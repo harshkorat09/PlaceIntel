@@ -1,0 +1,25 @@
+{
+  "name": "placeintel",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "dev": "pnpm --parallel --filter @placeintel/web --filter @placeintel/api dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "db:generate": "pnpm --filter @placeintel/api prisma:generate",
+    "db:migrate": "pnpm --filter @placeintel/api prisma:migrate",
+    "db:seed": "pnpm --filter @placeintel/api prisma:seed",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down"
+  },
+  "devDependencies": {
+    "prisma": "^7.9.1",
+    "tsx": "^4.23.1"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.9.1",
+    "dotenv": "^17.4.2"
+  }
+}

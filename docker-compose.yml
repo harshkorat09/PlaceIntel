@@ -1,0 +1,46 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg15
+    container_name: placeintel-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: placeintel
+      POSTGRES_PASSWORD: placeintel
+      POSTGRES_DB: placeintel
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U placeintel -d placeintel"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://placeintel:placeintel@postgres:5432/placeintel?schema=public
+      CHATBOT_URL: http://chatbot:8000
+    ports:
+      - "4000:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      chatbot:
+        condition: service_started
+
+  chatbot:
+    build:
+      context: ./apps/chatbot
+      dockerfile: Dockerfile
+    env_file: .env
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_data:
