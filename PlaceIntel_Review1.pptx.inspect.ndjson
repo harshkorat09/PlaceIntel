@@ -1,0 +1,483 @@
+{"kind":"deck","id":"pr/7e6dvf","name":"Deck"}
+{"kind":"layout","layoutId":"a49e608e-43d4-43d2-85d4-fd7f12344f9c","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"837c87d2-68f7-42bc-9e8b-c9d2a367466a","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/alwm08","slide":1,"title":"PLACEINTEL","textShapes":7}
+{"kind":"textbox","id":"sh/lsbe18ne","slide":1,"text":"PLACEINTEL","textPreview":"PLACEINTEL","textChars":10,"textLines":1,"bbox":[72,74,500,28]}
+{"kind":"textbox","id":"sh/yp0vqt4n","slide":1,"text":"AI-Powered Placement\nIntelligence Platform","textPreview":"AI-Powered Placement | Intelligence Platform","textChars":42,"textLines":2,"bbox":[72,150,720,150]}
+{"kind":"textbox","id":"sh/jq9wzy58","slide":1,"text":"Review 1 â€¢ Software Engineering Project","textPreview":"Review 1 â€¢ Software Engineering Project","textChars":41,"textLines":1,"bbox":[76,322,650,32]}
+{"kind":"textbox","id":"sh/wnido3mx","slide":1,"text":"CHARUSAT University\nDepartment of Computer Engineering","textPreview":"CHARUSAT University | Department of Computer Engineering","textChars":54,"textLines":2,"bbox":[76,406,430,60]}
+{"kind":"shape","id":"sh/xorex8n2","slide":1,"bbox":[835,108,290,290]}
+{"kind":"textbox","id":"sh/al0vmt4r","slide":1,"text":"PI","textPreview":"PI","textChars":2,"textLines":1,"bbox":[871,177,218,100]}
+{"kind":"textbox","id":"sh/bm9wvy5c","slide":1,"text":"Transforming placement information\ninto placement intelligence.","textPreview":"Transforming placement information | into placement intelligence.","textChars":63,"textLines":2,"bbox":[850,430,260,58]}
+{"kind":"textbox","id":"sh/gjmx0nm1","slide":1,"text":"Team members â€¢ Guide name â€¢ Academic Year","textPreview":"Team members â€¢ Guide name â€¢ Academic Year","textChars":45,"textLines":1,"bbox":[76,620,600,24]}
+{"kind":"notes","id":"nt/alwm08","slide":1,"text":"Open with the operational problem and the platform thesis.\n\n[Sources]\nInternal project brief, architecture, timeline, and API contract in repository."}
+{"kind":"slide","id":"sl/brp3m4","slide":2,"title":"01 Â€¢ CONTEXT","textShapes":16}
+{"kind":"textbox","id":"sh/qd8nqdor","slide":2,"text":"01 Â€¢ CONTEXT","textPreview":"01 Â€¢ CONTEXT","textChars":14,"textLines":1,"bbox":[72,36,1100,22]}
+{"kind":"textbox","id":"sh/dgj61s7i","slide":2,"text":"Placement information is fragmented at the moment students need it most","textPreview":"Placement information is fragmented at the moment students need it most","textChars":71,"textLines":1,"bbox":[72,64,1136,52]}
+{"kind":"textbox","id":"sh/cfapsn6x","slide":2,"text":"The current process creates search cost, missed updates, and avoidable manual work.","textPreview":"The current process creates search cost, missed updates, and avoidable manual work.","textChars":83,"textLines":1,"bbox":[72,120,1120,30]}
+{"kind":"shape","id":"sh/3qhovipg","slide":2,"bbox":[72,158,1136,1]}
+{"kind":"shape","id":"sh/2p8nmdov","slide":2,"bbox":[72,220,250,96]}
+{"kind":"textbox","id":"sh/pcz6xs7m","slide":2,"text":"EMAIL","textPreview":"EMAIL","textChars":5,"textLines":1,"bbox":[90,237,210,18]}
+{"kind":"textbox","id":"sh/4rq5on61","slide":2,"text":"Announcements","textPreview":"Announcements","textChars":13,"textLines":1,"bbox":[90,263,210,24]}
+{"kind":"shape","id":"sh/nmlo725k","slide":2,"bbox":[362,220,250,96]}
+{"kind":"textbox","id":"sh/mls7yhoz","slide":2,"text":"GROUPS","textPreview":"GROUPS","textChars":6,"textLines":1,"bbox":[380,237,210,18]}
+{"kind":"textbox","id":"sh/wfuxwbmd","slide":2,"text":"WhatsApp / Google Groups","textPreview":"WhatsApp / Google Groups","textChars":24,"textLines":1,"bbox":[380,263,210,24]}
+{"kind":"shape","id":"sh/xg3ypgni","slide":2,"bbox":[72,348,250,96]}
+{"kind":"textbox","id":"sh/adcfu147","slide":2,"text":"NOTICES","textPreview":"NOTICES","textChars":7,"textLines":1,"bbox":[90,365,210,18]}
+{"kind":"textbox","id":"sh/velgn65s","slide":2,"text":"PDFs & circulars","textPreview":"PDFs & circulars","textChars":16,"textLines":1,"bbox":[90,391,210,24]}
+{"kind":"shape","id":"sh/8buxsbm1","slide":2,"bbox":[362,348,250,96]}
+{"kind":"textbox","id":"sh/9c3ylgnm","slide":2,"text":"SPREADSHEETS","textPreview":"SPREADSHEETS","textChars":12,"textLines":1,"bbox":[380,365,210,18]}
+{"kind":"textbox","id":"sh/m9cfq14v","slide":2,"text":"Manual tracking","textPreview":"Manual tracking","textChars":15,"textLines":1,"bbox":[380,391,210,24]}
+{"kind":"shape","id":"sh/nalgj65g","slide":2,"bbox":[700,216,470,246]}
+{"kind":"textbox","id":"sh/0naxorm5","slide":2,"text":"THE CONSEQUENCE","textPreview":"THE CONSEQUENCE","textChars":15,"textLines":1,"bbox":[730,244,330,20]}
+{"kind":"textbox","id":"sh/lojyhwnq","slide":2,"text":"Students miss deadlines.\nThe T&P Cell cannot see the full picture.","textPreview":"Students miss deadlines. | The T&P Cell cannot see the full picture.","textChars":66,"textLines":2,"bbox":[730,284,400,76]}
+{"kind":"textbox","id":"sh/14belsfe","slide":2,"text":"No shared source of truth â†’ no reliable intelligence.","textPreview":"No shared source of truth â†’ no reliable intelligence.","textChars":55,"textLines":1,"bbox":[730,392,370,28]}
+{"kind":"textbox","id":"sh/032dcnyt","slide":2,"text":"PLACEINTEL â€¢ REVIEW 1","textPreview":"PLACEINTEL â€¢ REVIEW 1","textChars":23,"textLines":1,"bbox":[72,685,500,16]}
+{"kind":"textbox","id":"sh/f2twjix8","slide":2,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[1165,683,43,18]}
+{"kind":"notes","id":"nt/brp3m4","slide":2,"text":"Use the left side to make the fragmentation tangible; land on the â€œsource of truthâ€ gap.\n\n[Sources]\nInternal project brief, architecture, timeline, and API contract in repository."}
+{"kind":"slide","id":"sl/cw6ice","slide":3,"title":"02 Â€¢ EXISTING SYSTEM","textShapes":27}
+{"kind":"textbox","id":"sh/valk32ls","slide":3,"text":"02 Â€¢ EXISTING SYSTEM","textPreview":"02 Â€¢ EXISTING SYSTEM","textChars":22,"textLines":1,"bbox":[72,36,1100,22]}
+{"kind":"textbox","id":"sh/wbu1w7md","slide":3,"text":"The manual workflow breaks at retrieval, consistency, and reporting","textPreview":"The manual workflow breaks at retrieval, consistency, and reporting","textChars":67,"textLines":1,"bbox":[72,64,1136,52]}
+{"kind":"textbox","id":"sh/xc325c3y","slide":3,"text":"A centralized platform is necessary because todayâ€™s process is not designed for scale.","textPreview":"A centralized platform is necessary because todayâ€™s process is not designed for scale.","textChars":88,"textLines":1,"bbox":[72,120,1120,30]}
+{"kind":"shape","id":"sh/m5sjqx4b","slide":3,"bbox":[72,158,1136,1]}
+{"kind":"textbox","id":"sh/n6lkz2lw","slide":3,"text":"TODAY","textPreview":"TODAY","textChars":5,"textLines":1,"bbox":[90,198,420,28]}
+{"kind":"textbox","id":"sh/87u1s7m1","slide":3,"text":"WITH PLACEINTEL","textPreview":"WITH PLACEINTEL","textChars":15,"textLines":1,"bbox":[710,198,420,28]}
+{"kind":"shape","id":"sh/98321c3m","slide":3,"bbox":[72,230,1136,1]}
+{"kind":"textbox","id":"sh/yhsjmx4z","slide":3,"text":"Announcements","textPreview":"Announcements","textChars":13,"textLines":1,"bbox":[90,244,220,24]}
+{"kind":"textbox","id":"sh/zi1kvilk","slide":3,"text":"Email + groups","textPreview":"Email + groups","textChars":14,"textLines":1,"bbox":[360,244,280,24]}
+{"kind":"textbox","id":"sh/bmh8jed0","slide":3,"text":"â†’","textPreview":"â†’","textChars":3,"textLines":1,"bbox":[628,244,44,24]}
+{"kind":"textbox","id":"sh/al8ra9cf","slide":3,"text":"Central feed","textPreview":"Central feed","textChars":12,"textLines":1,"bbox":[710,244,380,24]}
+{"kind":"shape","id":"sh/x8jql4vq","slide":3,"bbox":[72,300,1136,1]}
+{"kind":"textbox","id":"sh/wna9cjul","slide":3,"text":"Records","textPreview":"Records","textChars":7,"textLines":1,"bbox":[90,314,220,24]}
+{"kind":"textbox","id":"sh/ja1snedw","slide":3,"text":"Manual sheets","textPreview":"Manual sheets","textChars":13,"textLines":1,"bbox":[360,314,280,24]}
+{"kind":"textbox","id":"sh/y9sre9cb","slide":3,"text":"â†’","textPreview":"â†’","textChars":3,"textLines":1,"bbox":[628,314,44,24]}
+{"kind":"textbox","id":"sh/lcjapov2","slide":3,"text":"Structured repository","textPreview":"Structured repository","textChars":21,"textLines":1,"bbox":[710,314,380,24]}
+{"kind":"shape","id":"sh/kba9gjuh","slide":3,"bbox":[72,370,1136,1]}
+{"kind":"textbox","id":"sh/zex8buds","slide":3,"text":"Discovery","textPreview":"Discovery","textChars":9,"textLines":1,"bbox":[90,384,220,24]}
+{"kind":"textbox","id":"sh/edor2pc7","slide":3,"text":"Ask around / search files","textPreview":"Ask around / search files","textChars":25,"textLines":1,"bbox":[360,384,280,24]}
+{"kind":"textbox","id":"sh/2lg36h0r","slide":3,"text":"â†’","textPreview":"â†’","textChars":3,"textLines":1,"bbox":[628,384,44,24]}
+{"kind":"textbox","id":"sh/3mpkzm1c","slide":3,"text":"Search + filters","textPreview":"Search + filters","textChars":16,"textLines":1,"bbox":[710,384,380,24]}
+{"kind":"shape","id":"sh/onyl8rix","slide":3,"bbox":[72,440,1136,1]}
+{"kind":"textbox","id":"sh/po721wji","slide":3,"text":"Insights","textPreview":"Insights","textChars":8,"textLines":1,"bbox":[90,454,220,24]}
+{"kind":"textbox","id":"sh/ehw32h0v","slide":3,"text":"Ad hoc reporting","textPreview":"Ad hoc reporting","textChars":16,"textLines":1,"bbox":[360,454,280,24]}
+{"kind":"textbox","id":"sh/fi5kvm1g","slide":3,"text":"â†’","textPreview":"â†’","textChars":3,"textLines":1,"bbox":[628,454,44,24]}
+{"kind":"textbox","id":"sh/gjyl47i1","slide":3,"text":"Analytics dashboard","textPreview":"Analytics dashboard","textChars":19,"textLines":1,"bbox":[710,454,380,24]}
+{"kind":"shape","id":"sh/1k72xcjm","slide":3,"bbox":[72,510,1136,1]}
+{"kind":"textbox","id":"sh/6dw3yx0z","slide":3,"text":"Data quality","textPreview":"Data quality","textChars":12,"textLines":1,"bbox":[90,524,220,24]}
+{"kind":"textbox","id":"sh/re5kr214","slide":3,"text":"Duplicates / drift","textPreview":"Duplicates / drift","textChars":18,"textLines":1,"bbox":[360,524,280,24]}
+{"kind":"textbox","id":"sh/98b6x032","slide":3,"text":"â†’","textPreview":"â†’","textChars":3,"textLines":1,"bbox":[628,524,44,24]}
+{"kind":"textbox","id":"sh/87254v2h","slide":3,"text":"Validation + ownership","textPreview":"Validation + ownership","textChars":22,"textLines":1,"bbox":[710,524,380,24]}
+{"kind":"textbox","id":"sh/n6tovalw","slide":3,"text":"PLACEINTEL â€¢ REVIEW 1","textPreview":"PLACEINTEL â€¢ REVIEW 1","textChars":23,"textLines":1,"bbox":[72,685,500,16]}
+{"kind":"textbox","id":"sh/m5kn25kb","slide":3,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[1165,683,43,18]}
+{"kind":"notes","id":"nt/cw6ice","slide":3,"text":"Frame this as a system analysis, not criticism of peopleâ€”the process is the constraint.\n\n[Sources]\nInternal project brief, architecture, timeline, and API contract in repository."}
+{"kind":"slide","id":"sl/sxl851","slide":4,"title":"03 Â€¢ PROPOSED SOLUTION","textShapes":18}
+{"kind":"textbox","id":"sh/dsruhgr6","slide":4,"text":"03 Â€¢ PROPOSED SOLUTION","textPreview":"03 Â€¢ PROPOSED SOLUTION","textChars":24,"textLines":1,"bbox":[72,36,1100,22]}
+{"kind":"textbox","id":"sh/qpgbmlsv","slide":4,"text":"PlaceIntel turns scattered notices into a searchable placement system","textPreview":"PlaceIntel turns scattered notices into a searchable placement system","textChars":69,"textLines":1,"bbox":[72,64,1136,52]}
+{"kind":"textbox","id":"sh/bqpcfq9g","slide":4,"text":"A modular platform for students and the Training & Placement Cell, with AI as an extensible layer.","textPreview":"A modular platform for students and the Training & Placement Cell, with AI as an extensible layer.","textChars":98,"textLines":1,"bbox":[72,120,1120,30]}
+{"kind":"shape","id":"sh/0vidsvax","slide":4,"bbox":[72,158,1136,1]}
+{"kind":"shape","id":"sh/lwrul0ri","slide":4,"bbox":[78,248,240,156]}
+{"kind":"shape","id":"sh/yt0vqlsr","slide":4,"bbox":[96,270,44,44]}
+{"kind":"textbox","id":"sh/zu9cjq9c","slide":4,"text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[96,281,44,20]}
+{"kind":"textbox","id":"sh/gzetgrad","slide":4,"text":"COLLECT","textPreview":"COLLECT","textChars":7,"textLines":1,"bbox":[156,270,140,18]}
+{"kind":"textbox","id":"sh/10nu9wby","slide":4,"text":"Notices, companies, drives","textPreview":"Notices, companies, drives","textChars":26,"textLines":1,"bbox":[156,302,140,48]}
+{"kind":"shape","id":"sh/1gjapkjm","slide":4,"bbox":[318,326,40,1]}
+{"kind":"shape","id":"sh/gfatwf21","slide":4,"bbox":[363,248,240,156]}
+{"kind":"shape","id":"sh/fu1sna1g","slide":4,"bbox":[381,270,44,44]}
+{"kind":"textbox","id":"sh/et8bu5kb","slide":4,"text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[381,281,44,20]}
+{"kind":"textbox","id":"sh/pkjat4jy","slide":4,"text":"STRUCTURE","textPreview":"STRUCTURE","textChars":9,"textLines":1,"bbox":[441,270,140,18]}
+{"kind":"textbox","id":"sh/ojat0z2d","slide":4,"text":"Eligibility, skills, deadlines","textPreview":"Eligibility, skills, deadlines","textChars":30,"textLines":1,"bbox":[441,302,140,48]}
+{"kind":"shape","id":"sh/3i1sru1s","slide":4,"bbox":[603,326,40,1]}
+{"kind":"shape","id":"sh/2hsbypk7","slide":4,"bbox":[648,248,240,156]}
+{"kind":"shape","id":"sh/do3ux4ju","slide":4,"bbox":[666,270,44,44]}
+{"kind":"textbox","id":"sh/cnut4zi9","slide":4,"text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[666,281,44,20]}
+{"kind":"textbox","id":"sh/wr2d0nql","slide":4,"text":"DISCOVER","textPreview":"DISCOVER","textChars":8,"textLines":1,"bbox":[726,270,140,18]}
+{"kind":"textbox","id":"sh/xsbet8r6","slide":4,"text":"Search, filters, dashboards","textPreview":"Search, filters, dashboards","textChars":27,"textLines":1,"bbox":[726,302,140,48]}
+{"kind":"shape","id":"sh/apkvyd8f","slide":4,"bbox":[888,326,40,1]}
+{"kind":"shape","id":"sh/bqtcri90","slide":4,"bbox":[933,248,240,156]}
+{"kind":"shape","id":"sh/kv2d4nqh","slide":4,"bbox":[951,270,44,44]}
+{"kind":"textbox","id":"sh/lwbexsr2","slide":4,"text":"4","textPreview":"4","textChars":1,"textLines":1,"bbox":[951,281,44,20]}
+{"kind":"textbox","id":"sh/ytkv2d8r","slide":4,"text":"INTELLIGENCE","textPreview":"INTELLIGENCE","textChars":12,"textLines":1,"bbox":[1011,270,140,18]}
+{"kind":"textbox","id":"sh/jutwvi9w","slide":4,"text":"Grounded natural-language queries","textPreview":"Grounded natural-language queries","textChars":33,"textLines":1,"bbox":[1011,302,140,48]}
+{"kind":"textbox","id":"sh/0zids3qd","slide":4,"text":"Modular monolith today â†’ AI-ready platform tomorrow","textPreview":"Modular monolith today â†’ AI-ready platform tomorrow","textChars":53,"textLines":1,"bbox":[280,500,720,34]}
+{"kind":"textbox","id":"sh/10rulory","slide":4,"text":"PLACEINTEL â€¢ REVIEW 1","textPreview":"PLACEINTEL â€¢ REVIEW 1","textChars":23,"textLines":1,"bbox":[72,685,500,16]}
+{"kind":"textbox","id":"sh/3exgr6tg","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[1165,683,43,18]}
+{"kind":"notes","id":"nt/sxl851","slide":4,"text":"The platform is useful on day one without waiting for the chatbot; the AI layer compounds value later.\n\n[Sources]\nInternal project brief, architecture, timeline, and API contract in repository."}
+{"kind":"slide","id":"sl/jx3qyi","slide":5,"title":"04 Â€¢ OBJECTIVES","textShapes":19}
+{"kind":"textbox","id":"sh/69gny1sb","slide":5,"text":"04 Â€¢ OBJECTIVES","textPreview":"04 Â€¢ OBJECTIVES","textChars":17,"textLines":1,"bbox":[72,36,1100,22]}
+{"kind":"textbox","id":"sh/tw76tgb2","slide":5,"text":"Build a reliable placement operating system for CHARUSAT","textPreview":"Build a reliable placement operating system for CHARUSAT","textChars":56,"textLines":1,"bbox":[72,64,1136,52]}
+{"kind":"textbox","id":"sh/svy50bah","slide":5,"text":"The first release prioritizes a strong information foundation, then adds intelligence.","textPreview":"The first release prioritizes a strong information foundation, then adds intelligence.","textChars":86,"textLines":1,"bbox":[72,120,1120,30]}
+{"kind":"shape","id":"sh/j65on6t0","slide":5,"bbox":[72,158,1136,1]}
+{"kind":"textbox","id":"sh/i5wnu1sf","slide":5,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[90,214,40,28]}
+{"kind":"textbox","id":"sh/5876pwb6","slide":5,"text":"Centralized placement repository","textPreview":"Centralized placement repository","textChars":32,"textLines":1,"bbox":[148,214,400,28]}
+{"kind":"shape","id":"sh/k7y5wbal","slide":5,"bbox":[148,257,412,1]}
+{"kind":"textbox","id":"sh/b25ojmto","slide":5,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[90,294,40,28]}
+{"kind":"textbox","id":"sh/a1wnqhc3","slide":5,"text":"Company & drive management","textPreview":"Company & drive management","textChars":26,"textLines":1,"bbox":[148,294,400,28]}
+{"kind":"shape","id":"sh/8bm183y5","slide":5,"bbox":[148,337,412,1]}
+{"kind":"textbox","id":"sh/tcvih8zq","slide":5,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[90,374,40,28]}
+{"kind":"textbox","id":"sh/694j6tgf","slide":5,"text":"Student-friendly search & filters","textPreview":"Student-friendly search & filters","textChars":33,"textLines":1,"bbox":[148,374,400,28]}
+{"kind":"shape","id":"sh/7ad0fyhk","slide":5,"bbox":[148,417,412,1]}
+{"kind":"textbox","id":"sh/k7mh4jy9","slide":5,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[90,454,40,28]}
+{"kind":"textbox","id":"sh/l8vidozu","slide":5,"text":"Eligibility and Fit Score explanation","textPreview":"Eligibility and Fit Score explanation","textChars":37,"textLines":1,"bbox":[148,454,400,28]}
+{"kind":"shape","id":"sh/ylkz2t03","slide":5,"bbox":[148,497,412,1]}
+{"kind":"textbox","id":"sh/jmd0byho","slide":5,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[630,214,40,28]}
+{"kind":"textbox","id":"sh/4361gnyd","slide":5,"text":"Analytics for placement decisions","textPreview":"Analytics for placement decisions","textChars":33,"textLines":1,"bbox":[688,214,400,28]}
+{"kind":"shape","id":"sh/p4fipszy","slide":5,"bbox":[688,257,412,1]}
+{"kind":"textbox","id":"sh/d0vi9sr2","slide":5,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[630,294,40,28]}
+{"kind":"textbox","id":"sh/cz210nqh","slide":5,"text":"AI-assisted information retrieval","textPreview":"AI-assisted information retrieval","textChars":33,"textLines":1,"bbox":[688,294,400,28]}
+{"kind":"shape","id":"sh/byt07i9w","slide":5,"bbox":[688,337,412,1]}
+{"kind":"textbox","id":"sh/qxkzyd8r","slide":5,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[630,374,40,28]}
+{"kind":"textbox","id":"sh/pwbi58r6","slide":5,"text":"Cloud-ready, modular architecture","textPreview":"Cloud-ready, modular architecture","textChars":33,"textLines":1,"bbox":[688,374,400,28]}
+{"kind":"shape","id":"sh/ov2hw3ql","slide":5,"bbox":[688,417,412,1]}
+{"kind":"textbox","id":"sh/3ut03y90","slide":5,"text":"PLACEINTEL â€¢ REVIEW 1","textPreview":"PLACEINTEL â€¢ REVIEW 1","textChars":23,"textLines":1,"bbox":[72,685,500,16]}
+{"kind":"textbox","id":"sh/2tkzud8f","slide":5,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1165,683,43,18]}
+{"kind":"notes","id":"nt/jx3qyi","slide":5,"text":"Read these as design objectives that guide scope and trade-offs.\n\n[Sources]\nInternal project brief, architecture, timeline, and API contract in repository."}
+{"kind":"slide","id":"sl/n6xsnl","slide":6,"title":"05 Â€¢ FUNCTIONAL REQUIREMENTS","textShapes":26}
+{"kind":"textbox","id":"sh/7618j2dk","slide":6,"text":"05 Â€¢ FUNCTIONAL REQUIREMENTS","textPreview":"05 Â€¢ FUNCTIONAL REQUIREMENTS","textChars":30,"textLines":1,"bbox":[72,36,1100,22]}
+{"kind":"textbox","id":"sh/s7apsnu5","slide":6,"text":"Seven capabilities define the first usable product","textPreview":"Seven capabilities define the first usable product","textChars":50,"textLines":1,"bbox":[72,64,1136,52]}
+{"kind":"textbox","id":"sh/t8jqlsvq","slide":6,"text":"Each capability maps directly to a student or admin workflow.","textPreview":"Each capability maps directly to a student or admin workflow.","textChars":61,"textLines":1,"bbox":[72,120,1120,30]}
+{"kind":"shape","id":"sh/u9s7uxcv","slide":6,"bbox":[72,158,1136,1]}
+{"kind":"shape","id":"sh/fa18n2dg","slide":6,"bbox":[72,214,250,122]}
+{"kind":"textbox","id":"sh/gba9w7u1","slide":6,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[90,230,38,18]}
+{"kind":"textbox","id":"sh/hc3qpcvm","slide":6,"text":"AUTH","textPreview":"AUTH","textChars":4,"textLines":1,"bbox":[90,258,208,22]}
+{"kind":"textbox","id":"sh/ad87idwr","slide":6,"text":"Secure login & roles","textPreview":"Secure login & roles","textChars":20,"textLines":1,"bbox":[90,292,210,24]}
+{"kind":"shape","id":"sh/veh8bydc","slide":6,"bbox":[358,214,250,122]}
+{"kind":"textbox","id":"sh/behc72ho","slide":6,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[376,230,38,18]}
+{"kind":"textbox","id":"sh/ad8bexgj","slide":6,"text":"COMPANIES","textPreview":"COMPANIES","textChars":9,"textLines":1,"bbox":[376,258,208,22]}
+{"kind":"textbox","id":"sh/x0zu9czu","slide":6,"text":"Company catalogue","textPreview":"Company catalogue","textChars":17,"textLines":1,"bbox":[376,292,210,24]}
+{"kind":"shape","id":"sh/wfqtg7y9","slide":6,"bbox":[644,214,250,122]}
+{"kind":"textbox","id":"sh/naxs3ihs","slide":6,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[662,230,38,18]}
+{"kind":"textbox","id":"sh/29obadg7","slide":6,"text":"DRIVES","textPreview":"DRIVES","textChars":6,"textLines":1,"bbox":[662,258,208,22]}
+{"kind":"textbox","id":"sh/9cfa5szy","slide":6,"text":"Placement lifecycle","textPreview":"Placement lifecycle","textChars":19,"textLines":1,"bbox":[662,292,210,24]}
+{"kind":"shape","id":"sh/ob6tcnyd","slide":6,"bbox":[930,214,250,122]}
+{"kind":"textbox","id":"sh/f6xszihw","slide":6,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[948,230,38,18]}
+{"kind":"textbox","id":"sh/e54b6d0b","slide":6,"text":"ELIGIBILITY","textPreview":"ELIGIBILITY","textChars":11,"textLines":1,"bbox":[948,258,208,22]}
+{"kind":"textbox","id":"sh/ih4bidk3","slide":6,"text":"Rules + fit signal","textPreview":"Rules + fit signal","textChars":18,"textLines":1,"bbox":[948,292,210,24]}
+{"kind":"shape","id":"sh/32dcri1o","slide":6,"bbox":[72,374,250,122]}
+{"kind":"textbox","id":"sh/43mtk329","slide":6,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[90,390,38,18]}
+{"kind":"textbox","id":"sh/54vut8je","slide":6,"text":"SEARCH","textPreview":"SEARCH","textChars":6,"textLines":1,"bbox":[90,418,208,22]}
+{"kind":"textbox","id":"sh/q54vmdkz","slide":6,"text":"Filters & discovery","textPreview":"Filters & discovery","textChars":19,"textLines":1,"bbox":[90,452,210,24]}
+{"kind":"shape","id":"sh/r6xcvi1k","slide":6,"bbox":[358,374,250,122]}
+{"kind":"textbox","id":"sh/s76don25","slide":6,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[376,390,38,18]}
+{"kind":"textbox","id":"sh/d8fuxsjq","slide":6,"text":"ANALYTICS","textPreview":"ANALYTICS","textChars":9,"textLines":1,"bbox":[376,418,208,22]}
+{"kind":"textbox","id":"sh/e9ovqxkb","slide":6,"text":"Counts & trends","textPreview":"Counts & trends","textChars":15,"textLines":1,"bbox":[376,452,210,24]}
+{"kind":"shape","id":"sh/faxcj21w","slide":6,"bbox":[644,374,250,122]}
+{"kind":"textbox","id":"sh/94zepw3y","slide":6,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[662,390,38,18]}
+{"kind":"textbox","id":"sh/o3qxgrmd","slide":6,"text":"ADMIN","textPreview":"ADMIN","textChars":5,"textLines":1,"bbox":[662,418,208,22]}
+{"kind":"textbox","id":"sh/n2hwnmls","slide":6,"text":"Governance & uploads","textPreview":"Governance & uploads","textChars":20,"textLines":1,"bbox":[662,452,210,24]}
+{"kind":"textbox","id":"sh/m18feh47","slide":6,"text":"PLACEINTEL â€¢ REVIEW 1","textPreview":"PLACEINTEL â€¢ REVIEW 1","textChars":23,"textLines":1,"bbox":[72,685,500,16]}
+{"kind":"textbox","id":"sh/xsjytw3u","slide":6,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[1165,683,43,18]}
+{"kind":"notes","id":"nt/n6xsnl","slide":6,"text":"Point out that these are end-to-end product capabilities, not isolated screens.\n\n[Sources]\nInternal project brief, architecture, timeline, and API contract in repository."}
+{"kind":"slide","id":"sl/0ilzjl","slide":7,"title":"06 Â€¢ QUALITY ATTRIBUTES","textShapes":19}
+{"kind":"textbox","id":"sh/f6xgb2tk","slide":7,"text":"06 Â€¢ QUALITY ATTRIBUTES","textPreview":"06 Â€¢ QUALITY ATTRIBUTES","textChars":25,"textLines":1,"bbox":[72,36,1100,22]}
+{"kind":"textbox","id":"sh/g7qxkna5","slide":7,"text":"Trust is a feature: the platform must be fast, secure, and maintainable","textPreview":"Trust is a feature: the platform must be fast, secure, and maintainable","textChars":71,"textLines":1,"bbox":[72,64,1136,52]}
+{"kind":"textbox","id":"sh/h8zydsbq","slide":7,"text":"Non-functional requirements protect the experience as usage and scope grow.","textPreview":"Non-functional requirements protect the experience as usage and scope grow.","textChars":75,"textLines":1,"bbox":[72,120,1120,30]}
+{"kind":"shape","id":"sh/61ofeds3","slide":7,"bbox":[72,158,1136,1]}
+{"kind":"textbox","id":"sh/72xg7it8","slide":7,"text":"SCALABILITY","textPreview":"SCALABILITY","textChars":11,"textLines":1,"bbox":[92,204,180,22]}
+{"kind":"textbox","id":"sh/s36xgnat","slide":7,"text":"Grow from one batch to many cohorts","textPreview":"Grow from one batch to many cohorts","textChars":35,"textLines":1,"bbox":[300,204,690,22]}
+{"kind":"shape","id":"sh/t4fy9sbe","slide":7,"bbox":[92,238,1038,1]}
+{"kind":"textbox","id":"sh/qx8fqhs7","slide":7,"text":"SECURITY","textPreview":"SECURITY","textChars":8,"textLines":1,"bbox":[92,261,180,22]}
+{"kind":"textbox","id":"sh/by1gjmts","slide":7,"text":"JWT, hashing, validation, RBAC","textPreview":"JWT, hashing, validation, RBAC","textChars":30,"textLines":1,"bbox":[300,261,690,22]}
+{"kind":"shape","id":"sh/f294fipg","slide":7,"bbox":[92,295,1038,1]}
+{"kind":"textbox","id":"sh/e10n6d8b","slide":7,"text":"PERFORMANCE","textPreview":"PERFORMANCE","textChars":11,"textLines":1,"bbox":[92,318,180,22]}
+{"kind":"textbox","id":"sh/1ormh87m","slide":7,"text":"Fast search and predictable APIs","textPreview":"Fast search and predictable APIs","textChars":32,"textLines":1,"bbox":[300,318,690,22]}
+{"kind":"shape","id":"sh/0ni58nq1","slide":7,"bbox":[92,352,1038,1]}
+{"kind":"textbox","id":"sh/nqt43ips","slide":7,"text":"RELIABILITY","textPreview":"RELIABILITY","textChars":11,"textLines":1,"bbox":[92,375,180,22]}
+{"kind":"textbox","id":"sh/2pknad87","slide":7,"text":"Backups, logging, recoverable failures","textPreview":"Backups, logging, recoverable failures","textChars":38,"textLines":1,"bbox":[300,375,690,22]}
+{"kind":"shape","id":"sh/psbm5s7y","slide":7,"bbox":[92,409,1038,1]}
+{"kind":"textbox","id":"sh/or25cnqd","slide":7,"text":"MAINTAINABILITY","textPreview":"MAINTAINABILITY","textChars":15,"textLines":1,"bbox":[92,432,180,22]}
+{"kind":"textbox","id":"sh/buto72po","slide":7,"text":"Layered modules, shared contracts","textPreview":"Layered modules, shared contracts","textChars":33,"textLines":1,"bbox":[300,432,690,22]}
+{"kind":"shape","id":"sh/atknex83","slide":7,"bbox":[92,466,1038,1]}
+{"kind":"textbox","id":"sh/618zmlwn","slide":7,"text":"EXTENSIBILITY","textPreview":"EXTENSIBILITY","textChars":13,"textLines":1,"bbox":[92,489,180,22]}
+{"kind":"textbox","id":"sh/72hgvqd8","slide":7,"text":"AI, notifications, mobile later","textPreview":"AI, notifications, mobile later","textChars":31,"textLines":1,"bbox":[300,489,690,22]}
+{"kind":"shape","id":"sh/83qhovet","slide":7,"bbox":[92,523,1038,1]}
+{"kind":"textbox","id":"sh/tozyx0ve","slide":7,"text":"AVAILABILITY","textPreview":"AVAILABILITY","textChars":12,"textLines":1,"bbox":[92,546,180,22]}
+{"kind":"textbox","id":"sh/yxozylwr","slide":7,"text":"Dockerized, cloud-ready deployment","textPreview":"Dockerized, cloud-ready deployment","textChars":34,"textLines":1,"bbox":[300,546,690,22]}
+{"kind":"shape","id":"sh/jyxgrqdc","slide":7,"bbox":[92,580,1038,1]}
+{"kind":"textbox","id":"sh/kz6hkveh","slide":7,"text":"PLACEINTEL â€¢ REVIEW 1","textPreview":"PLACEINTEL â€¢ REVIEW 1","textChars":23,"textLines":1,"bbox":[72,685,500,16]}
+{"kind":"textbox","id":"sh/l0fytgv2","slide":7,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[1165,683,43,18]}
+{"kind":"notes","id":"nt/0ilzjl","slide":7,"text":"Emphasize that architecture choices are justified by these quality attributes.\n\n[Sources]\nInternal project brief, architecture, timeline, and API contract in repository."}
+{"kind":"slide","id":"sl/zk812a","slide":8,"title":"07 Â€¢ TECHNOLOGY STACK","textShapes":20}
+{"kind":"textbox","id":"sh/543yxgve","slide":8,"text":"07 Â€¢ TECHNOLOGY STACK","textPreview":"07 Â€¢ TECHNOLOGY STACK","textChars":23,"textLines":1,"bbox":[72,36,1100,22]}
+{"kind":"textbox","id":"sh/i1szm1wn","slide":8,"text":"A pragmatic stack keeps the core simple and the future open","textPreview":"A pragmatic stack keeps the core simple and the future open","textChars":59,"textLines":1,"bbox":[72,64,1136,52]}
+{"kind":"textbox","id":"sh/j21gv6d8","slide":8,"text":"Selected technologies match the teamâ€™s need for speed, structure, and AI extensibility.","textPreview":"Selected technologies match the teamâ€™s need for speed, structure, and AI extensibility.","textChars":89,"textLines":1,"bbox":[72,120,1120,30]}
+{"kind":"shape","id":"sh/wzaxkreh","slide":8,"bbox":[72,158,1136,1]}
+{"kind":"shape","id":"sh/x0jytwv2","slide":8,"bbox":[72,230,198,220]}
+{"kind":"textbox","id":"sh/axsfi1wr","slide":8,"text":"WEB","textPreview":"WEB","textChars":3,"textLines":1,"bbox":[90,250,160,18]}
+{"kind":"textbox","id":"sh/vy1grmdw","slide":8,"text":"React + TypeScript","textPreview":"React + TypeScript","textChars":18,"textLines":1,"bbox":[90,292,160,60]}
+{"kind":"textbox","id":"sh/gvehwve1","slide":8,"text":"Component reuse, typed UI","textPreview":"Component reuse, typed UI","textChars":25,"textLines":1,"bbox":[90,372,160,46]}
+{"kind":"shape","id":"sh/1wny50v6","slide":8,"bbox":[298,230,198,220]}
+{"kind":"textbox","id":"sh/5kb6tgve","slide":8,"text":"API","textPreview":"API","textChars":3,"textLines":1,"bbox":[316,250,160,18]}
+{"kind":"textbox","id":"sh/4j25kbet","slide":8,"text":"Node.js + Express","textPreview":"Node.js + Express","textChars":17,"textLines":1,"bbox":[316,292,160,60]}
+{"kind":"textbox","id":"sh/jitor6d8","slide":8,"text":"Fast REST iteration","textPreview":"Fast REST iteration","textChars":19,"textLines":1,"bbox":[316,372,160,46]}
+{"kind":"shape","id":"sh/ix0ni1wn","slide":8,"bbox":[524,230,198,220]}
+{"kind":"textbox","id":"sh/xwrmpwvi","slide":8,"text":"DATA","textPreview":"DATA","textChars":4,"textLines":1,"bbox":[542,250,160,18]}
+{"kind":"textbox","id":"sh/wvi5grex","slide":8,"text":"PostgreSQL + Prisma","textPreview":"PostgreSQL + Prisma","textChars":19,"textLines":1,"bbox":[542,292,160,60]}
+{"kind":"textbox","id":"sh/vu94nmdc","slide":8,"text":"Integrity, migrations, safe access","textPreview":"Integrity, migrations, safe access","textChars":34,"textLines":1,"bbox":[542,372,160,46]}
+{"kind":"shape","id":"sh/at0nehwr","slide":8,"bbox":[750,230,198,220]}
+{"kind":"textbox","id":"sh/1sv610vm","slide":8,"text":"OPS","textPreview":"OPS","textChars":3,"textLines":1,"bbox":[768,250,160,18]}
+{"kind":"textbox","id":"sh/grm5sve1","slide":8,"text":"Docker + GitHub","textPreview":"Docker + GitHub","textChars":15,"textLines":1,"bbox":[768,292,160,60]}
+{"kind":"textbox","id":"sh/07ehk3q9","slide":8,"text":"Reproducible environments","textPreview":"Reproducible environments","textChars":25,"textLines":1,"bbox":[768,372,160,46]}
+{"kind":"shape","id":"sh/l8nydo7u","slide":8,"bbox":[976,230,198,220]}
+{"kind":"textbox","id":"sh/y5czit8j","slide":8,"text":"FUTURE","textPreview":"FUTURE","textChars":6,"textLines":1,"bbox":[994,250,160,18]}
+{"kind":"textbox","id":"sh/z6lgbyp4","slide":8,"text":"AWS + pgvector + FastAPI","textPreview":"AWS + pgvector + FastAPI","textChars":24,"textLines":1,"bbox":[994,292,160,60]}
+{"kind":"textbox","id":"sh/c3uhgjqd","slide":8,"text":"Cloud scale + RAG service","textPreview":"Cloud scale + RAG service","textChars":25,"textLines":1,"bbox":[994,372,160,46]}
+{"kind":"textbox","id":"sh/d43y9o7y","slide":8,"text":"PLACEINTEL â€¢ REVIEW 1","textPreview":"PLACEINTEL â€¢ REVIEW 1","textChars":23,"textLines":1,"bbox":[72,685,500,16]}
+{"kind":"textbox","id":"sh/q1cze987","slide":8,"text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1165,683,43,18]}
+{"kind":"notes","id":"nt/zk812a","slide":8,"text":"Technology choices are intentionally boring where reliability matters and extensible where AI will evolve.\n\n[Sources]\nInternal project brief, architecture, timeline, and API contract in repository."}
+{"kind":"slide","id":"sl/2w2o2n","slide":9,"title":"08 Â€¢ ARCHITECTURE","textShapes":12}
+{"kind":"textbox","id":"sh/6twvad4f","slide":9,"text":"08 Â€¢ ARCHITECTURE","textPreview":"08 Â€¢ ARCHITECTURE","textChars":19,"textLines":1,"bbox":[72,36,1100,22]}
+{"kind":"textbox","id":"sh/twne58n6","slide":9,"text":"A modular monolith gives the team clean boundaries without premature complexity","textPreview":"A modular monolith gives the team clean boundaries without premature complexity","textChars":79,"textLines":1,"bbox":[72,64,1136,52]}
+{"kind":"textbox","id":"sh/8vedcnml","slide":9,"text":"Independent layers can evolve into services later without rewriting the product.","textPreview":"Independent layers can evolve into services later without rewriting the product.","textChars":80,"textLines":1,"bbox":[72,120,1120,30]}
+{"kind":"shape","id":"sh/j6lczy54","slide":9,"bbox":[72,158,1136,1]}
+{"kind":"shape","id":"sh/y5cv6toj","slide":9,"bbox":[72,224,280,70]}
+{"kind":"textbox","id":"sh/lsnu18na","slide":9,"text":"React Frontend","textPreview":"React Frontend","textChars":14,"textLines":1,"bbox":[72,247,280,24]}
+{"kind":"shape","id":"sh/kred83mp","slide":9,"bbox":[72,344,280,70]}
+{"kind":"textbox","id":"sh/b2lcvy5s","slide":9,"text":"Express REST API","textPreview":"Express REST API","textChars":16,"textLines":1,"bbox":[72,367,280,24]}
+{"kind":"shape","id":"sh/a1cv2to7","slide":9,"bbox":[72,464,280,70]}
+{"kind":"textbox","id":"sh/sza5kzid","slide":9,"text":"Prisma ORM","textPreview":"Prisma ORM","textChars":10,"textLines":1,"bbox":[72,487,280,24]}
+{"kind":"shape","id":"sh/t0j6d4jy","slide":9,"bbox":[72,584,280,70]}
+{"kind":"textbox","id":"sh/6xsni907","slide":9,"text":"PostgreSQL","textPreview":"PostgreSQL","textChars":10,"textLines":1,"bbox":[72,607,280,24]}
+{"kind":"shape","id":"sh/ry14bu1s","slide":9,"bbox":[212,294,1,46]}
+{"kind":"shape","id":"sh/kba5gz21","slide":9,"bbox":[212,414,1,46]}
+{"kind":"shape","id":"sh/5cjm94jm","slide":9,"bbox":[212,534,1,46]}
+{"kind":"shape","id":"sh/i9snepkb","slide":9,"bbox":[500,262,310,120]}
+{"kind":"textbox","id":"sh/ja147u1g","slide":9,"text":"FUTURE EXTENSIONS","textPreview":"FUTURE EXTENSIONS","textChars":17,"textLines":1,"bbox":[524,284,260,18]}
+{"kind":"textbox","id":"sh/o7u5sjil","slide":9,"text":"Email Collector â€¢ AI Service\npgvector â€¢ AWS Cloud","textPreview":"Email Collector â€¢ AI Service | pgvector â€¢ AWS Cloud","textChars":53,"textLines":2,"bbox":[524,316,260,48]}
+{"kind":"shape","id":"sh/psn6lojq","slide":9,"bbox":[352,322,148,57]}
+{"kind":"textbox","id":"sh/xojm5oba","slide":9,"text":"Monorepo boundary: shared contracts + independent delivery","textPreview":"Monorepo boundary: shared contracts + independent delivery","textChars":58,"textLines":1,"bbox":[500,470,560,30]}
+{"kind":"textbox","id":"sh/cna5cjap","slide":9,"text":"PLACEINTEL â€¢ REVIEW 1","textPreview":"PLACEINTEL â€¢ REVIEW 1","textChars":23,"textLines":1,"bbox":[72,685,500,16]}
+{"kind":"textbox","id":"sh/bmh43et4","slide":9,"text":"09","textPreview":"09","textChars":2,"textLines":1,"bbox":[1165,683,43,18]}
+{"kind":"notes","id":"nt/2w2o2n","slide":9,"text":"Explain the architecture as a deliberate modular monolith, with AI isolated behind a service boundary.\n\n[Sources]\nInternal project brief, architecture, timeline, and API contract in repository."}
+{"kind":"slide","id":"sl/3f6pv0","slide":10,"title":"09 Â€¢ DATA MODEL","textShapes":11}
+{"kind":"textbox","id":"sh/lk32hgfy","slide":10,"text":"09 Â€¢ DATA MODEL","textPreview":"09 Â€¢ DATA MODEL","textChars":17,"textLines":1,"bbox":[72,36,1100,22]}
+{"kind":"textbox","id":"sh/yxcjm1wn","slide":10,"text":"The relational model makes placement intelligence explainable","textPreview":"The relational model makes placement intelligence explainable","textChars":61,"textLines":1,"bbox":[72,64,1136,52]}
+{"kind":"textbox","id":"sh/jylkf6x8","slide":10,"text":"Core entities preserve integrity today and provide clean retrieval units for AI tomorrow.","textPreview":"Core entities preserve integrity today and provide clean retrieval units for AI tomorrow.","textChars":89,"textLines":1,"bbox":[72,120,1120,30]}
+{"kind":"shape","id":"sh/8ne1svep","slide":10,"bbox":[72,158,1136,1]}
+{"kind":"shape","id":"sh/ton2l0va","slide":10,"bbox":[100,252,220,70]}
+{"kind":"textbox","id":"sh/6lcjqlwj","slide":10,"text":"STUDENT","textPreview":"STUDENT","textChars":7,"textLines":1,"bbox":[100,272,220,30]}
+{"kind":"shape","id":"sh/7m5kjqd4","slide":10,"bbox":[500,210,220,70]}
+{"kind":"textbox","id":"sh/gre1wvel","slide":10,"text":"COMPANY","textPreview":"COMPANY","textChars":7,"textLines":1,"bbox":[500,230,220,30]}
+{"kind":"shape","id":"sh/hsn2p0v6","slide":10,"bbox":[500,352,220,70]}
+{"kind":"textbox","id":"sh/dwnqxcju","slide":10,"text":"PLACEMENT","textPreview":"PLACEMENT","textChars":9,"textLines":1,"bbox":[500,372,220,30]}
+{"kind":"shape","id":"sh/cvup4rip","slide":10,"bbox":[900,252,220,70]}
+{"kind":"textbox","id":"sh/rul8vm14","slide":10,"text":"SKILL","textPreview":"SKILL","textChars":5,"textLines":1,"bbox":[900,272,220,30]}
+{"kind":"shape","id":"sh/qtc72h0j","slide":10,"bbox":[900,420,220,70]}
+{"kind":"textbox","id":"sh/10nq1wj6","slide":10,"text":"PLACEMENT\nSKILL","textPreview":"PLACEMENT | SKILL","textChars":15,"textLines":2,"bbox":[900,440,220,30]}
+{"kind":"shape","id":"sh/0ze98ril","slide":10,"bbox":[320,245,180,42]}
+{"kind":"shape","id":"sh/zy58zm10","slide":10,"bbox":[320,287,180,100]}
+{"kind":"shape","id":"sh/exwr6h0f","slide":10,"bbox":[720,245,180,42]}
+{"kind":"shape","id":"sh/h4jqpsj2","slide":10,"bbox":[720,387,180,68]}
+{"kind":"shape","id":"sh/g3apw7ih","slide":10,"bbox":[1010,322,1,98]}
+{"kind":"textbox","id":"sh/sjyhsre9","slide":10,"text":"Relational integrity â€¢ auditability â€¢ future vector compatibility","textPreview":"Relational integrity â€¢ auditability â€¢ future vector compatibility","textChars":69,"textLines":1,"bbox":[240,570,800,30]}
+{"kind":"textbox","id":"sh/tk7i1wvu","slide":10,"text":"PLACEINTEL â€¢ REVIEW 1","textPreview":"PLACEINTEL â€¢ REVIEW 1","textChars":23,"textLines":1,"bbox":[72,685,500,16]}
+{"kind":"textbox","id":"sh/6hgzq1wj","slide":10,"text":"10","textPreview":"10","textChars":2,"textLines":1,"bbox":[1165,683,43,18]}
+{"kind":"notes","id":"nt/3f6pv0","slide":10,"text":"Keep the ERD intentionally simplified for review 1; the point is the relationship design, not every attribute.\n\n[Sources]\nInternal project brief, architecture, timeline, and API contract in repository."}
+{"kind":"slide","id":"sl/s7gkst","slide":11,"title":"10 Â€¢ API DESIGN","textShapes":24}
+{"kind":"textbox","id":"sh/fi58fud0","slide":11,"text":"10 Â€¢ API DESIGN","textPreview":"10 Â€¢ API DESIGN","textChars":17,"textLines":1,"bbox":[72,36,1100,22]}
+{"kind":"textbox","id":"sh/gjep8zul","slide":11,"text":"Stable API contracts let frontend and backend teams move in parallel","textPreview":"Stable API contracts let frontend and backend teams move in parallel","textChars":68,"textLines":1,"bbox":[72,64,1136,52]}
+{"kind":"textbox","id":"sh/1knqh4v6","slide":11,"text":"REST resources, JSON responses, and versioning keep integration predictable.","textPreview":"REST resources, JSON responses, and versioning keep integration predictable.","textChars":76,"textLines":1,"bbox":[72,120,1120,30]}
+{"kind":"shape","id":"sh/6dc72pcj","slide":11,"bbox":[72,158,1136,1]}
+{"kind":"shape","id":"sh/relobud4","slide":11,"bbox":[72,218,520,340]}
+{"kind":"textbox","id":"sh/sfup4zup","slide":11,"text":"/api/v1","textPreview":"/api/v1","textChars":7,"textLines":1,"bbox":[102,248,450,28]}
+{"kind":"textbox","id":"sh/tg3qd4va","slide":11,"text":"GET    /companies","textPreview":"GET    /companies","textChars":17,"textLines":1,"bbox":[102,298,420,24]}
+{"kind":"textbox","id":"sh/q9g7etcn","slide":11,"text":"POST   /companies","textPreview":"POST   /companies","textChars":17,"textLines":1,"bbox":[102,332,420,24]}
+{"kind":"textbox","id":"sh/bap8ned8","slide":11,"text":"GET    /placements","textPreview":"GET    /placements","textChars":18,"textLines":1,"bbox":[102,366,420,24]}
+{"kind":"textbox","id":"sh/3atkjads","slide":11,"text":"POST   /placements","textPreview":"POST   /placements","textChars":18,"textLines":1,"bbox":[102,400,420,24]}
+{"kind":"textbox","id":"sh/i9kjq5c7","slide":11,"text":"PUT    /placements/:id","textPreview":"PUT    /placements/:id","textChars":22,"textLines":1,"bbox":[102,434,420,24]}
+{"kind":"textbox","id":"sh/5cb2lkvy","slide":11,"text":"DELETE /placements/:id","textPreview":"DELETE /placements/:id","textChars":22,"textLines":1,"bbox":[102,468,420,24]}
+{"kind":"textbox","id":"sh/4b21sfud","slide":11,"text":"GET    /analytics","textPreview":"GET    /analytics","textChars":17,"textLines":1,"bbox":[102,502,420,24]}
+{"kind":"shape","id":"sh/redknado","slide":11,"bbox":[670,218,500,340]}
+{"kind":"textbox","id":"sh/qd43u5c3","slide":11,"text":"CONTRACT PRINCIPLES","textPreview":"CONTRACT PRINCIPLES","textChars":19,"textLines":1,"bbox":[704,248,410,20]}
+{"kind":"textbox","id":"sh/dgv2pkvu","slide":11,"text":"â€¢","textPreview":"â€¢","textChars":3,"textLines":1,"bbox":[704,296,22,42]}
+{"kind":"textbox","id":"sh/sfmlwfu9","slide":11,"text":"Resource-based URLs","textPreview":"Resource-based URLs","textChars":19,"textLines":1,"bbox":[730,296,374,42]}
+{"kind":"textbox","id":"sh/fidkrud0","slide":11,"text":"â€¢","textPreview":"â€¢","textChars":3,"textLines":1,"bbox":[704,338,22,42]}
+{"kind":"textbox","id":"sh/eh43ypcf","slide":11,"text":"JWT authorization","textPreview":"JWT authorization","textChars":17,"textLines":1,"bbox":[730,338,374,42]}
+{"kind":"textbox","id":"sh/ad8nqtwn","slide":11,"text":"â€¢","textPreview":"â€¢","textChars":3,"textLines":1,"bbox":[704,380,22,42]}
+{"kind":"textbox","id":"sh/byh4jyx8","slide":11,"text":"Standard status codes","textPreview":"Standard status codes","textChars":21,"textLines":1,"bbox":[730,380,374,42]}
+{"kind":"textbox","id":"sh/czq5s3et","slide":11,"text":"â€¢","textPreview":"â€¢","textChars":3,"textLines":1,"bbox":[704,422,22,42]}
+{"kind":"textbox","id":"sh/x0z6lofy","slide":11,"text":"Zod validation","textPreview":"Zod validation","textChars":14,"textLines":1,"bbox":[730,422,374,42]}
+{"kind":"textbox","id":"sh/29onm9wb","slide":11,"text":"â€¢","textPreview":"â€¢","textChars":3,"textLines":1,"bbox":[704,464,22,42]}
+{"kind":"textbox","id":"sh/nax4fexw","slide":11,"text":"Predictable JSON responses","textPreview":"Predictable JSON responses","textChars":26,"textLines":1,"bbox":[730,464,374,42]}
+{"kind":"textbox","id":"sh/ob65ojeh","slide":11,"text":"PLACEINTEL â€¢ REVIEW 1","textPreview":"PLACEINTEL â€¢ REVIEW 1","textChars":23,"textLines":1,"bbox":[72,685,500,16]}
+{"kind":"textbox","id":"sh/pczmhof2","slide":11,"text":"11","textPreview":"11","textChars":2,"textLines":1,"bbox":[1165,683,43,18]}
+{"kind":"notes","id":"nt/s7gkst","slide":11,"text":"Use this slide to show how the team avoids integration surprises before implementation begins.\n\n[Sources]\nInternal project brief, architecture, timeline, and API contract in repository."}
+{"kind":"slide","id":"sl/mc6zvs","slide":12,"title":"11 Â€¢ DEVELOPMENT WORKFLOW","textShapes":25}
+{"kind":"textbox","id":"sh/v2d8zy5o","slide":12,"text":"11 Â€¢ DEVELOPMENT WORKFLOW","textPreview":"11 Â€¢ DEVELOPMENT WORKFLOW","textChars":27,"textLines":1,"bbox":[72,36,1100,22]}
+{"kind":"textbox","id":"sh/gnm9s369","slide":12,"text":"Dependencies first; parallel delivery second","textPreview":"Dependencies first; parallel delivery second","textChars":44,"textLines":1,"bbox":[72,64,1136,52]}
+{"kind":"textbox","id":"sh/hova18nu","slide":12,"text":"The workflow front-loads shared decisions, then unlocks independent workstreams.","textPreview":"The workflow front-loads shared decisions, then unlocks independent workstreams.","textChars":80,"textLines":1,"bbox":[72,120,1120,30]}
+{"kind":"shape","id":"sh/iporutof","slide":12,"bbox":[72,158,1136,1]}
+{"kind":"shape","id":"sh/3qxs3y5k","slide":12,"bbox":[72,320,106,74]}
+{"kind":"textbox","id":"sh/4r69w365","slide":12,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[84,333,82,16]}
+{"kind":"textbox","id":"sh/5sfa58nq","slide":12,"text":"Requirements","textPreview":"Requirements","textChars":12,"textLines":1,"bbox":[84,355,82,30]}
+{"kind":"shape","id":"sh/qtorydob","slide":12,"bbox":[178,357,16,1]}
+{"kind":"shape","id":"sh/ruxs7i5w","slide":12,"bbox":[196,320,106,74]}
+{"kind":"textbox","id":"sh/fu1ofaxs","slide":12,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[208,333,82,16]}
+{"kind":"textbox","id":"sh/ets765g7","slide":12,"text":"Architecture","textPreview":"Architecture","textChars":12,"textLines":1,"bbox":[208,355,82,30]}
+{"kind":"shape","id":"sh/1wj6hkfy","slide":12,"bbox":[302,357,16,1]}
+{"kind":"shape","id":"sh/gvap8fyd","slide":12,"bbox":[320,320,106,74]}
+{"kind":"textbox","id":"sh/rqhobqxw","slide":12,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[332,333,82,16]}
+{"kind":"textbox","id":"sh/6p8725gb","slide":12,"text":"Database","textPreview":"Database","textChars":8,"textLines":1,"bbox":[332,355,82,30]}
+{"kind":"shape","id":"sh/tsj6d0fm","slide":12,"bbox":[426,357,16,1]}
+{"kind":"shape","id":"sh/srap4vy1","slide":12,"bbox":[444,320,106,74]}
+{"kind":"textbox","id":"sh/bml8nux0","slide":12,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[456,333,82,16]}
+{"kind":"textbox","id":"sh/qlc7epgf","slide":12,"text":"API","textPreview":"API","textChars":3,"textLines":1,"bbox":[456,355,82,30]}
+{"kind":"shape","id":"sh/mhgrmt0n","slide":12,"bbox":[550,297,16,60]}
+{"kind":"shape","id":"sh/nipsfyh8","slide":12,"bbox":[568,260,106,74]}
+{"kind":"textbox","id":"sh/8jy9o3it","slide":12,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[580,273,82,16]}
+{"kind":"textbox","id":"sh/9k7ah8ze","slide":12,"text":"Parallel build","textPreview":"Parallel build","textChars":14,"textLines":1,"bbox":[580,295,82,30]}
+{"kind":"shape","id":"sh/algbqt0z","slide":12,"bbox":[674,297,16,60]}
+{"kind":"shape","id":"sh/vmpsjyh4","slide":12,"bbox":[692,320,106,74]}
+{"kind":"textbox","id":"sh/wnyts3ip","slide":12,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[704,333,82,16]}
+{"kind":"textbox","id":"sh/xo7al8za","slide":12,"text":"Integration","textPreview":"Integration","textChars":11,"textLines":1,"bbox":[704,355,82,30]}
+{"kind":"shape","id":"sh/qpcre90f","slide":12,"bbox":[798,357,16,1]}
+{"kind":"shape","id":"sh/bq5s7eh0","slide":12,"bbox":[816,320,106,74]}
+{"kind":"textbox","id":"sh/t4budcji","slide":12,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[828,333,82,16]}
+{"kind":"textbox","id":"sh/sj2dk72x","slide":12,"text":"Testing","textPreview":"Testing","textChars":7,"textLines":1,"bbox":[828,355,82,30]}
+{"kind":"shape","id":"sh/ritcb21c","slide":12,"bbox":[922,357,16,1]}
+{"kind":"shape","id":"sh/6hkvixk7","slide":12,"bbox":[940,320,106,74]}
+{"kind":"textbox","id":"sh/18vuhwju","slide":12,"text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[952,333,82,16]}
+{"kind":"textbox","id":"sh/g72dor29","slide":12,"text":"Deployment","textPreview":"Deployment","textChars":10,"textLines":1,"bbox":[952,355,82,30]}
+{"kind":"shape","id":"sh/f6tcfm1o","slide":12,"bbox":[1046,357,16,1]}
+{"kind":"shape","id":"sh/e5kvmhk3","slide":12,"bbox":[1064,320,106,74]}
+{"kind":"textbox","id":"sh/xcru5sja","slide":12,"text":"09","textPreview":"09","textChars":2,"textLines":1,"bbox":[1076,333,82,16]}
+{"kind":"textbox","id":"sh/wbidcn2p","slide":12,"text":"AI layer","textPreview":"AI layer","textChars":8,"textLines":1,"bbox":[1076,355,82,30]}
+{"kind":"textbox","id":"sh/kjqp0zqp","slide":12,"text":"Parallel tracks after API contract","textPreview":"Parallel tracks after API contract","textChars":34,"textLines":1,"bbox":[512,214,360,24]}
+{"kind":"textbox","id":"sh/lkz69k7a","slide":12,"text":"Frontend  â€¢  Backend  â€¢  DevOps  â€¢  AI preparation","textPreview":"Frontend  â€¢  Backend  â€¢  DevOps  â€¢  AI preparation","textChars":56,"textLines":1,"bbox":[400,500,520,26]}
+{"kind":"textbox","id":"sh/yh87yp8j","slide":12,"text":"PLACEINTEL â€¢ REVIEW 1","textPreview":"PLACEINTEL â€¢ REVIEW 1","textChars":23,"textLines":1,"bbox":[72,685,500,16]}
+{"kind":"textbox","id":"sh/ziho7up4","slide":12,"text":"12","textPreview":"12","textChars":2,"textLines":1,"bbox":[1165,683,43,18]}
+{"kind":"notes","id":"nt/mc6zvs","slide":12,"text":"The API contract is the handoff point that enables parallel development.\n\n[Sources]\nInternal project brief, architecture, timeline, and API contract in repository."}
+{"kind":"slide","id":"sl/azwuuk","slide":13,"title":"12 Â€¢ TEAM RESPONSIBILITIES","textShapes":15}
+{"kind":"textbox","id":"sh/z6d832l8","slide":13,"text":"12 Â€¢ TEAM RESPONSIBILITIES","textPreview":"12 Â€¢ TEAM RESPONSIBILITIES","textChars":28,"textLines":1,"bbox":[72,36,1100,22]}
+{"kind":"textbox","id":"sh/07mpc7mt","slide":13,"text":"Clear ownership keeps architecture, delivery, and AI work connected","textPreview":"Clear ownership keeps architecture, delivery, and AI work connected","textChars":67,"textLines":1,"bbox":[72,64,1136,52]}
+{"kind":"textbox","id":"sh/l8vq5c3e","slide":13,"text":"Responsibilities are separated by specialty, with shared integration checkpoints.","textPreview":"Responsibilities are separated by specialty, with shared integration checkpoints.","textChars":81,"textLines":1,"bbox":[72,120,1120,30]}
+{"kind":"shape","id":"sh/qhk76x4r","slide":13,"bbox":[72,158,1136,1]}
+{"kind":"shape","id":"sh/b2t8z25c","slide":13,"bbox":[90,230,300,250]}
+{"kind":"shape","id":"sh/c32p8nmh","slide":13,"bbox":[90,230,300,56]}
+{"kind":"textbox","id":"sh/d4vq1sn2","slide":13,"text":"MEMBER 1","textPreview":"MEMBER 1","textChars":8,"textLines":1,"bbox":[108,248,264,20]}
+{"kind":"textbox","id":"sh/2dk72d4f","slide":13,"text":"Architecture & Data","textPreview":"Architecture & Data","textChars":19,"textLines":1,"bbox":[112,316,256,30]}
+{"kind":"textbox","id":"sh/3et8vi50","slide":13,"text":"Software architecture\nDatabase design\nDevOps & cloud deployment","textPreview":"Software architecture | Database design | DevOps & cloud deployment","textChars":63,"textLines":3,"bbox":[112,370,256,80]}
+{"kind":"shape","id":"sh/r6dwjax8","slide":13,"bbox":[460,230,300,250]}
+{"kind":"shape","id":"sh/q54fq5wn","slide":13,"bbox":[460,230,300,56]}
+{"kind":"textbox","id":"sh/d8velkfy","slide":13,"text":"MEMBER 2","textPreview":"MEMBER 2","textChars":8,"textLines":1,"bbox":[478,248,264,20]}
+{"kind":"textbox","id":"sh/s7mxsfet","slide":13,"text":"Product Delivery","textPreview":"Product Delivery","textChars":16,"textLines":1,"bbox":[482,316,256,30]}
+{"kind":"textbox","id":"sh/fudwnax4","slide":13,"text":"Backend development\nFrontend development\nREST API implementation","textPreview":"Backend development | Frontend development | REST API implementation","textChars":64,"textLines":3,"bbox":[482,370,256,80]}
+{"kind":"shape","id":"sh/e94fu5wj","slide":13,"bbox":[830,230,300,250]}
+{"kind":"shape","id":"sh/1wfypkfa","slide":13,"bbox":[830,230,300,56]}
+{"kind":"textbox","id":"sh/0vmxwfep","slide":13,"text":"MEMBER 3","textPreview":"MEMBER 3","textChars":8,"textLines":1,"bbox":[848,248,264,20]}
+{"kind":"textbox","id":"sh/vytwbqx0","slide":13,"text":"AI & Intelligence","textPreview":"AI & Intelligence","textChars":17,"textLines":1,"bbox":[852,316,256,30]}
+{"kind":"textbox","id":"sh/udkvilwf","slide":13,"text":"Data processing\nNLP preparation\nRAG pipeline","textPreview":"Data processing | NLP preparation | RAG pipeline","textChars":44,"textLines":3,"bbox":[852,370,256,80]}
+{"kind":"textbox","id":"sh/yt8zqtg3","slide":13,"text":"Shared checkpoint: integration, testing, and review evidence","textPreview":"Shared checkpoint: integration, testing, and review evidence","textChars":60,"textLines":1,"bbox":[310,560,660,28]}
+{"kind":"textbox","id":"sh/zuh0jyho","slide":13,"text":"PLACEINTEL â€¢ REVIEW 1","textPreview":"PLACEINTEL â€¢ REVIEW 1","textChars":23,"textLines":1,"bbox":[72,685,500,16]}
+{"kind":"textbox","id":"sh/kvahs3yt","slide":13,"text":"13","textPreview":"13","textChars":2,"textLines":1,"bbox":[1165,683,43,18]}
+{"kind":"notes","id":"nt/azwuuk","slide":13,"text":"Position ownership as a delivery advantage, not silos.\n\n[Sources]\nInternal project brief, architecture, timeline, and API contract in repository."}
+{"kind":"slide","id":"sl/d3f0c0","slide":14,"title":"13 Â€¢ TIMELINE","textShapes":28}
+{"kind":"textbox","id":"sh/2107ad03","slide":14,"text":"13 Â€¢ TIMELINE","textPreview":"13 Â€¢ TIMELINE","textChars":15,"textLines":1,"bbox":[72,36,1100,22]}
+{"kind":"textbox","id":"sh/p4rql8zu","slide":14,"text":"A 15-week roadmap converts the architecture into evidence","textPreview":"A 15-week roadmap converts the architecture into evidence","textChars":57,"textLines":1,"bbox":[72,64,1136,52]}
+{"kind":"textbox","id":"sh/o3i9cni9","slide":14,"text":"Milestones sequence the foundation, product build, intelligence, and hardening.","textPreview":"Milestones sequence the foundation, product build, intelligence, and hardening.","textChars":79,"textLines":1,"bbox":[72,120,1120,30]}
+{"kind":"shape","id":"sh/b6t8nihk","slide":14,"bbox":[72,158,1136,1]}
+{"kind":"textbox","id":"sh/q5kred0z","slide":14,"text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[300,192,24,18]}
+{"kind":"shape","id":"sh/d8bqpszq","slide":14,"bbox":[300,216,1,386]}
+{"kind":"textbox","id":"sh/c729gni5","slide":14,"text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[352,192,24,18]}
+{"kind":"shape","id":"sh/7ap8by1g","slide":14,"bbox":[352,216,1,386]}
+{"kind":"textbox","id":"sh/69g72t0v","slide":14,"text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[404,192,24,18]}
+{"kind":"shape","id":"sh/07ahw7yd","slide":14,"bbox":[404,216,1,386]}
+{"kind":"textbox","id":"sh/l8ji5cfy","slide":14,"text":"4","textPreview":"4","textChars":1,"textLines":1,"bbox":[456,192,24,18]}
+{"kind":"shape","id":"sh/y5szuxg7","slide":14,"bbox":[456,216,1,386]}
+{"kind":"textbox","id":"sh/z61032xs","slide":14,"text":"5","textPreview":"5","textChars":1,"textLines":1,"bbox":[508,192,24,18]}
+{"kind":"shape","id":"sh/8buh0ry9","slide":14,"bbox":[508,216,1,386]}
+{"kind":"textbox","id":"sh/9c3i9cfu","slide":14,"text":"6","textPreview":"6","textChars":1,"textLines":1,"bbox":[560,192,24,18]}
+{"kind":"shape","id":"sh/m9szyhg3","slide":14,"bbox":[560,216,1,386]}
+{"kind":"textbox","id":"sh/nal07mxo","slide":14,"text":"7","textPreview":"7","textChars":1,"textLines":1,"bbox":[612,192,24,18]}
+{"kind":"shape","id":"sh/ofqhony5","slide":14,"bbox":[612,216,1,386]}
+{"kind":"textbox","id":"sh/pgzyxsfq","slide":14,"text":"8","textPreview":"8","textChars":1,"textLines":1,"bbox":[664,192,24,18]}
+{"kind":"shape","id":"sh/5wre1ore","slide":14,"bbox":[664,216,1,386]}
+{"kind":"textbox","id":"sh/4bixsjqt","slide":14,"text":"9","textPreview":"9","textChars":1,"textLines":1,"bbox":[716,192,24,18]}
+{"kind":"shape","id":"sh/ja9wze98","slide":14,"bbox":[716,216,1,386]}
+{"kind":"textbox","id":"sh/i90fq98n","slide":14,"text":"10","textPreview":"10","textChars":2,"textLines":1,"bbox":[768,192,24,18]}
+{"kind":"shape","id":"sh/t0by5orq","slide":14,"bbox":[768,216,1,386]}
+{"kind":"textbox","id":"sh/sz2xwjq5","slide":14,"text":"11","textPreview":"11","textChars":2,"textLines":1,"bbox":[820,192,24,18]}
+{"kind":"shape","id":"sh/ry9g3e9k","slide":14,"bbox":[820,216,1,386]}
+{"kind":"textbox","id":"sh/6x0fut8z","slide":14,"text":"12","textPreview":"12","textChars":2,"textLines":1,"bbox":[872,192,24,18]}
+{"kind":"shape","id":"sh/14by987m","slide":14,"bbox":[872,216,1,386]}
+{"kind":"textbox","id":"sh/g32x03q1","slide":14,"text":"13","textPreview":"13","textChars":2,"textLines":1,"bbox":[924,192,24,18]}
+{"kind":"shape","id":"sh/y9wbu5oj","slide":14,"bbox":[924,216,1,386]}
+{"kind":"textbox","id":"sh/za5c3qp4","slide":14,"text":"14","textPreview":"14","textChars":2,"textLines":1,"bbox":[976,192,24,18]}
+{"kind":"shape","id":"sh/kbedwv6p","slide":14,"bbox":[976,216,1,386]}
+{"kind":"textbox","id":"sh/lcnu507a","slide":14,"text":"15","textPreview":"15","textChars":2,"textLines":1,"bbox":[1028,192,24,18]}
+{"kind":"shape","id":"sh/mdwvy5of","slide":14,"bbox":[1028,216,1,386]}
+{"kind":"textbox","id":"sh/7e5c7ap0","slide":14,"text":"Requirements","textPreview":"Requirements","textChars":12,"textLines":1,"bbox":[82,240,200,22]}
+{"kind":"shape","id":"sh/8fyd0f6l","slide":14,"bbox":[300,240,96,24]}
+{"kind":"textbox","id":"sh/9g7u9k76","slide":14,"text":"Architecture","textPreview":"Architecture","textChars":12,"textLines":1,"bbox":[82,283,200,22]}
+{"kind":"shape","id":"sh/uhgv2por","slide":14,"bbox":[352,283,96,24]}
+{"kind":"textbox","id":"sh/v2pcbapc","slide":14,"text":"Database","textPreview":"Database","textChars":8,"textLines":1,"bbox":[82,326,200,22]}
+{"kind":"shape","id":"sh/jm1kzqt4","slide":14,"bbox":[404,326,96,24]}
+{"kind":"textbox","id":"sh/ils36lcj","slide":14,"text":"UI + API","textPreview":"UI + API","textChars":8,"textLines":1,"bbox":[82,369,200,22]}
+{"kind":"shape","id":"sh/5ojm1gba","slide":14,"bbox":[508,369,200,24]}
+{"kind":"textbox","id":"sh/4nal8vup","slide":14,"text":"Integration","textPreview":"Integration","textChars":11,"textLines":1,"bbox":[82,412,200,22]}
+{"kind":"shape","id":"sh/rql43qtg","slide":14,"bbox":[716,412,96,24]}
+{"kind":"textbox","id":"sh/6pc3alcv","slide":14,"text":"Analytics + automation","textPreview":"Analytics + automation","textChars":22,"textLines":1,"bbox":[82,455,200,22]}
+{"kind":"shape","id":"sh/tc3m50b6","slide":14,"bbox":[820,455,96,24]}
+{"kind":"textbox","id":"sh/sbulcvul","slide":14,"text":"Cloud deployment","textPreview":"Cloud deployment","textChars":16,"textLines":1,"bbox":[82,498,200,22]}
+{"kind":"shape","id":"sh/7uhkr6dw","slide":14,"bbox":[924,498,44,24]}
+{"kind":"textbox","id":"sh/mt83y1cb","slide":14,"text":"AI integration + testing","textPreview":"AI integration + testing","textChars":24,"textLines":1,"bbox":[82,541,200,22]}
+{"kind":"shape","id":"sh/cz6hs7a9","slide":14,"bbox":[976,541,96,24]}
+{"kind":"textbox","id":"sh/x0fi1cbu","slide":14,"text":"PLACEINTEL â€¢ REVIEW 1","textPreview":"PLACEINTEL â€¢ REVIEW 1","textChars":23,"textLines":1,"bbox":[72,685,500,16]}
+{"kind":"textbox","id":"sh/ax4zqxs3","slide":14,"text":"14","textPreview":"14","textChars":2,"textLines":1,"bbox":[1165,683,43,18]}
+{"kind":"notes","id":"nt/d3f0c0","slide":14,"text":"The roadmap is a dependency-based plan; dates are a planning baseline, not a promise of finished AI capabilities.\n\n[Sources]\nInternal project brief, architecture, timeline, and API contract in repository."}
+{"kind":"slide","id":"sl/tvwvmh","slide":15,"title":"14 Â€¢ FUTURE SCOPE","textShapes":14}
+{"kind":"textbox","id":"sh/czmp8fmt","slide":15,"text":"14 Â€¢ FUTURE SCOPE","textPreview":"14 Â€¢ FUTURE SCOPE","textChars":19,"textLines":1,"bbox":[72,36,1100,22]}
+{"kind":"textbox","id":"sh/bydofal8","slide":15,"text":"The core platform creates a runway for intelligence","textPreview":"The core platform creates a runway for intelligence","textChars":51,"textLines":1,"bbox":[72,64,1136,52]}
+{"kind":"textbox","id":"sh/axk76p4n","slide":15,"text":"Future enhancements become safer once the data model, permissions, and APIs are stable.","textPreview":"Future enhancements become safer once the data model, permissions, and APIs are stable.","textChars":87,"textLines":1,"bbox":[72,120,1120,30]}
+{"kind":"shape","id":"sh/pwb6dk32","slide":15,"bbox":[72,158,1136,1]}
+{"kind":"shape","id":"sh/ov2p4fmh","slide":15,"bbox":[90,260,240,150]}
+{"kind":"textbox","id":"sh/nutobalw","slide":15,"text":"NOW","textPreview":"NOW","textChars":3,"textLines":1,"bbox":[110,284,200,20]}
+{"kind":"textbox","id":"sh/2tk7254b","slide":15,"text":"Structured placement data","textPreview":"Structured placement data","textChars":25,"textLines":1,"bbox":[110,322,200,50]}
+{"kind":"shape","id":"sh/9sfqp436","slide":15,"bbox":[330,335,40,1]}
+{"kind":"shape","id":"sh/8r6pgzml","slide":15,"bbox":[380,260,240,150]}
+{"kind":"textbox","id":"sh/mx4zitcv","slide":15,"text":"NEXT","textPreview":"NEXT","textChars":4,"textLines":1,"bbox":[400,284,200,20]}
+{"kind":"textbox","id":"sh/nid0bytg","slide":15,"text":"Email collection + notifications","textPreview":"Email collection + notifications","textChars":32,"textLines":1,"bbox":[400,322,200,50]}
+{"kind":"shape","id":"sh/ojmhk3u1","slide":15,"bbox":[620,335,40,1]}
+{"kind":"shape","id":"sh/9kvidobm","slide":15,"bbox":[670,260,240,150]}
+{"kind":"textbox","id":"sh/etkze9cz","slide":15,"text":"THEN","textPreview":"THEN","textChars":4,"textLines":1,"bbox":[690,284,200,20]}
+{"kind":"textbox","id":"sh/zud07etk","slide":15,"text":"RAG chatbot + semantic search","textPreview":"RAG chatbot + semantic search","textChars":29,"textLines":1,"bbox":[690,322,200,50]}
+{"kind":"shape","id":"sh/0vmhgjup","slide":15,"bbox":[910,335,40,1]}
+{"kind":"shape","id":"sh/1wvi9oba","slide":15,"bbox":[960,260,240,150]}
+{"kind":"textbox","id":"sh/ypojqdc3","slide":15,"text":"LATER","textPreview":"LATER","textChars":5,"textLines":1,"bbox":[980,284,200,20]}
+{"kind":"textbox","id":"sh/jqx0jito","slide":15,"text":"Mobile app + multi-university","textPreview":"Mobile app + multi-university","textChars":29,"textLines":1,"bbox":[980,322,200,50]}
+{"kind":"textbox","id":"sh/fupwba90","slide":15,"text":"AI is a force multiplier for trusted dataâ€”not a substitute for it.","textPreview":"AI is a force multiplier for trusted dataâ€”not a substitute for it.","textChars":68,"textLines":1,"bbox":[220,520,840,32]}
+{"kind":"textbox","id":"sh/utgfi5sf","slide":15,"text":"PLACEINTEL â€¢ REVIEW 1","textPreview":"PLACEINTEL â€¢ REVIEW 1","textChars":23,"textLines":1,"bbox":[72,685,500,16]}
+{"kind":"textbox","id":"sh/hwredkr6","slide":15,"text":"15","textPreview":"15","textChars":2,"textLines":1,"bbox":[1165,683,43,18]}
+{"kind":"notes","id":"nt/tvwvmh","slide":15,"text":"Close the future-scope story with sequencing: foundation first, intelligence second.\n\n[Sources]\nInternal project brief, architecture, timeline, and API contract in repository."}
+{"kind":"slide","id":"sl/37l4tn","slide":16,"title":"15 Â€¢ EXPECTED OUTCOMES","textShapes":17}
+{"kind":"textbox","id":"sh/m90vqx0f","slide":16,"text":"15 Â€¢ EXPECTED OUTCOMES","textPreview":"15 Â€¢ EXPECTED OUTCOMES","textChars":24,"textLines":1,"bbox":[72,36,1100,22]}
+{"kind":"textbox","id":"sh/9cbulcz6","slide":16,"text":"Review 1 establishes the foundation for a production-ready build","textPreview":"Review 1 establishes the foundation for a production-ready build","textChars":64,"textLines":1,"bbox":[72,64,1136,52]}
+{"kind":"textbox","id":"sh/8bids7il","slide":16,"text":"The next review can focus on implementation evidence because the design decisions are now explicit.","textPreview":"The next review can focus on implementation evidence because the design decisions are now explicit.","textChars":99,"textLines":1,"bbox":[72,120,1120,30]}
+{"kind":"shape","id":"sh/zm9cfi14","slide":16,"bbox":[72,158,1136,1]}
+{"kind":"shape","id":"sh/yl0vmx0j","slide":16,"bbox":[90,230,470,106]}
+{"kind":"textbox","id":"sh/l8ruhsju","slide":16,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[114,254,44,22]}
+{"kind":"textbox","id":"sh/k7idoni9","slide":16,"text":"ONE SOURCE OF TRUTH","textPreview":"ONE SOURCE OF TRUTH","textChars":19,"textLines":1,"bbox":[180,254,340,24]}
+{"kind":"textbox","id":"sh/bipcbi1s","slide":16,"text":"Centralized repository","textPreview":"Centralized repository","textChars":22,"textLines":1,"bbox":[180,288,340,24]}
+{"kind":"shape","id":"sh/qhgbid07","slide":16,"bbox":[630,230,470,106]}
+{"kind":"textbox","id":"sh/4rix4jq9","slide":16,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[654,254,44,22]}
+{"kind":"textbox","id":"sh/psrex47u","slide":16,"text":"FASTER DISCOVERY","textPreview":"FASTER DISCOVERY","textChars":16,"textLines":1,"bbox":[720,254,340,24]}
+{"kind":"textbox","id":"sh/2p0f2983","slide":16,"text":"Search, filters, and eligibility","textPreview":"Search, filters, and eligibility","textChars":32,"textLines":1,"bbox":[720,288,340,24]}
+{"kind":"shape","id":"sh/3q9wvepo","slide":16,"bbox":[90,375,470,106]}
+{"kind":"textbox","id":"sh/gnid0zqx","slide":16,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[114,399,44,22]}
+{"kind":"textbox","id":"sh/horet47i","slide":16,"text":"EXPLAINABLE INSIGHTS","textPreview":"EXPLAINABLE INSIGHTS","textChars":20,"textLines":1,"bbox":[180,399,340,24]}
+{"kind":"textbox","id":"sh/ulgvyp87","slide":16,"text":"Analytics + Fit Score + grounded AI","textPreview":"Analytics + Fit Score + grounded AI","textChars":35,"textLines":1,"bbox":[180,433,340,24]}
+{"kind":"shape","id":"sh/fmpwrupc","slide":16,"bbox":[630,375,470,106]}
+{"kind":"textbox","id":"sh/0j2xc36h","slide":16,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[654,399,44,22]}
+{"kind":"textbox","id":"sh/1kbe5o72","slide":16,"text":"SCALABLE FOUNDATION","textPreview":"SCALABLE FOUNDATION","textChars":19,"textLines":1,"bbox":[720,399,340,24]}
+{"kind":"textbox","id":"sh/907epoz6","slide":16,"text":"Modular, secure, cloud-ready","textPreview":"Modular, secure, cloud-ready","textChars":28,"textLines":1,"bbox":[720,433,340,24]}
+{"kind":"textbox","id":"sh/8fyxgjyl","slide":16,"text":"PLACEINTEL â€¢ REVIEW 1","textPreview":"PLACEINTEL â€¢ REVIEW 1","textChars":23,"textLines":1,"bbox":[72,685,500,16]}
+{"kind":"textbox","id":"sh/nepwnyh0","slide":16,"text":"16","textPreview":"16","textChars":2,"textLines":1,"bbox":[1165,683,43,18]}
+{"kind":"notes","id":"nt/37l4tn","slide":16,"text":"These are expected outcomes at the system level; do not present them as measured results yet.\n\n[Sources]\nInternal project brief, architecture, timeline, and API contract in repository."}
+{"kind":"slide","id":"sl/r285wz","slide":17,"title":"REVIEW 1 COMPLETE","textShapes":6}
+{"kind":"textbox","id":"sh/o7edofeh","slide":17,"text":"REVIEW 1 COMPLETE","textPreview":"REVIEW 1 COMPLETE","textChars":17,"textLines":1,"bbox":[72,78,500,24]}
+{"kind":"textbox","id":"sh/n65cvadw","slide":17,"text":"The foundation is ready\nfor implementation.","textPreview":"The foundation is ready | for implementation.","textChars":43,"textLines":2,"bbox":[72,160,700,130]}
+{"kind":"textbox","id":"sh/m5wvm5wb","slide":17,"text":"Problem analyzed â€¢ Requirements identified â€¢ Architecture finalized\nDatabase + API designs prepared â€¢ Roadmap and ownership defined","textPreview":"Problem analyzed â€¢ Requirements identified â€¢ Architecture finalized | Database + API designs prepared â€¢ Roadmap and ownership defined","textChars":137,"textLines":2,"bbox":[76,340,760,54]}
+{"kind":"shape","id":"sh/14nut0v6","slide":17,"bbox":[890,155,220,220]}
+{"kind":"textbox","id":"sh/03udkvel","slide":17,"text":"PI","textPreview":"PI","textChars":2,"textLines":1,"bbox":[930,218,140,70]}
+{"kind":"textbox","id":"sh/z2lcrqd0","slide":17,"text":"Thank you","textPreview":"Thank you","textChars":9,"textLines":1,"bbox":[72,585,400,40]}
+{"kind":"textbox","id":"sh/e1cbilwf","slide":17,"text":"Transforming placement information into placement intelligence.","textPreview":"Transforming placement information into placement intelligence.","textChars":63,"textLines":1,"bbox":[72,635,700,24]}
+{"kind":"notes","id":"nt/r285wz","slide":17,"text":"End with the Review 1 handoff: the team has reduced ambiguity and is ready to build.\n\n[Sources]\nInternal project brief, architecture, timeline, and API contract in repository."}
