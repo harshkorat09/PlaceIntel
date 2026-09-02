@@ -1,0 +1,149 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+  output          = "../apps/api/src/generated/client"
+}
+
+datasource db {
+  provider   = "postgresql"
+  extensions = [vector]
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+enum Institute {
+  DEPSTAR
+  CSPIT
+}
+
+model User {
+  id           Int    @id @default(autoincrement())
+  email        String @unique
+  passwordHash String
+  role         Role   @default(STUDENT)
+  name         String
+
+  // Student specific fields
+  rollNo    String?    @unique
+  cgpa      Float?
+  institute Institute?
+  phone     String?
+
+  branchId Int?
+  branch   Branch? @relation(fields: [branchId], references: [id])
+
+  skills StudentSkill[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Company {
+  id           Int     @id @default(autoincrement())
+  name         String  @unique
+  sector       String
+  hiresDepstar Int     @default(0)
+  hiresCspit   Int     @default(0)
+  status       String  @default("Active Recruiter")
+  avgPackage   Float
+  notes        String?
+  website      String?
+
+  hrContacts Json?
+  visits     Json?
+
+  placements Placement[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Placement {
+  id        Int     @id @default(autoincrement())
+  companyId Int
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  position    String
+  ctc         Float
+  deadline    DateTime
+  cgpaCutoff  Float
+  description String?
+
+  status      String @default("Upcoming")
+  activeRound String @default("Pre-Placement Talk")
+
+  appliedCount     Int @default(0)
+  shortlistedCount Int @default(0)
+  offeredCount     Int @default(0)
+
+  skills      PlacementSkill[]
+  branches    PlacementBranch[]
+  attachments Attachment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Branch {
+  id         Int               @id @default(autoincrement())
+  name       String            @unique
+  users      User[]
+  placements PlacementBranch[]
+}
+
+model Skill {
+  id         Int              @id @default(autoincrement())
+  name       String           @unique
+  students   StudentSkill[]
+  placements PlacementSkill[]
+}
+
+model StudentSkill {
+  userId  Int
+  user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skillId Int
+  skill   Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([userId, skillId])
+}
+
+model PlacementSkill {
+  placementId Int
+  placement   Placement @relation(fields: [placementId], references: [id], onDelete: Cascade)
+  skillId     Int
+  skill       Skill     @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([placementId, skillId])
+}
+
+model PlacementBranch {
+  placementId Int
+  placement   Placement @relation(fields: [placementId], references: [id], onDelete: Cascade)
+
+  branchId Int
+  branch   Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@id([placementId, branchId])
+}
+
+model Attachment {
+  id          Int              @id @default(autoincrement())
+  placementId Int
+  placement   Placement        @relation(fields: [placementId], references: [id], onDelete: Cascade)
+  filePath    String
+  fileType    String
+  chunks      PlacementChunk[]
+}
+
+model PlacementChunk {
+  id Int @id @default(autoincrement())
+
+  attachmentId Int
+  attachment   Attachment @relation(fields: [attachmentId], references: [id], onDelete: Cascade)
+
+  chunkText String
+  embedding Unsupported("vector(1536)")?
+}

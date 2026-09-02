@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Search, 
   Plus, 
@@ -8,114 +8,39 @@ import {
   Sparkles,
   AlertCircle
 } from 'lucide-react';
+import { apiClient } from '../api/client';
 
-interface Drive {
-  id: number;
-  companyName: string;
-  position: string;
-  ctc: number;
-  deadline: string;
-  cgpaCutoff: number;
-  eligibleBranches: string[];
-  status: string;
-  activeRound: string;
-  appliedCount: number;
-  shortlistedCount: number;
-  offeredCount: number;
-  skills: string[];
-}
 
-export const initialDrives: Drive[] = [
-  {
-    id: 1,
-    companyName: 'Google India',
-    position: 'Software Engineer',
-    ctc: 32.0,
-    deadline: '2026-08-12',
-    cgpaCutoff: 8.0,
-    eligibleBranches: ['CSE', 'IT'],
-    status: 'Registration Open',
-    activeRound: 'Coding Test',
-    appliedCount: 210,
-    shortlistedCount: 45,
-    offeredCount: 0,
-    skills: ['Data Structures', 'Algorithms', 'System Design']
-  },
-  {
-    id: 2,
-    companyName: 'Microsoft',
-    position: 'Program Manager',
-    ctc: 28.0,
-    deadline: '2026-08-18',
-    cgpaCutoff: 7.5,
-    eligibleBranches: ['CSE', 'IT', 'ECE'],
-    status: 'Shortlisting',
-    activeRound: 'Resume Review',
-    appliedCount: 320,
-    shortlistedCount: 0,
-    offeredCount: 0,
-    skills: ['Product Planning', 'Data Analytics', 'Agile']
-  },
-  {
-    id: 3,
-    companyName: 'Goldman Sachs',
-    position: 'Systems Analyst',
-    ctc: 22.0,
-    deadline: '2026-08-25',
-    cgpaCutoff: 8.0,
-    eligibleBranches: ['CSE', 'IT', 'ECE'],
-    status: 'Ongoing',
-    activeRound: 'Technical Interview',
-    appliedCount: 180,
-    shortlistedCount: 22,
-    offeredCount: 0,
-    skills: ['Java', 'C++', 'Database Systems']
-  },
-  {
-    id: 4,
-    companyName: 'Deloitte US',
-    position: 'Technology Consultant',
-    ctc: 14.0,
-    deadline: '2026-09-02',
-    cgpaCutoff: 6.5,
-    eligibleBranches: ['CSE', 'IT', 'ECE', 'ME', 'EE'],
-    status: 'Upcoming',
-    activeRound: 'Pre-Placement Talk',
-    appliedCount: 450,
-    shortlistedCount: 0,
-    offeredCount: 0,
-    skills: ['SQL', 'Cloud Basics', 'Business Communication']
-  },
-  {
-    id: 5,
-    companyName: 'Tata Motors',
-    position: 'Graduate Engineer Trainee',
-    ctc: 8.5,
-    deadline: '2026-07-28',
-    cgpaCutoff: 6.0,
-    eligibleBranches: ['ME', 'EE'],
-    status: 'Completed',
-    activeRound: 'Final Offers Released',
-    appliedCount: 95,
-    shortlistedCount: 18,
-    offeredCount: 8,
-    skills: ['AutoCAD', 'Thermodynamics', 'Power Systems']
-  }
-];
+
+
 
 export default function Placements() {
-  const [drives, setDrives] = useState<Drive[]>(() => {
-    const stored = localStorage.getItem('placeintel_placement_drives');
-    if (stored) {
-      return JSON.parse(stored);
-    }
-    localStorage.setItem('placeintel_placement_drives', JSON.stringify(initialDrives));
-    return initialDrives;
-  });
+  const [drives, setDrives] = useState<any[]>([]);
+
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [branchFilter, setBranchFilter] = useState('All');
   const [minCtc, setMinCtc] = useState(0);
+
+  const fetchDrives = async () => {
+    try {
+      const queryParams = new URLSearchParams();
+      if (branchFilter !== 'All') queryParams.append('branch', branchFilter);
+      if (minCtc > 0) queryParams.append('packageRange', minCtc.toString());
+      if (search) queryParams.append('skill', search);
+
+      const res = await apiClient.get(`/placements?${queryParams.toString()}`);
+      if (res.success) {
+        setDrives(res.data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch placements:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDrives();
+  }, [branchFilter, minCtc, search]);
   
   // Form Drawer Toggle
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -130,42 +55,44 @@ export default function Placements() {
   const [newSkills, setNewSkills] = useState('');
 
   // Handle Form Submission
-  const handleCreateDrive = (e: React.FormEvent) => {
+  const handleCreateDrive = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newCompanyName || !newPosition || !newCtc || !newDeadline) {
       alert('Please fill out all required fields.');
       return;
     }
 
-    const driveObj: Drive = {
-      id: drives.length + 1,
-      companyName: newCompanyName,
-      position: newPosition,
-      ctc: parseFloat(newCtc),
-      deadline: newDeadline,
-      cgpaCutoff: parseFloat(newCgpa),
-      eligibleBranches: newBranches,
-      status: 'Upcoming',
-      activeRound: 'Pre-Placement Talk',
-      appliedCount: 0,
-      shortlistedCount: 0,
-      offeredCount: 0,
-      skills: newSkills.split(',').map(s => s.trim()).filter(Boolean)
-    };
+    try {
+      const res = await apiClient.post('/placements', {
+        companyId: 1, // Hardcoded for now until company dropdown is added
+        position: newPosition,
+        ctc: parseFloat(newCtc),
+        deadline: newDeadline,
+        cgpaCutoff: parseFloat(newCgpa),
+        description: '',
+        branchIds: [], // Would need branch mapping logic
+        skillIds: []
+      });
 
-    const updatedDrives = [driveObj, ...drives];
-    setDrives(updatedDrives);
-    localStorage.setItem('placeintel_placement_drives', JSON.stringify(updatedDrives));
-    
-    // Reset form
-    setNewCompanyName('');
-    setNewPosition('');
-    setNewCtc('');
-    setNewDeadline('');
-    setNewCgpa('7.0');
-    setNewBranches(['CSE', 'IT']);
-    setNewSkills('');
-    setIsFormOpen(false);
+      if (res.success) {
+        setIsFormOpen(false);
+        fetchDrives();
+        
+        // Reset form
+        setNewCompanyName('');
+        setNewPosition('');
+        setNewCtc('');
+        setNewDeadline('');
+        setNewCgpa('7.0');
+        setNewBranches(['CSE', 'IT']);
+        setNewSkills('');
+      } else {
+        alert(res.message || 'Failed to create placement');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error creating placement');
+    }
   };
 
   // Toggle Branch Checkbox
@@ -366,8 +293,8 @@ export default function Placements() {
 
                     {/* Core Skills */}
                     <div className="skills-list">
-                      {drive.skills.map((skill, i) => (
-                        <span key={i} className="skill-tag">{skill}</span>
+                      {drive.skills?.map((skill: any, i: number) => (
+                        <span key={i} className="skill-tag">{skill.skill ? skill.skill.name : skill}</span>
                       ))}
                     </div>
 

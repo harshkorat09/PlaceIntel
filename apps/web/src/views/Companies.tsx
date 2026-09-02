@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Search, 
   Sparkles,
@@ -9,166 +9,30 @@ import {
   X,
   ExternalLink
 } from 'lucide-react';
+import { apiClient } from '../api/client';
 
-interface HRContact {
-  name: string;
-  role: string;
-  email: string;
-  phone: string;
-}
 
-interface VisitHistory {
-  date: string;
-  event: string;
-  details: string;
-}
 
-interface Company {
-  id: number;
-  name: string;
-  sector: 'Technology' | 'Finance & Banking' | 'Consulting' | 'Automotive' | 'Core Engineering';
-  hiresDepstar: number;
-  hiresCspit: number;
-  status: 'Active Recruiter' | 'Outreach' | 'Inactive';
-  avgPackage: number; // LPA
-  hrContacts: HRContact[];
-  notes: string;
-  visits: VisitHistory[];
-  website: string;
-}
-
-const initialCompanies: Company[] = [
-  {
-    id: 1,
-    name: 'Google India',
-    sector: 'Technology',
-    hiresDepstar: 35,
-    hiresCspit: 50,
-    status: 'Active Recruiter',
-    avgPackage: 32.0,
-    hrContacts: [
-      { name: 'Neha Saxena', role: 'Lead Talent Partner', email: 'neha.s@google.com', phone: '+91 98765 88888' },
-      { name: 'Ryan Dsouza', role: 'University Coordinator', email: 'ryand@google.com', phone: '+91 98765 77777' }
-    ],
-    notes: 'Google focuses heavily on raw problem solving, algorithm design, and core OS concepts. Candidates with strong competitive coding profiles are highly preferred. Standard selection process involves an online challenge, followed by 3-4 technical rounds.',
-    visits: [
-      { date: 'Aug 12, 2026', event: 'SDE Campus Drive', details: 'Online coding test scheduled for registered candidates.' },
-      { date: 'Jul 15, 2025', event: 'PPT & Selection Drive', details: 'Selected 14 students (6 DEPSTAR, 8 CSPIT).' },
-      { date: 'Jul 20, 2024', event: 'SDE Recruitment Drive', details: 'Selected 12 students (5 DEPSTAR, 7 CSPIT).' }
-    ],
-    website: 'https://careers.google.com'
-  },
-  {
-    id: 2,
-    name: 'Microsoft',
-    sector: 'Technology',
-    hiresDepstar: 20,
-    hiresCspit: 44,
-    status: 'Active Recruiter',
-    avgPackage: 28.0,
-    hrContacts: [
-      { name: 'Amit Verma', role: 'University Recruiter', email: 'amit.v@microsoft.com', phone: '+91 98765 66666' }
-    ],
-    notes: 'Microsoft values project diversity and full stack development skills. Pre-placement talk attendance is tracked and highly correlated with shortlists. Candidates must be fluent in coding languages like C++, C#, or Java.',
-    visits: [
-      { date: 'Aug 18, 2026', event: 'Program Manager Drive', details: 'Resume screening active; interviews to begin.' },
-      { date: 'Jul 28, 2025', event: 'Software Dev Drive', details: 'Selected 18 students (5 DEPSTAR, 13 CSPIT).' }
-    ],
-    website: 'https://careers.microsoft.com'
-  },
-  {
-    id: 3,
-    name: 'Goldman Sachs',
-    sector: 'Finance & Banking',
-    hiresDepstar: 12,
-    hiresCspit: 30,
-    status: 'Active Recruiter',
-    avgPackage: 22.0,
-    hrContacts: [
-      { name: 'Priya Shah', role: 'Human Capital Associate', email: 'priya.s@gs.com', phone: '+91 99999 55555' }
-    ],
-    notes: 'Goldman Sachs looks for strong quantitative reasoning, data structures proficiency, and basic banking domain interests. They hold three rounds of technical interviews covering algorithms, DBMS, and OOPs.',
-    visits: [
-      { date: 'Aug 25, 2026', event: 'Systems Analyst Drive', details: 'Pre-Placement Talk scheduled at CHARUSAT auditorium.' },
-      { date: 'Jul 30, 2025', event: 'Annual Placement Drive', details: 'Selected 10 students (3 DEPSTAR, 7 CSPIT).' }
-    ],
-    website: 'https://goldmansachs.com/careers'
-  },
-  {
-    id: 4,
-    name: 'Deloitte US',
-    sector: 'Consulting',
-    hiresDepstar: 30,
-    hiresCspit: 80,
-    status: 'Active Recruiter',
-    avgPackage: 14.0,
-    hrContacts: [
-      { name: 'Vikram Mehta', role: 'Campus Lead', email: 'vikram.m@deloitte.com', phone: '+91 97777 44444' }
-    ],
-    notes: 'Deloitte values soft skills, resume verification, and case study problem solving. They conduct group discussions before technical rounds. Open to students from all branches.',
-    visits: [
-      { date: 'Sep 02, 2026', event: 'Technology Consultant Drive', details: 'Registration window active for eligible branches.' },
-      { date: 'Aug 01, 2025', event: 'Consultant Selection Drive', details: 'Selected 35 students (10 DEPSTAR, 25 CSPIT).' }
-    ],
-    website: 'https://deloitte.com/careers'
-  },
-  {
-    id: 5,
-    name: 'Tata Motors',
-    sector: 'Automotive',
-    hiresDepstar: 8,
-    hiresCspit: 18,
-    status: 'Active Recruiter',
-    avgPackage: 8.5,
-    hrContacts: [
-      { name: 'Rohan Patil', role: 'T&P Lead Coordinator', email: 'rohan.p@tatamotors.com', phone: '+91 95555 33333' }
-    ],
-    notes: 'Tata Motors recruits heavily from Mechanical (ME) and Electrical (EE) branches. Technical assessment covers AutoCAD, thermodynamics, electric vehicles, and engine mechanics.',
-    visits: [
-      { date: 'Jul 28, 2025', event: 'Graduate Engineer Trainee', details: 'Completed. Selected 8 students (2 DEPSTAR, 6 CSPIT).' }
-    ],
-    website: 'https://tatamotors.com/careers'
-  },
-  {
-    id: 6,
-    name: 'TCS (Tata Consultancy)',
-    sector: 'Technology',
-    hiresDepstar: 70,
-    hiresCspit: 140,
-    status: 'Active Recruiter',
-    avgPackage: 4.5,
-    hrContacts: [
-      { name: 'Sneha Nair', role: 'Talent Acquisition Team', email: 'sneha.n@tcs.com', phone: '+91 91111 88888' }
-    ],
-    notes: 'Mass recruiter. TCS values general aptitude, basic coding, and verified academic records. Students with backlogs are strictly filtered out.',
-    visits: [
-      { date: 'Aug 01, 2026', event: 'TCS Ninja/Digital Drive', details: 'System mapping done; shortlists released.' },
-      { date: 'Aug 05, 2025', event: 'General Recruitment', details: 'Selected 55 students (15 DEPSTAR, 40 CSPIT).' }
-    ],
-    website: 'https://tcs.com/careers'
-  },
-  {
-    id: 7,
-    name: 'Uber India',
-    sector: 'Technology',
-    hiresDepstar: 1,
-    hiresCspit: 2,
-    status: 'Outreach',
-    avgPackage: 44.0,
-    hrContacts: [
-      { name: 'Rahul Sen', role: 'APAC Recruiting Manager', email: 'rahul.s@uber.com', phone: '+91 92222 77777' }
-    ],
-    notes: 'Uber holds high compensation standards, targeting the top 2% of coders. Direct focus on concurrency, multi-threading, low-latency APIs, and systems design.',
-    visits: [
-      { date: 'Jul 10, 2026', event: 'Recruiter Outreach', details: 'Sent calendar invite for a potential recruitment drive.' }
-    ],
-    website: 'https://uber.com/careers'
-  }
-];
 
 export default function Companies({ role = 'officer' }: { role?: 'officer' | 'student' }) {
   const isAdmin = role === 'officer';
-  const [companies, setCompanies] = useState<Company[]>(initialCompanies);
+  const [companies, setCompanies] = useState<any[]>([]);
+
+  const fetchCompanies = async () => {
+    try {
+      const res = await apiClient.get('/companies');
+      if (res.success) {
+        setCompanies(res.data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch companies:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCompanies();
+  }, []);
+
   const [search, setSearch] = useState('');
   const [sectorFilter, setSectorFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -193,45 +57,46 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
   const [newStatus, setNewStatus] = useState<'Active Recruiter' | 'Outreach'>('Active Recruiter');
 
   // Form Submission
-  const handleCreateCompany = (e: React.FormEvent) => {
+  const handleCreateCompany = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newCompanyName || !newAvgPackage || !newHrName || !newHrEmail) {
       alert('Please fill out all required fields.');
       return;
     }
 
-    const companyObj: Company = {
-      id: companies.length + 1,
-      name: newCompanyName,
-      sector: newSector,
-      hiresDepstar: parseInt(newHiresDepstar) || 0,
-      hiresCspit: parseInt(newHiresCspit) || 0,
-      status: newStatus,
-      avgPackage: parseFloat(newAvgPackage),
-      hrContacts: [
-        { name: newHrName, role: 'Talent Acquisition', email: newHrEmail, phone: newHrPhone || 'N/A' }
-      ],
-      notes: newNotes || 'No notes available.',
-      visits: [
-        { date: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }), event: 'Recruiter Added', details: 'Added to database registry.' }
-      ],
-      website: 'https://' + newCompanyName.toLowerCase().replace(' ', '') + '.com'
-    };
+    try {
+      const res = await apiClient.post('/companies', {
+        name: newCompanyName,
+        sector: newSector,
+        hiresDepstar: parseInt(newHiresDepstar) || 0,
+        hiresCspit: parseInt(newHiresCspit) || 0,
+        status: newStatus,
+        avgPackage: parseFloat(newAvgPackage),
+        notes: newNotes || 'No notes available.',
+        website: 'https://' + newCompanyName.toLowerCase().replace(' ', '') + '.com'
+      });
 
-    setCompanies([companyObj, ...companies]);
-
-    // Reset Form
-    setNewCompanyName('');
-    setNewSector('Technology');
-    setNewHiresDepstar('0');
-    setNewHiresCspit('0');
-    setNewAvgPackage('');
-    setNewHrName('');
-    setNewHrEmail('');
-    setNewHrPhone('');
-    setNewNotes('');
-    setNewStatus('Active Recruiter');
-    setIsFormOpen(false);
+      if (res.success) {
+        setIsFormOpen(false);
+        fetchCompanies();
+        
+        setNewCompanyName('');
+        setNewSector('Technology');
+        setNewStatus('Active Recruiter');
+        setNewAvgPackage('');
+        setNewHrName('');
+        setNewHrEmail('');
+        setNewHrPhone('');
+        setNewHiresDepstar('');
+        setNewHiresCspit('');
+        setNewNotes('');
+      } else {
+        alert(res.message || 'Failed to create company');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error creating company');
+    }
   };
 
   const selectedCompany = companies.find(c => c.id === selectedCompanyId);
@@ -525,7 +390,7 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
                 </div>
                 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  {selectedCompany.hrContacts.map((hr, i) => (
+                  {selectedCompany.hrContacts?.map((hr: any, i: number) => (
                     <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <span style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-primary)' }}>{hr.name}</span>
@@ -554,11 +419,10 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
               </div>
             )}
 
-            {/* Campus Visits Timeline */}
             <div className="timeline-container">
               <span className="detail-label">Recruitment & Visit Timeline</span>
               <div className="app-timeline">
-                {selectedCompany.visits.map((visit, i) => (
+                {selectedCompany.visits?.map((visit: any, i: number) => (
                   <div key={i} className="timeline-step">
                     <div className="timeline-dot active"></div>
                     <div className="timeline-step-details">
