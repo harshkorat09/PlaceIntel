@@ -5,13 +5,12 @@ import {
   Lock, 
   Loader2, 
   User, 
-  AlertCircle, 
-  ShieldAlert
+  AlertCircle
 } from 'lucide-react';
 
-interface AuthProps {
-  onLoginSuccess: (role: 'officer' | 'student', identifier: string) => void;
-}
+import { useAuth } from '../contexts/AuthContext';
+import { apiClient } from '../api/client';
+import { useNavigate } from 'react-router-dom';
 
 interface StudentCredential {
   enrollmentNo: string;
@@ -19,20 +18,17 @@ interface StudentCredential {
   isFirstTime: boolean;
 }
 
-export default function Auth({ onLoginSuccess }: AuthProps) {
-  const [email, setEmail] = useState('placement.dir@univ.edu');
-  const [enrollmentNo, setEnrollmentNo] = useState('24DCSE045');
-  const [password, setPassword] = useState('temp123');
+export default function Auth() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('admin@placeintel.com');
+  const [enrollmentNo, setEnrollmentNo] = useState('student.24dcse045@charusat.edu.in');
+  const [password, setPassword] = useState('admin123');
   const [isLoading, setIsLoading] = useState(false);
   
   // Login Role: officer vs student
   const [loginRole, setLoginRole] = useState<'officer' | 'student'>('officer');
   
-  // Forced password reset states
-  const [isResettingPassword, setIsResettingPassword] = useState(false);
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-
   // Inline error state
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -48,7 +44,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
     }
   }, []);
 
-  const handleSignIn = (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
     const identifier = loginRole === 'officer' ? email : enrollmentNo;
@@ -56,67 +52,24 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
 
     setIsLoading(true);
     
-    // Simulate 1.2s verification delay
-    setTimeout(() => {
-      setIsLoading(false);
-      
-      if (loginRole === 'student') {
-        const stored = localStorage.getItem('placeintel_student_credentials');
-        const credsList: StudentCredential[] = stored ? JSON.parse(stored) : [];
-        const matched = credsList.find(c => c.enrollmentNo.toUpperCase() === enrollmentNo.trim().toUpperCase());
-        
-        if (matched && matched.password === password) {
-          if (matched.isFirstTime) {
-            setIsResettingPassword(true);
-          } else {
-            onLoginSuccess('student', enrollmentNo.trim().toUpperCase());
-          }
-        } else {
-          setErrorMessage('Invalid student credentials. Try 24DCSE045 and temp123.');
-        }
-      } else {
-        // Placement Officer login check
-        if (email.trim() === 'placement.dir@univ.edu' && password === '12345678') {
-          onLoginSuccess('officer', email.trim());
-        } else {
-          setErrorMessage('Invalid officer email or password. Hint: 12345678');
-        }
-      }
-    }, 1200);
-  };
-
-  const handleSavePassword = (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMessage(null);
-    if (!newPassword || newPassword !== confirmPassword) {
-      setErrorMessage('Passwords do not match. Please re-enter.');
-      return;
-    }
-    if (newPassword.length < 6) {
-      setErrorMessage('Password must be at least 6 characters long.');
-      return;
-    }
-
-    setIsLoading(true);
-    
-    // Simulate saving delay
-    setTimeout(() => {
-      setIsLoading(false);
-      
-      // Update credentials array in localStorage
-      const stored = localStorage.getItem('placeintel_student_credentials');
-      const credsList: StudentCredential[] = stored ? JSON.parse(stored) : [];
-      const updated = credsList.map(c => {
-        if (c.enrollmentNo.toUpperCase() === enrollmentNo.trim().toUpperCase()) {
-          return { ...c, password: newPassword, isFirstTime: false };
-        }
-        return c;
+    try {
+      const res = await apiClient.post('/auth/login', {
+        email: identifier,
+        password: password
       });
-      localStorage.setItem('placeintel_student_credentials', JSON.stringify(updated));
 
-      alert('Password updated successfully! Logging you in...');
-      onLoginSuccess('student', enrollmentNo.trim().toUpperCase());
-    }, 1200);
+      if (res.success && res.data?.token) {
+        login(res.data.token, res.data.user);
+        navigate('/');
+      } else {
+        setErrorMessage(res.message || 'Login failed');
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMessage('An error occurred during login');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -143,76 +96,6 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
             <span>{errorMessage}</span>
           </div>
         )}
-
-        {/* First Time Reset Password View */}
-        {isResettingPassword ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-            
-            <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.05)', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '12px', borderRadius: 'var(--radius-md)', display: 'flex', gap: 'var(--space-sm)' }}>
-              <ShieldAlert size={20} style={{ color: 'var(--danger)', flexShrink: 0 }} />
-              <div>
-                <span style={{ fontWeight: '700', fontSize: '13px', color: 'var(--text-primary)', display: 'block', marginBottom: '2px' }}>First-Time Password Change</span>
-                <p style={{ fontSize: '11.5px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-                  For security, you must replace the temporary password sent by your administrator before accessing the dashboard.
-                </p>
-              </div>
-            </div>
-
-            <form onSubmit={handleSavePassword} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)', marginTop: 'var(--space-xs)' }}>
-              
-              <div className="form-group">
-                <label className="form-label">Create New Password *</label>
-                <div style={{ position: 'relative' }}>
-                  <Lock size={14} style={{ position: 'absolute', left: '12px', top: '11px', color: 'var(--text-tertiary)' }} />
-                  <input 
-                    type="password" 
-                    className="form-control" 
-                    placeholder="Min. 6 characters"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    style={{ paddingLeft: '36px' }}
-                    required
-                    disabled={isLoading}
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Confirm New Password *</label>
-                <div style={{ position: 'relative' }}>
-                  <Lock size={14} style={{ position: 'absolute', left: '12px', top: '11px', color: 'var(--text-tertiary)' }} />
-                  <input 
-                    type="password" 
-                    className="form-control" 
-                    placeholder="Repeat password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    style={{ paddingLeft: '36px' }}
-                    required
-                    disabled={isLoading}
-                  />
-                </div>
-              </div>
-
-              <button 
-                type="submit" 
-                className="btn btn-primary"
-                style={{ width: '100%', padding: '10px', marginTop: 'var(--space-xs)' }}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 size={14} className="spinner-icon" style={{ marginRight: '6px' }} />
-                    <span>Saving Password...</span>
-                  </>
-                ) : (
-                  <span>Save Password & Log In</span>
-                )}
-              </button>
-
-            </form>
-          </div>
-        ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
             
             {/* Role Switcher */}
@@ -223,7 +106,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                 style={{ flex: 1, padding: '6px', fontSize: '12px', borderRadius: 'var(--radius-sm)', border: 'none', backgroundColor: loginRole === 'officer' ? 'var(--card)' : 'transparent', color: loginRole === 'officer' ? 'var(--primary)' : 'var(--text-secondary)', boxShadow: loginRole === 'officer' ? 'var(--shadow-sm)' : 'none', fontWeight: loginRole === 'officer' ? '700' : '500' }}
                 onClick={() => {
                   setLoginRole('officer');
-                  setPassword('12345678');
+                  setPassword('admin123');
                   setErrorMessage(null);
                 }}
               >
@@ -235,7 +118,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                 style={{ flex: 1, padding: '6px', fontSize: '12px', borderRadius: 'var(--radius-sm)', border: 'none', backgroundColor: loginRole === 'student' ? 'var(--card)' : 'transparent', color: loginRole === 'student' ? 'var(--primary)' : 'var(--text-secondary)', boxShadow: loginRole === 'student' ? 'var(--shadow-sm)' : 'none', fontWeight: loginRole === 'student' ? '700' : '500' }}
                 onClick={() => {
                   setLoginRole('student');
-                  setPassword('temp123');
+                  setPassword('student123');
                   setErrorMessage(null);
                 }}
               >
@@ -339,8 +222,6 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
 
             </form>
           </div>
-        )}
-
       </div>
     </div>
   );

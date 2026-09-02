@@ -15,6 +15,7 @@
     "docker:down": "docker compose down"
   },
   "devDependencies": {
+    "@types/pg": "^8.23.1",
     "prisma": "^7.9.1",
     "tsx": "^4.23.1"
   },
