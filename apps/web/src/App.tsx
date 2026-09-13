@@ -20,7 +20,7 @@ import {
 
 // Import views
 import Dashboard from './views/Dashboard';
-import Placements, { initialDrives } from './views/Placements';
+import Placements from './views/Placements';
 import Students from './views/Students';
 import Companies from './views/Companies';
 import Applications, { initialApplications } from './views/Applications';
@@ -34,17 +34,16 @@ import AdminPanel from './views/AdminPanel';
 import Auth from './views/Auth';
 import { StudentDashboard, StudentJobs, StudentAIAssistant, StudentProfile, getStudentData } from './views/StudentViews';
 
-export default function App() {
-  const [user, setUser] = useState<{ role: 'officer' | 'student'; id: string } | null>(null);
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
+
+function DashboardLayout() {
+  const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [lastSync, setLastSync] = useState(Date.now());
 
-  // Initialize all storage on app load to ensure students have data
   useEffect(() => {
-    if (!localStorage.getItem('placeintel_placement_drives')) {
-      localStorage.setItem('placeintel_placement_drives', JSON.stringify(initialDrives));
-    }
     if (!localStorage.getItem('placeintel_student_applications')) {
       localStorage.setItem('placeintel_student_applications', JSON.stringify(initialApplications));
     }
@@ -61,21 +60,15 @@ export default function App() {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  // Authentication page wrapper
-  if (!user) {
-    return <Auth onLoginSuccess={(role, id) => setUser({ role, id })} />;
-  }
-
-  const student = user.role === 'student' ? getStudentData(user.id) : null;
+  const student = user?.role === 'STUDENT' ? getStudentData(String(user.userId)) : null;
   const userInitials = student ? student.name.split(' ').map((n: string) => n[0]).join('') : 'AD';
   const userName = student ? student.name : 'Dr. Amit Das';
-  const userEmail = student ? user.id : 'placement.dir@univ.edu';
+  const userEmail = user?.email || 'placement.dir@univ.edu';
 
   return (
-    <Router>
-      <div className="app-layout">
-        {/* Sidebar */}
-        <aside className="sidebar">
+    <div className="app-layout">
+      {/* Sidebar */}
+      <aside className="sidebar">
           <div className="sidebar-header">
             <div className="logo-icon">PI</div>
             <span className="logo-text">PlaceIntel</span>
@@ -89,10 +82,10 @@ export default function App() {
             </NavLink>
             <NavLink to="/placements" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
               <Briefcase size={16} />
-              {user.role === 'officer' ? 'Placement Drives' : 'Job Openings'}
+              {user?.role === 'ADMIN' ? 'Placement Drives' : 'Job Openings'}
             </NavLink>
             
-            {user.role === 'officer' && (
+            {user?.role === 'ADMIN' && (
               <NavLink to="/students" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
                 <Users size={16} />
                 Students
@@ -101,12 +94,12 @@ export default function App() {
             
             <NavLink to="/companies" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
               <Building2 size={16} />
-              {user.role === 'officer' ? 'Companies' : 'Recruiters'}
+              {user?.role === 'ADMIN' ? 'Companies' : 'Recruiters'}
             </NavLink>
             
             <NavLink to="/applications" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
               <FileSpreadsheet size={16} />
-              {user.role === 'officer' ? 'Applications' : 'My Applications'}
+              {user?.role === 'ADMIN' ? 'Applications' : 'My Applications'}
             </NavLink>
 
             <NavLink to="/analytics" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
@@ -114,7 +107,7 @@ export default function App() {
               Analytics
             </NavLink>
 
-            {user.role === 'officer' && (
+            {user?.role === 'ADMIN' && (
               <NavLink to="/reports" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
                 <ClipboardList size={16} />
                 Reports
@@ -138,10 +131,10 @@ export default function App() {
             </NavLink>
             <NavLink to="/settings" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
               <SettingsIcon size={16} />
-              {user.role === 'officer' ? 'Settings' : 'My Profile'}
+              {user?.role === 'ADMIN' ? 'Settings' : 'My Profile'}
             </NavLink>
 
-            {user.role === 'officer' && (
+            {user?.role === 'ADMIN' && (
               <NavLink to="/admin" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
                 <ShieldAlert size={16} />
                 Admin Panel
@@ -158,7 +151,7 @@ export default function App() {
             </div>
             <button 
               className="icon-btn" 
-              onClick={() => setUser(null)} 
+              onClick={logout} 
               title="Logout"
               style={{ color: 'var(--text-secondary)' }}
             >
@@ -224,7 +217,7 @@ export default function App() {
                       className="menu-item" 
                       onClick={() => {
                         setShowProfileDropdown(false);
-                        setUser(null);
+                        logout();
                       }}
                       style={{ padding: '8px var(--space-sm)', color: 'var(--danger)', borderTop: '1px solid var(--border)', marginTop: '4px' }}
                     >
@@ -239,31 +232,44 @@ export default function App() {
           {/* Page Routing Contents (keyed by lastSync to force remount on cross-tab updates) */}
           <main className="main-content" key={lastSync}>
             <Routes>
-              <Route path="/" element={user.role === 'officer' ? <Dashboard /> : <StudentDashboard studentId={user.id} />} />
-              <Route path="/placements" element={user.role === 'officer' ? <Placements /> : <StudentJobs studentId={user.id} />} />
+              <Route path="/" element={<ProtectedRoute>{user?.role === 'ADMIN' ? <Dashboard /> : <StudentDashboard studentId={String(user?.userId)} />}</ProtectedRoute>} />
+              <Route path="/placements" element={<ProtectedRoute>{user?.role === 'ADMIN' ? <Placements /> : <StudentJobs studentId={String(user?.userId)} />}</ProtectedRoute>} />
               
-              {user.role === 'officer' && (
-                <>
-                  <Route path="/students" element={<Students />} />
-                  <Route path="/reports" element={<Reports />} />
-                  <Route path="/admin" element={<AdminPanel />} />
-                </>
-              )}
-
-              <Route path="/companies" element={<Companies role={user.role} />} />
-              <Route path="/applications" element={<Applications role={user.role} studentRollNo={user.id} />} />
-
-              <Route path="/analytics" element={<Analytics role={user.role} />} />
-              <Route path="/ai-assistant" element={user.role === 'officer' ? <AIAssistant /> : <StudentAIAssistant studentId={user.id} />} />
-              <Route path="/notifications" element={<Notifications role={user.role} />} />
-              <Route path="/calendar" element={<Calendar role={user.role} />} />
-              <Route path="/settings" element={user.role === 'officer' ? <Settings /> : <StudentProfile studentId={user.id} />} />
+              <Route path="/students" element={<ProtectedRoute requireAdmin><Students /></ProtectedRoute>} />
+              <Route path="/reports" element={<ProtectedRoute requireAdmin><Reports /></ProtectedRoute>} />
+              <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminPanel /></ProtectedRoute>} />
+              
+              <Route path="/companies" element={<ProtectedRoute><Companies role={user?.role === 'ADMIN' ? 'officer' : 'student'} /></ProtectedRoute>} />
+              <Route path="/applications" element={<ProtectedRoute><Applications role={user?.role === 'ADMIN' ? 'officer' : 'student'} studentRollNo={String(user?.userId)} /></ProtectedRoute>} />
+              <Route path="/analytics" element={<ProtectedRoute><Analytics role={user?.role === 'ADMIN' ? 'officer' : 'student'} /></ProtectedRoute>} />
+              <Route path="/ai-assistant" element={<ProtectedRoute>{user?.role === 'ADMIN' ? <AIAssistant /> : <StudentAIAssistant studentId={String(user?.userId)} />}</ProtectedRoute>} />
+              <Route path="/notifications" element={<ProtectedRoute><Notifications role={user?.role === 'ADMIN' ? 'officer' : 'student'} /></ProtectedRoute>} />
+              <Route path="/calendar" element={<ProtectedRoute><Calendar role={user?.role === 'ADMIN' ? 'officer' : 'student'} /></ProtectedRoute>} />
+              <Route path="/settings" element={<ProtectedRoute>{user?.role === 'ADMIN' ? <Settings /> : <StudentProfile studentId={String(user?.userId)} />}</ProtectedRoute>} />
               
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </main>
         </div>
       </div>
+  );
+}
+
+function AppContent() {
+  return (
+    <Routes>
+      <Route path="/login" element={<Auth />} />
+      <Route path="/*" element={<DashboardLayout />} />
+    </Routes>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </Router>
   );
 }

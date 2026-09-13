@@ -11,6 +11,7 @@ import {
   Upload,
   Lock
 } from 'lucide-react';
+import { apiClient } from '../api/client';
 
 interface StudentViewsProps {
   studentId: string;
@@ -336,9 +337,17 @@ export function StudentJobs({ studentId }: StudentViewsProps) {
 
   // Initialized sync variables
   useEffect(() => {
-    const storedDrives = localStorage.getItem('placeintel_placement_drives');
-    if (storedDrives) setDrives(JSON.parse(storedDrives));
+    const fetchDrives = async () => {
+      try {
+        const res = await apiClient.get('/placements');
+        if (res.success) setDrives(res.data);
+      } catch (err) {
+        console.error('Failed to fetch drives', err);
+      }
+    };
+    fetchDrives();
 
+    // Currently apps are still in local storage until applications API is fully modeled
     const storedApps = localStorage.getItem('placeintel_student_applications');
     if (storedApps) setApps(JSON.parse(storedApps));
   }, []);
@@ -541,18 +550,24 @@ export function StudentAIAssistant({ studentId }: StudentViewsProps) {
     setChatInput('');
     setIsAiTyping(true);
 
-    setTimeout(() => {
-      let reply = "Analyzing profile metrics. Type 'practice' to start interview simulation or 'cv review' to inspect credentials formatting.";
-
-      if (prompt.includes('practice') || prompt.includes('interview')) {
-        reply = `Alright! Let's simulate a technical mock round. Imagine you're interviewing at Google for an SDE intern role.\n\nQuestion: "How do you detect a cycle in a singly linked list, and what is the space complexity of your approach?"`;
-      } else if (prompt.includes('resume') || prompt.includes('review') || prompt.includes('cv')) {
-        reply = `I analyzed your profile CV details:\n- CGPA: ${student.cgpa} (High quality)\n- Extracted Core Skills: React, Python, Data Structures.\n- Optimization Tip: Add AWS Cloud or Docker experience to stand out for high-package (15+ LPA) roles.`;
+    const fetchChat = async () => {
+      try {
+        const res = await apiClient.post('/chat', { question: prompt });
+        if (res.success && res.data) {
+          const reply = res.data.answer + (res.data.source_notice ? `\n\n[Source: ${res.data.source_notice}]` : '');
+          setChatMessages(prev => [...prev, { sender: 'ai', text: reply }]);
+        } else {
+          setChatMessages(prev => [...prev, { sender: 'ai', text: 'Error connecting to the intelligence server.' }]);
+        }
+      } catch (err) {
+        console.error(err);
+        setChatMessages(prev => [...prev, { sender: 'ai', text: 'Error connecting to the intelligence server.' }]);
+      } finally {
+        setIsAiTyping(false);
       }
-
-      setChatMessages(prev => [...prev, { sender: 'ai', text: reply }]);
-      setIsAiTyping(false);
-    }, 1200);
+    };
+    
+    fetchChat();
   };
 
   return (
