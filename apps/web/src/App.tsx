@@ -22,7 +22,9 @@ import AIAssistant from './views/AIAssistant';
 import Settings from './views/Settings';
 import AdminPanel from './views/AdminPanel';
 import Auth from './views/Auth';
-import { StudentDashboard, StudentJobs, StudentProfile, getStudentData } from './views/StudentViews';
+import { StudentDashboard, getStudentData } from './views/StudentViews';
+import { StudentJobs } from './views/StudentJobs';
+import { StudentProfile } from './views/StudentProfile';
 
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';

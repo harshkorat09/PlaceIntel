@@ -9,21 +9,20 @@ import {
   X,
   ExternalLink
 } from 'lucide-react';
-import { apiClient } from '../api/client';
+import { companyService } from '../api/companyService';
+import type { Company } from '../api/types';
 
 
 
 
 export default function Companies({ role = 'officer' }: { role?: 'officer' | 'student' }) {
   const isAdmin = role === 'officer';
-  const [companies, setCompanies] = useState<any[]>([]);
+  const [companies, setCompanies] = useState<Company[]>([]);
 
   const fetchCompanies = async () => {
     try {
-      const res = await apiClient.get('/companies');
-      if (res.success) {
-        setCompanies(res.data);
-      }
+      const data = await companyService.getCompanies();
+      setCompanies(data);
     } catch (error) {
       console.error('Failed to fetch companies:', error);
     }
@@ -39,7 +38,7 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
   const [volumeFilter, setVolumeFilter] = useState('All');
 
   // Selected Company for Drawer
-  const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(null);
+  const [selectedCompanyId, setSelectedCompanyId] = useState<string | null>(null);
 
   // Form Panel Toggle
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -65,7 +64,7 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
     }
 
     try {
-      const res = await apiClient.post('/companies', {
+      const newCompany = await companyService.createCompany({
         name: newCompanyName,
         sector: newSector,
         hiresDepstar: parseInt(newHiresDepstar) || 0,
@@ -76,23 +75,19 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
         website: 'https://' + newCompanyName.toLowerCase().replace(' ', '') + '.com'
       });
 
-      if (res.success) {
-        setIsFormOpen(false);
-        fetchCompanies();
-        
-        setNewCompanyName('');
-        setNewSector('Technology');
-        setNewStatus('Active Recruiter');
-        setNewAvgPackage('');
-        setNewHrName('');
-        setNewHrEmail('');
-        setNewHrPhone('');
-        setNewHiresDepstar('');
-        setNewHiresCspit('');
-        setNewNotes('');
-      } else {
-        alert(res.message || 'Failed to create company');
-      }
+      setIsFormOpen(false);
+      setCompanies(prev => [...prev, newCompany]);
+      
+      setNewCompanyName('');
+      setNewSector('Technology');
+      setNewStatus('Active Recruiter');
+      setNewAvgPackage('');
+      setNewHrName('');
+      setNewHrEmail('');
+      setNewHrPhone('');
+      setNewHiresDepstar('');
+      setNewHiresCspit('');
+      setNewNotes('');
     } catch (error) {
       console.error(error);
       alert('Error creating company');
@@ -290,7 +285,7 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
                     )}
 
                     {/* Core Recruiter Contact */}
-                    {company.hrContacts.length > 0 && (
+                    {company.hrContacts && company.hrContacts.length > 0 && (
                       <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', fontSize: '12px', color: 'var(--text-secondary)', borderTop: '1px solid var(--border)', paddingTop: 'var(--space-sm)', marginTop: 'var(--space-xs)' }}>
                         <Mail size={12} style={{ color: 'var(--text-tertiary)' }} />
                         <span>{company.hrContacts[0].name} ({company.hrContacts[0].email})</span>

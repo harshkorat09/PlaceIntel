@@ -1,21 +1,20 @@
 import { useState, useEffect } from 'react';
-import { 
+import {
   Search, 
   Plus, 
   Clock, 
-  Download, 
-  Users, 
   Sparkles,
   AlertCircle
 } from 'lucide-react';
-import { apiClient } from '../api/client';
+import { placementService } from '../api/placementService';
+import type { Placement } from '../api/types';
 
 
 
 
 
 export default function Placements() {
-  const [drives, setDrives] = useState<any[]>([]);
+  const [drives, setDrives] = useState<Placement[]>([]);
 
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -24,15 +23,9 @@ export default function Placements() {
 
   const fetchDrives = async () => {
     try {
-      const queryParams = new URLSearchParams();
-      if (branchFilter !== 'All') queryParams.append('branch', branchFilter);
-      if (minCtc > 0) queryParams.append('packageRange', minCtc.toString());
-      if (search) queryParams.append('skill', search);
-
-      const res = await apiClient.get(`/placements?${queryParams.toString()}`);
-      if (res.success) {
-        setDrives(res.data);
-      }
+      // Filtering is done client-side for now with mock data
+      const data = await placementService.getPlacements();
+      setDrives(data);
     } catch (error) {
       console.error('Failed to fetch placements:', error);
     }
@@ -63,32 +56,29 @@ export default function Placements() {
     }
 
     try {
-      const res = await apiClient.post('/placements', {
-        companyId: 1, // Hardcoded for now until company dropdown is added
-        position: newPosition,
-        ctc: parseFloat(newCtc),
+      const newPlacement = await placementService.createPlacement({
+        companyName: newCompanyName,
+        role: newPosition,
+        packageRange: newCtc + ' LPA',
         deadline: newDeadline,
-        cgpaCutoff: parseFloat(newCgpa),
-        description: '',
-        branchIds: [], // Would need branch mapping logic
-        skillIds: []
+        cgpaRequirement: parseFloat(newCgpa),
+        description: 'New drive',
+        eligibleBranches: newBranches,
+        requiredSkills: newSkills.split(',').map(s => s.trim()).filter(s => s),
+        status: 'Upcoming'
       });
 
-      if (res.success) {
-        setIsFormOpen(false);
-        fetchDrives();
-        
-        // Reset form
-        setNewCompanyName('');
-        setNewPosition('');
-        setNewCtc('');
-        setNewDeadline('');
-        setNewCgpa('7.0');
-        setNewBranches(['CSE', 'IT']);
-        setNewSkills('');
-      } else {
-        alert(res.message || 'Failed to create placement');
-      }
+      setIsFormOpen(false);
+      setDrives(prev => [...prev, newPlacement]);
+      
+      // Reset form
+      setNewCompanyName('');
+      setNewPosition('');
+      setNewCtc('');
+      setNewDeadline('');
+      setNewCgpa('7.0');
+      setNewBranches(['CSE', 'IT']);
+      setNewSkills('');
     } catch (error) {
       console.error(error);
       alert('Error creating placement');
@@ -108,7 +98,7 @@ export default function Placements() {
   const filteredDrives = drives.filter(drive => {
     const matchesSearch = 
       drive.companyName.toLowerCase().includes(search.toLowerCase()) ||
-      drive.position.toLowerCase().includes(search.toLowerCase());
+      drive.role.toLowerCase().includes(search.toLowerCase());
       
     const matchesStatus = 
       statusFilter === 'All' || 
@@ -118,7 +108,8 @@ export default function Placements() {
       branchFilter === 'All' || 
       drive.eligibleBranches.includes(branchFilter);
       
-    const matchesCtc = drive.ctc >= minCtc;
+    const ctcValue = parseFloat(drive.packageRange);
+    const matchesCtc = !isNaN(ctcValue) ? ctcValue >= minCtc : true;
     
     return matchesSearch && matchesStatus && matchesBranch && matchesCtc;
   });
@@ -240,13 +231,6 @@ export default function Placements() {
               </div>
             ) : (
               filteredDrives.map(drive => {
-                // Calculate pipeline percentage
-                const total = drive.appliedCount || 1;
-                const shortlistPct = drive.status === 'Completed' 
-                  ? 100 
-                  : Math.round((drive.shortlistedCount / total) * 100);
-                const offeredPct = Math.round((drive.offeredCount / total) * 100);
-
                 return (
                   <div key={drive.id} className="card drive-card">
                     {/* Header */}
@@ -257,14 +241,11 @@ export default function Placements() {
                         </div>
                         <div className="drive-title-block">
                           <span className="drive-company-name">{drive.companyName}</span>
-                          <span className="drive-role">{drive.position}</span>
+                          <span className="drive-role">{drive.role}</span>
                         </div>
                       </div>
                       <div className="drive-badge-container">
                         {renderStatusBadge(drive.status)}
-                        <span style={{ fontSize: '10px', color: 'var(--text-tertiary)', fontWeight: '500' }}>
-                          Round: {drive.activeRound}
-                        </span>
                       </div>
                     </div>
 
@@ -272,11 +253,11 @@ export default function Placements() {
                     <div className="drive-details-grid">
                       <div className="detail-item">
                         <span className="detail-label">Compensation</span>
-                        <span className="detail-value" style={{ color: 'var(--primary)', fontWeight: '600' }}>₹{drive.ctc.toFixed(1)} LPA</span>
+                        <span className="detail-value" style={{ color: 'var(--primary)', fontWeight: '600' }}>{drive.packageRange}</span>
                       </div>
                       <div className="detail-item">
                         <span className="detail-label">CGPA Cutoff</span>
-                        <span className="detail-value">≽ {drive.cgpaCutoff.toFixed(1)}</span>
+                        <span className="detail-value">≽ {drive.cgpaRequirement.toFixed(1)}</span>
                       </div>
                       <div className="detail-item" style={{ gridColumn: 'span 2' }}>
                         <span className="detail-label">Registration Deadline</span>
@@ -293,50 +274,13 @@ export default function Placements() {
 
                     {/* Core Skills */}
                     <div className="skills-list">
-                      {drive.skills?.map((skill: any, i: number) => (
-                        <span key={i} className="skill-tag">{skill.skill ? skill.skill.name : skill}</span>
+                      {drive.requiredSkills?.map((skill: string, i: number) => (
+                        <span key={i} className="skill-tag">{skill}</span>
                       ))}
-                    </div>
-
-                    {/* Pipeline representation */}
-                    <div className="pipeline-container">
-                      <div className="pipeline-header">
-                        <span>Recruitment Pipeline</span>
-                        <span>{drive.appliedCount} Applied</span>
-                      </div>
-                      <div className="pipeline-stages">
-                        {drive.status === 'Completed' ? (
-                          <>
-                            <div className="pipeline-segment" style={{ width: `${100 - offeredPct}%`, backgroundColor: 'var(--primary)' }} title="Participated"></div>
-                            <div className="pipeline-segment" style={{ width: `${offeredPct}%`, backgroundColor: 'var(--accent)' }} title="Selected"></div>
-                          </>
-                        ) : (
-                          <>
-                            <div className="pipeline-segment" style={{ width: `${100 - shortlistPct}%`, backgroundColor: 'var(--border-focus)' }} title="Applied"></div>
-                            <div className="pipeline-segment" style={{ width: `${shortlistPct - offeredPct}%`, backgroundColor: 'var(--primary)' }} title="Shortlisted"></div>
-                            <div className="pipeline-segment" style={{ width: `${offeredPct}%`, backgroundColor: 'var(--accent)' }} title="Selected"></div>
-                          </>
-                        )}
-                      </div>
-                      <div className="pipeline-labels">
-                        <span>Applied: {drive.appliedCount}</span>
-                        {drive.status === 'Completed' ? (
-                          <span style={{ color: 'var(--accent)', fontWeight: '600' }}>Placed: {drive.offeredCount}</span>
-                        ) : (
-                          <span>Shortlisted: {drive.shortlistedCount}</span>
-                        )}
-                      </div>
                     </div>
 
                     {/* Bottom Actions */}
                     <div style={{ display: 'flex', gap: 'var(--space-sm)', borderTop: '1px solid var(--border)', paddingTop: 'var(--space-md)', marginTop: 'var(--space-xs)' }}>
-                      <button className="btn btn-secondary btn-sm" style={{ flex: 1, padding: '6px' }}>
-                        <Users size={12} />
-                        Applicants
-                      </button>
-                      <button className="btn btn-secondary btn-sm" style={{ padding: '6px' }} title="Download Resumes">
-                        <Download size={12} />
-                      </button>
                       <button 
                         className="btn btn-primary btn-sm" 
                         style={{ padding: '6px 10px', display: 'flex', gap: '4px', backgroundColor: 'var(--secondary)', color: 'white' }}
