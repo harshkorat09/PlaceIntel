@@ -1,37 +1,18 @@
 import { useState, useEffect } from 'react';
-import { 
-  CheckCircle, 
-  ArrowUpRight, 
-  Sparkles, 
-  Activity, 
-  Briefcase, 
-  AlertCircle, 
-  Send, 
-  Cpu, 
-  Upload,
-  Lock
+import {
+  CheckCircle,
+  ArrowUpRight,
+  Sparkles,
+  Briefcase,
+  AlertCircle,
+  Activity
 } from 'lucide-react';
-import { apiClient } from '../api/client';
 
 interface StudentViewsProps {
   studentId: string;
 }
 
-interface Drive {
-  id: number;
-  companyName: string;
-  position: string;
-  ctc: number;
-  deadline: string;
-  cgpaCutoff: number;
-  eligibleBranches: string[];
-  status: string;
-  activeRound: string;
-  appliedCount: number;
-  shortlistedCount: number;
-  offeredCount: number;
-  skills: string[];
-}
+
 
 interface Application {
   id: number;
@@ -83,7 +64,7 @@ export const getStudentData = (id: string) => {
   let branch = 'CSE';
   if (id.toUpperCase().includes('CE')) branch = 'CE';
   else if (id.toUpperCase().includes('IT')) branch = 'IT';
-  
+
   return {
     name: 'New Student',
     cgpa: 0,
@@ -103,13 +84,13 @@ export function StudentDashboard({ studentId }: StudentViewsProps) {
   const [apps, setApps] = useState<Application[]>([]);
   const [announcements, setAnnouncements] = useState<any[]>([]);
   const [events, setEvents] = useState<any[]>([]);
-  
+
   useEffect(() => {
     const storedApps = localStorage.getItem('placeintel_student_applications');
     if (storedApps) {
       setApps(JSON.parse(storedApps));
     }
-    
+
     const storedNotifs = localStorage.getItem('placeintel_announcements');
     if (storedNotifs) {
       const parsed = JSON.parse(storedNotifs);
@@ -128,7 +109,7 @@ export function StudentDashboard({ studentId }: StudentViewsProps) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
-      
+
       {/* Header banner */}
       <div className="page-header" style={{ marginBottom: 0 }}>
         <div>
@@ -139,7 +120,7 @@ export function StudentDashboard({ studentId }: StudentViewsProps) {
 
       {/* Stats Row */}
       <div className="applications-metrics-grid">
-        
+
         <div className="card" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
           <div className="kpi-icon" style={{ backgroundColor: 'var(--primary-light)', color: 'var(--primary)' }}>
             <Activity size={20} />
@@ -185,14 +166,14 @@ export function StudentDashboard({ studentId }: StudentViewsProps) {
       </div>
 
       <div className="dashboard-grid">
-        
+
         {/* Spline Area velocity curve */}
         <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
           <div className="card-title">
             <span>University Hiring Velocity (AY 2025-2026)</span>
             <span className="badge badge-info">Cumulative Offers</span>
           </div>
-          
+
           <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: 'var(--space-md)' }}>
             Visualizing monthly student selections cumulative growth curve since season launch.
           </p>
@@ -254,7 +235,7 @@ export function StudentDashboard({ studentId }: StudentViewsProps) {
                     </span>
                   </div>
                   <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Position Target: {app.driveRole}</span>
-                  
+
                   {/* Minified pipeline tracker indicator bar */}
                   <div style={{ display: 'flex', height: '4px', backgroundColor: 'var(--border)', borderRadius: 'var(--radius-full)', overflow: 'hidden', marginTop: '4px' }}>
                     <div style={{ width: '25%', backgroundColor: 'var(--accent)' }}></div>
@@ -272,14 +253,14 @@ export function StudentDashboard({ studentId }: StudentViewsProps) {
       </div>
 
       <div className="dashboard-grid">
-        
+
         {/* Recent Announcements */}
         <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
           <div className="card-title" style={{ display: 'flex', gap: '8px', alignItems: 'center', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
             <AlertCircle size={16} style={{ color: 'var(--primary)' }} />
             <span>Recent Placement Cell Notices</span>
           </div>
-          
+
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {announcements.length === 0 ? (
               <span style={{ fontSize: '12px', color: 'var(--text-tertiary)', fontStyle: 'italic' }}>No recent notices.</span>
@@ -300,7 +281,7 @@ export function StudentDashboard({ studentId }: StudentViewsProps) {
             <Briefcase size={16} style={{ color: 'var(--accent)' }} />
             <span>Upcoming Calendar Events</span>
           </div>
-          
+
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {events.length === 0 ? (
               <span style={{ fontSize: '12px', color: 'var(--text-tertiary)', fontStyle: 'italic' }}>No upcoming events scheduled.</span>
@@ -326,525 +307,4 @@ export function StudentDashboard({ studentId }: StudentViewsProps) {
   );
 }
 
-/* ============================================================================
-   2. STUDENT JOB OPENINGS (EXPLORE AND APPLY)
-   ============================================================================ */
-export function StudentJobs({ studentId }: StudentViewsProps) {
-  const student = getStudentData(studentId);
-  const [drives, setDrives] = useState<Drive[]>([]);
-  const [apps, setApps] = useState<Application[]>([]);
-  const [search, setSearch] = useState('');
 
-  // Initialized sync variables
-  useEffect(() => {
-    const fetchDrives = async () => {
-      try {
-        const res = await apiClient.get('/placements');
-        if (res.success) setDrives(res.data);
-      } catch (err) {
-        console.error('Failed to fetch drives', err);
-      }
-    };
-    fetchDrives();
-
-    // Currently apps are still in local storage until applications API is fully modeled
-    const storedApps = localStorage.getItem('placeintel_student_applications');
-    if (storedApps) setApps(JSON.parse(storedApps));
-  }, []);
-
-  // Check student eligibility
-  const checkEligibility = (drive: Drive) => {
-    // 1. Check if drive is active
-    if (drive.status === 'Completed' || drive.status === 'Selection Done') {
-      return { eligible: false, reason: 'Drive Completed' };
-    }
-    
-    // 2. Check deadline
-    const deadlineDate = new Date(drive.deadline);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    if (deadlineDate < today) {
-      return { eligible: false, reason: 'Deadline Passed' };
-    }
-
-    // 3. Check CGPA
-    const isCgpaOk = student.cgpa >= drive.cgpaCutoff;
-    if (!isCgpaOk) return { eligible: false, reason: `CGPA below ${drive.cgpaCutoff}` };
-
-    // 4. Check Branch
-    const isBranchOk = drive.eligibleBranches.some(b => b.toUpperCase().trim() === student.branch.toUpperCase().trim());
-    if (!isBranchOk) return { eligible: false, reason: `Branch restriction (${drive.eligibleBranches.join(', ')})` };
-    
-    return { eligible: true };
-  };
-
-  // Submit Application click handler
-  const handleApply = (drive: Drive) => {
-    // Match by drive ID + rollNo to prevent conflicts if company has multiple drives
-    const isApplied = apps.some(a => a.driveCompany === drive.companyName && a.driveRole === drive.position && a.rollNo === studentId.toUpperCase());
-    if (isApplied) return;
-
-    const newApp: Application = {
-      id: apps.length > 0 ? Math.max(...apps.map(a => a.id)) + 1 : 1,
-      studentName: student.name,
-      rollNo: studentId.toUpperCase(),
-      email: student.email,
-      institute: student.institute,
-      branch: student.branch,
-      cgpa: student.cgpa,
-      driveCompany: drive.companyName,
-      driveRole: drive.position,
-      driveCutoff: drive.cgpaCutoff,
-      drivePackage: drive.ctc,
-      status: 'Applied',
-      appliedDate: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
-      timeline: [
-        { 
-          date: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }), 
-          stage: 'Applied', 
-          note: 'Resume submitted successfully via student portal.' 
-        }
-      ]
-    };
-
-    const updatedApps = [newApp, ...apps];
-    setApps(updatedApps);
-    localStorage.setItem('placeintel_student_applications', JSON.stringify(updatedApps));
-
-    // Also update drive appliedCount in local storage
-    const updatedDrives = drives.map(d => {
-      if (d.id === drive.id) {
-        return { ...d, appliedCount: d.appliedCount + 1 };
-      }
-      return d;
-    });
-    setDrives(updatedDrives);
-    localStorage.setItem('placeintel_placement_drives', JSON.stringify(updatedDrives));
-
-    alert(`Successfully applied to ${drive.companyName}! Your profile has been added to the coordinator's applications tracker.`);
-  };
-
-  // Filter drives list
-  const filtered = drives.filter(d => 
-    d.companyName.toLowerCase().includes(search.toLowerCase()) ||
-    d.position.toLowerCase().includes(search.toLowerCase())
-  );
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
-      
-      <div className="page-header" style={{ marginBottom: 0 }}>
-        <div>
-          <h1 className="page-title">Active Job Openings</h1>
-          <p className="page-subtitle">Verify CGPA cutoffs, eligible branches, and apply to recruitment drives registered by the placement cell.</p>
-        </div>
-      </div>
-
-      {/* Filter search bar */}
-      <div className="filters-bar">
-        <div className="filter-input-group" style={{ flex: 1 }}>
-          <input 
-            type="text" 
-            placeholder="Search company name, target position, or technologies..." 
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-      </div>
-
-      {/* Drives Grid */}
-      <div className="drives-grid">
-        {filtered.map(drive => {
-          const check = checkEligibility(drive);
-          const isApplied = apps.some(a => a.driveCompany === drive.companyName && a.driveRole === drive.position && a.rollNo === studentId.toUpperCase());
-
-          return (
-            <div key={drive.id} className="card drive-card" style={{ borderLeft: isApplied ? '4px solid var(--accent)' : '1px solid var(--border)' }}>
-              <div className="drive-card-header">
-                <div className="company-logo-badge">{drive.companyName[0]}</div>
-                <div className="drive-badge-container">
-                  {isApplied ? (
-                    <span className="badge badge-success">Applied</span>
-                  ) : check.eligible ? (
-                    <span className="badge badge-success">Eligible to Apply</span>
-                  ) : (
-                    <span className="badge badge-danger" title={check.reason}>Ineligible</span>
-                  )}
-                  <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '4px' }}>Package: {drive.ctc.toFixed(1)} LPA</span>
-                </div>
-              </div>
-
-              <div className="drive-title-block">
-                <span className="drive-company-name">{drive.companyName}</span>
-                <span className="drive-role">{drive.position}</span>
-              </div>
-
-              <div className="resume-text-box" style={{ fontSize: '12px', lineHeight: '1.4', marginTop: '10px', marginBottom: '4px', padding: '8px', maxHeight: '60px' }}>
-                Full-time role targeting core computer science fundamentals. Strong grasp of algorithms, data structures, and system design required. Bond details as per company policy.
-              </div>
-
-              <div className="drive-details-grid" style={{ gridTemplateColumns: '1fr', padding: '10px 0', gap: '8px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11.5px' }}>
-                  <span style={{ color: 'var(--text-secondary)' }}>Cutoff Limit:</span>
-                  <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>{drive.cgpaCutoff.toFixed(2)} CGPA</span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11.5px' }}>
-                  <span style={{ color: 'var(--text-secondary)' }}>Eligible Branches:</span>
-                  <span style={{ fontWeight: '600', color: 'var(--text-primary)', fontSize: '11px' }}>{drive.eligibleBranches.join(', ')}</span>
-                </div>
-                {drive.skills && drive.skills.length > 0 && (
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '2px' }}>
-                    {drive.skills.map(skill => (
-                      <span key={skill} className="badge" style={{ fontSize: '10px', padding: '2px 6px', backgroundColor: 'var(--background)' }}>
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto', borderTop: '1px solid var(--border)', paddingTop: '12px' }}>
-                <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>Deadline: {drive.deadline}</span>
-                {isApplied ? (
-                  <button className="btn btn-secondary btn-sm" disabled style={{ opacity: 0.8 }}>
-                    ✓ Applied
-                  </button>
-                ) : check.eligible ? (
-                  <button className="btn btn-primary btn-sm" onClick={() => handleApply(drive)}>
-                    Apply Now
-                  </button>
-                ) : (
-                  <span style={{ fontSize: '11px', color: 'var(--danger)', fontWeight: '600' }}>
-                    {check.reason}
-                  </span>
-                )}
-              </div>
-
-            </div>
-          );
-        })}
-      </div>
-
-    </div>
-  );
-}
-
-/* ============================================================================
-   3. STUDENT AI INTERVIEW ASSISTANT
-   ============================================================================ */
-export function StudentAIAssistant({ studentId }: StudentViewsProps) {
-  const student = getStudentData(studentId);
-  const [chatMessages, setChatMessages] = useState([
-    { sender: 'ai', text: `Hi ${student.name}! I am your AI Placement assistant. Ask me to 'review resume', 'practice interview', or clarify eligibility queries.` }
-  ]);
-  const [chatInput, setChatInput] = useState('');
-  const [isAiTyping, setIsAiTyping] = useState(false);
-
-  const handleSend = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!chatInput.trim()) return;
-
-    const userMsg = { sender: 'user', text: chatInput };
-    setChatMessages(prev => [...prev, userMsg]);
-    const prompt = chatInput.toLowerCase();
-    setChatInput('');
-    setIsAiTyping(true);
-
-    const fetchChat = async () => {
-      try {
-        const res = await apiClient.post('/chat', { question: prompt });
-        if (res.success && res.data) {
-          const reply = res.data.answer + (res.data.source_notice ? `\n\n[Source: ${res.data.source_notice}]` : '');
-          setChatMessages(prev => [...prev, { sender: 'ai', text: reply }]);
-        } else {
-          setChatMessages(prev => [...prev, { sender: 'ai', text: 'Error connecting to the intelligence server.' }]);
-        }
-      } catch (err) {
-        console.error(err);
-        setChatMessages(prev => [...prev, { sender: 'ai', text: 'Error connecting to the intelligence server.' }]);
-      } finally {
-        setIsAiTyping(false);
-      }
-    };
-    
-    fetchChat();
-  };
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)', height: 'calc(100vh - 120px)' }}>
-      
-      <div className="page-header" style={{ marginBottom: 0 }}>
-        <div>
-          <h1 className="page-title">AI Career Assistant</h1>
-          <p className="page-subtitle">Practice technical coding questions, request resume feedback, and verify mock behavioral answers.</p>
-        </div>
-      </div>
-
-      <div className="card" style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, padding: 0 }}>
-        
-        {/* Chat header */}
-        <div style={{ padding: 'var(--space-md)', borderBottom: '1px solid var(--border)', display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <Sparkles size={16} style={{ color: 'var(--primary)' }} />
-          <span style={{ fontWeight: '600', fontSize: '13px' }}>Conversational Practice Arena</span>
-        </div>
-
-        {/* Messages feed */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: 'var(--space-md)', display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-          {chatMessages.map((msg, idx) => (
-            <div 
-              key={idx} 
-              style={{ 
-                alignSelf: msg.sender === 'ai' ? 'flex-start' : 'flex-end',
-                maxWidth: '80%',
-                backgroundColor: msg.sender === 'ai' ? 'var(--background)' : 'var(--primary)',
-                color: msg.sender === 'ai' ? 'var(--text-primary)' : 'white',
-                padding: '10px 14px',
-                borderRadius: 'var(--radius-md)',
-                fontSize: '13px',
-                lineHeight: '1.5',
-                whiteSpace: 'pre-wrap',
-                border: msg.sender === 'ai' ? '1px solid var(--border)' : 'none'
-              }}
-            >
-              {msg.text}
-            </div>
-          ))}
-
-          {isAiTyping && (
-            <div style={{ alignSelf: 'flex-start', backgroundColor: 'var(--background)', padding: '10px 14px', borderRadius: 'var(--radius-md)', display: 'flex', gap: '4px', alignItems: 'center' }}>
-              <span className="spinner-icon"><Cpu size={12} /></span>
-              <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>AI is formulating response...</span>
-            </div>
-          )}
-        </div>
-
-        {/* Quick prompt suggestions chips */}
-        <div style={{ display: 'flex', gap: 'var(--space-xs)', padding: 'var(--space-sm) var(--space-md)', borderTop: '1px dashed var(--border)', overflowX: 'auto' }}>
-          <button className="btn btn-secondary btn-sm" onClick={() => setChatInput('Review my CV strengths and weaknesses')}>
-            Review CV
-          </button>
-          <button className="btn btn-secondary btn-sm" onClick={() => setChatInput('Practice mock technical coding interview')}>
-            Technical Mock Prep
-          </button>
-          <button className="btn btn-secondary btn-sm" onClick={() => setChatInput('Give me mock behavioral questions')}>
-            Behavioral Mock Prep
-          </button>
-        </div>
-
-        {/* Composer Form input */}
-        <form onSubmit={handleSend} style={{ padding: 'var(--space-md)', borderTop: '1px solid var(--border)', display: 'flex', gap: 'var(--space-sm)' }}>
-          <input 
-            type="text" 
-            className="form-control" 
-            placeholder="Type message or click a helper prompt chip..."
-            value={chatInput}
-            onChange={(e) => setChatInput(e.target.value)}
-            disabled={isAiTyping}
-            style={{ flex: 1 }}
-          />
-          <button type="submit" className="btn btn-primary" disabled={isAiTyping}>
-            <Send size={14} />
-          </button>
-        </form>
-
-      </div>
-
-    </div>
-  );
-}
-
-/* ============================================================================
-   4. STUDENT PROFILE SETTINGS & RESUME UPLOADER
-   ============================================================================ */
-export function StudentProfile({ studentId }: StudentViewsProps) {
-  const student = getStudentData(studentId);
-  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
-  const [resumeName, setResumeName] = useState('Default_Academic_Resume.pdf');
-  const [isChangingPassword, setIsChangingPassword] = useState(false);
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordError, setPasswordError] = useState<string | null>(null);
-
-  const handlePasswordChange = (e: React.FormEvent) => {
-    e.preventDefault();
-    setPasswordError(null);
-    if (!newPassword || newPassword !== confirmPassword) {
-      setPasswordError('Passwords do not match.');
-      return;
-    }
-    if (newPassword.length < 6) {
-      setPasswordError('Password must be at least 6 characters.');
-      return;
-    }
-
-    const stored = localStorage.getItem('placeintel_student_credentials');
-    if (stored) {
-      const credsList = JSON.parse(stored);
-      const updated = credsList.map((c: any) => {
-        if (c.enrollmentNo.toUpperCase() === studentId.trim().toUpperCase()) {
-          return { ...c, password: newPassword };
-        }
-        return c;
-      });
-      localStorage.setItem('placeintel_student_credentials', JSON.stringify(updated));
-      alert('Password updated successfully!');
-      setIsChangingPassword(false);
-      setNewPassword('');
-      setConfirmPassword('');
-    }
-  };
-
-  const handleUpload = () => {
-    setUploadProgress(10);
-    const interval = setInterval(() => {
-      setUploadProgress(prev => {
-        if (prev === null) return null;
-        if (prev >= 100) {
-          clearInterval(interval);
-          setTimeout(() => setUploadProgress(null), 1000);
-          setResumeName(`${student.name.replace(/ /g, '_')}_Resume_Parsed.pdf`);
-          alert('New CV file uploaded. Skill tags synchronized successfully!');
-          return 100;
-        }
-        return prev + 30;
-      });
-    }, 300);
-  };
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
-      
-      <div className="page-header" style={{ marginBottom: 0 }}>
-        <div>
-          <h1 className="page-title">Placement Profile</h1>
-          <p className="page-subtitle">Verify academic CGPA credentials and manage your active recruiting resume PDF.</p>
-        </div>
-      </div>
-
-      <div className="analytics-grid-two">
-        
-        {/* Left card - details */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-          
-          <div className="drawer-profile-header" style={{ borderBottom: 'none', paddingBottom: 0 }}>
-            <div className="avatar-lg" style={{ width: '80px', height: '80px', fontSize: '28px' }}>
-              {student.name.split(' ').map((n: string) => n[0]).join('')}
-            </div>
-            <h3 className="drawer-profile-name" style={{ marginTop: '12px' }}>{student.name}</h3>
-            <span style={{ fontSize: '13px', color: 'var(--text-secondary)', fontFamily: 'monospace' }}>Roll ID: {studentId}</span>
-          </div>
-
-          <div className="profile-meta-grid" style={{ gridTemplateColumns: '1fr', padding: 'var(--space-md)', gap: '12px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13.5px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Institute:</span>
-              <strong style={{ color: 'var(--text-primary)' }}>{student.institute}</strong>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13.5px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Academic Branch:</span>
-              <strong style={{ color: 'var(--text-primary)' }}>{student.branch} Engineering</strong>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13.5px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Email Address:</span>
-              <strong style={{ color: 'var(--text-primary)' }}>{student.email}</strong>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13.5px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Verified CGPA:</span>
-              <strong style={{ color: 'var(--primary)', fontWeight: '700' }}>{student.cgpa > 0 ? student.cgpa.toFixed(2) : 'Not Updated'}</strong>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13.5px', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Extracted Skills:</span>
-              <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', justifyContent: 'flex-end', maxWidth: '180px' }}>
-                {student.skills && student.skills.length > 0 ? (
-                  student.skills.map(skill => (
-                    <span key={skill} className="badge badge-info" style={{ fontSize: '10px', padding: '2px 6px' }}>{skill}</span>
-                  ))
-                ) : (
-                  <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>No skills extracted yet</span>
-                )}
-              </div>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13.5px' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>Phone Number:</span>
-              <strong style={{ color: 'var(--text-primary)' }}>{student.phone}</strong>
-            </div>
-          </div>
-          
-          {!isChangingPassword ? (
-            <button className="btn btn-secondary btn-sm" style={{ alignSelf: 'flex-start', marginTop: 'auto' }} onClick={() => setIsChangingPassword(true)}>
-              <Lock size={14} style={{ marginRight: '6px' }} />
-              Change Password
-            </button>
-          ) : (
-            <form onSubmit={handlePasswordChange} style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', borderTop: '1px solid var(--border)', paddingTop: '12px' }}>
-              <span style={{ fontSize: '13px', fontWeight: '600' }}>Change Account Password</span>
-              {passwordError && <span style={{ fontSize: '11px', color: 'var(--danger)' }}>{passwordError}</span>}
-              <input 
-                type="password" 
-                className="form-control" 
-                placeholder="New Password (min 6 chars)" 
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                style={{ fontSize: '12px', padding: '6px 10px' }}
-                required
-              />
-              <input 
-                type="password" 
-                className="form-control" 
-                placeholder="Confirm Password" 
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                style={{ fontSize: '12px', padding: '6px 10px' }}
-                required
-              />
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <button type="submit" className="btn btn-primary btn-sm" style={{ flex: 1 }}>Save</button>
-                <button type="button" className="btn btn-secondary btn-sm" style={{ flex: 1 }} onClick={() => setIsChangingPassword(false)}>Cancel</button>
-              </div>
-            </form>
-          )}
-
-        </div>
-
-        {/* Right card - resume upload */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-          
-          <div className="card-title" style={{ borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
-            <span>Placement Resume PDF</span>
-          </div>
-
-          <p style={{ fontSize: '12.5px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
-            Upload your verified resume PDF. Our parser will extract core technical keywords for the recruiter matchmaking algorithm.
-          </p>
-
-          <div 
-            style={{ border: '2px dashed var(--border)', borderRadius: 'var(--radius-md)', padding: 'var(--space-xl)', textAlign: 'center', backgroundColor: 'var(--background)', cursor: 'pointer' }}
-            onClick={handleUpload}
-          >
-            <Upload size={32} style={{ color: 'var(--text-tertiary)', margin: '0 auto var(--space-md)' }} />
-            {uploadProgress !== null ? (
-              <div>
-                <div style={{ fontSize: '13px', fontWeight: '600', color: 'var(--primary)', marginBottom: '6px' }}>Uploading & Analyzing CV... {uploadProgress}%</div>
-                <div style={{ height: '6px', background: 'var(--border)', borderRadius: 'var(--radius-full)', overflow: 'hidden' }}>
-                  <div style={{ width: `${uploadProgress}%`, height: '100%', backgroundColor: 'var(--primary)' }}></div>
-                </div>
-              </div>
-            ) : (
-              <div>
-                <span style={{ fontSize: '13.5px', fontWeight: '600', color: 'var(--primary)', display: 'block' }}>{resumeName}</span>
-                <span style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '4px', display: 'block' }}>Click or drop to upload updated PDF file</span>
-              </div>
-            )}
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: 'var(--text-tertiary)', marginTop: 'auto', borderTop: '1px dashed var(--border)', paddingTop: '10px' }}>
-            <AlertCircle size={12} style={{ color: 'var(--accent)' }} />
-            <span>Credentials locked and verified by University registrar T&P desk.</span>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-  );
-}
