@@ -1,16 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink, Navigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Briefcase, 
-  Users, 
   Building2, 
-  FileSpreadsheet, 
   BarChart3, 
-  ClipboardList, 
   Sparkles, 
-  Bell, 
-  Calendar as CalendarIcon, 
   Settings as SettingsIcon, 
   ShieldAlert, 
   LogOut, 
@@ -21,18 +16,13 @@ import {
 // Import views
 import Dashboard from './views/Dashboard';
 import Placements from './views/Placements';
-import Students from './views/Students';
 import Companies from './views/Companies';
-import Applications, { initialApplications } from './views/Applications';
 import Analytics from './views/Analytics';
-import Reports from './views/Reports';
 import AIAssistant from './views/AIAssistant';
-import Notifications, { initialNotifications } from './views/Notifications';
-import Calendar, { initialEvents } from './views/Calendar';
 import Settings from './views/Settings';
 import AdminPanel from './views/AdminPanel';
 import Auth from './views/Auth';
-import { StudentDashboard, StudentJobs, StudentAIAssistant, StudentProfile, getStudentData } from './views/StudentViews';
+import { StudentDashboard, StudentJobs, StudentProfile, getStudentData } from './views/StudentViews';
 
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -41,24 +31,6 @@ function DashboardLayout() {
   const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
-  const [lastSync, setLastSync] = useState(Date.now());
-
-  useEffect(() => {
-    if (!localStorage.getItem('placeintel_student_applications')) {
-      localStorage.setItem('placeintel_student_applications', JSON.stringify(initialApplications));
-    }
-    if (!localStorage.getItem('placeintel_calendar_events')) {
-      localStorage.setItem('placeintel_calendar_events', JSON.stringify(initialEvents));
-    }
-    if (!localStorage.getItem('placeintel_announcements')) {
-      localStorage.setItem('placeintel_announcements', JSON.stringify(initialNotifications));
-    }
-    const handleStorageChange = () => {
-      setLastSync(Date.now());
-    };
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
 
   const student = user?.role === 'STUDENT' ? getStudentData(String(user.userId)) : null;
   const userInitials = student ? student.name.split(' ').map((n: string) => n[0]).join('') : 'AD';
@@ -85,34 +57,15 @@ function DashboardLayout() {
               {user?.role === 'ADMIN' ? 'Placement Drives' : 'Job Openings'}
             </NavLink>
             
-            {user?.role === 'ADMIN' && (
-              <NavLink to="/students" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
-                <Users size={16} />
-                Students
-              </NavLink>
-            )}
-            
             <NavLink to="/companies" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
               <Building2 size={16} />
               {user?.role === 'ADMIN' ? 'Companies' : 'Recruiters'}
-            </NavLink>
-            
-            <NavLink to="/applications" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
-              <FileSpreadsheet size={16} />
-              {user?.role === 'ADMIN' ? 'Applications' : 'My Applications'}
             </NavLink>
 
             <NavLink to="/analytics" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
               <BarChart3 size={16} />
               Analytics
             </NavLink>
-
-            {user?.role === 'ADMIN' && (
-              <NavLink to="/reports" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
-                <ClipboardList size={16} />
-                Reports
-              </NavLink>
-            )}
 
             <div className="menu-label" style={{ marginTop: 'var(--space-md)' }}>AI & Automation</div>
             <NavLink to="/ai-assistant" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
@@ -121,14 +74,6 @@ function DashboardLayout() {
             </NavLink>
 
             <div className="menu-label" style={{ marginTop: 'var(--space-md)' }}>System</div>
-            <NavLink to="/notifications" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
-              <Bell size={16} />
-              Notifications
-            </NavLink>
-            <NavLink to="/calendar" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
-              <CalendarIcon size={16} />
-              Calendar
-            </NavLink>
             <NavLink to="/settings" className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}>
               <SettingsIcon size={16} />
               {user?.role === 'ADMIN' ? 'Settings' : 'My Profile'}
@@ -168,21 +113,13 @@ function DashboardLayout() {
               <Search size={16} className="text-tertiary" style={{ color: 'var(--text-tertiary)' }} />
               <input 
                 type="text" 
-                placeholder="Search students, companies, or drives..." 
+                placeholder="Search companies or drives..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
             
             <div className="header-actions">
-              <NavLink to="/notifications" className="icon-btn">
-                <Bell size={18} />
-                <span className="icon-badge"></span>
-              </NavLink>
-              <NavLink to="/calendar" className="icon-btn">
-                <CalendarIcon size={18} />
-              </NavLink>
-              
               <div style={{ position: 'relative' }}>
                 <div 
                   style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-xs)', cursor: 'pointer' }}
@@ -229,22 +166,17 @@ function DashboardLayout() {
             </div>
           </header>
 
-          {/* Page Routing Contents (keyed by lastSync to force remount on cross-tab updates) */}
-          <main className="main-content" key={lastSync}>
+          {/* Page Routing Contents */}
+          <main className="main-content">
             <Routes>
               <Route path="/" element={<ProtectedRoute>{user?.role === 'ADMIN' ? <Dashboard /> : <StudentDashboard studentId={String(user?.userId)} />}</ProtectedRoute>} />
               <Route path="/placements" element={<ProtectedRoute>{user?.role === 'ADMIN' ? <Placements /> : <StudentJobs studentId={String(user?.userId)} />}</ProtectedRoute>} />
               
-              <Route path="/students" element={<ProtectedRoute requireAdmin><Students /></ProtectedRoute>} />
-              <Route path="/reports" element={<ProtectedRoute requireAdmin><Reports /></ProtectedRoute>} />
               <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminPanel /></ProtectedRoute>} />
               
               <Route path="/companies" element={<ProtectedRoute><Companies role={user?.role === 'ADMIN' ? 'officer' : 'student'} /></ProtectedRoute>} />
-              <Route path="/applications" element={<ProtectedRoute><Applications role={user?.role === 'ADMIN' ? 'officer' : 'student'} studentRollNo={String(user?.userId)} /></ProtectedRoute>} />
               <Route path="/analytics" element={<ProtectedRoute><Analytics role={user?.role === 'ADMIN' ? 'officer' : 'student'} /></ProtectedRoute>} />
-              <Route path="/ai-assistant" element={<ProtectedRoute>{user?.role === 'ADMIN' ? <AIAssistant /> : <StudentAIAssistant studentId={String(user?.userId)} />}</ProtectedRoute>} />
-              <Route path="/notifications" element={<ProtectedRoute><Notifications role={user?.role === 'ADMIN' ? 'officer' : 'student'} /></ProtectedRoute>} />
-              <Route path="/calendar" element={<ProtectedRoute><Calendar role={user?.role === 'ADMIN' ? 'officer' : 'student'} /></ProtectedRoute>} />
+              <Route path="/ai-assistant" element={<ProtectedRoute><AIAssistant /></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute>{user?.role === 'ADMIN' ? <Settings /> : <StudentProfile studentId={String(user?.userId)} />}</ProtectedRoute>} />
               
               <Route path="*" element={<Navigate to="/" />} />
