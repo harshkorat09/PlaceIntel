@@ -62,6 +62,7 @@ model Placement {
   company          Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
   branches         PlacementBranch[]
   skills           PlacementSkill[]
+  
 }
 
 model Branch {
@@ -110,6 +111,7 @@ model Attachment {
   placementId Int
   filePath    String
   fileType    String
+  fileHash    String          @unique
   placement   Placement        @relation(fields: [placementId], references: [id], onDelete: Cascade)
   chunks      PlacementChunk[]
 }
@@ -119,6 +121,8 @@ model PlacementChunk {
   attachmentId Int
   chunkText    String
   embedding    Unsupported("vector")?
+  pageNumber   Int
+  chunkIndex   Int
   attachment   Attachment             @relation(fields: [attachmentId], references: [id], onDelete: Cascade)
 }
 
