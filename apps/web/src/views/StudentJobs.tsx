@@ -16,7 +16,7 @@ export function StudentJobs({ studentId }: StudentJobsProps) {
   const [search, setSearch] = useState('');
   const [branchFilter, setBranchFilter] = useState('');
   const [skillFilter, setSkillFilter] = useState('');
-  
+
   useEffect(() => {
     const fetchDrives = async () => {
       try {
@@ -34,8 +34,8 @@ export function StudentJobs({ studentId }: StudentJobsProps) {
 
   const filteredDrives = useMemo(() => {
     return drives.filter(drive => {
-      const matchSearch = drive.companyName.toLowerCase().includes(search.toLowerCase()) || 
-                          drive.role.toLowerCase().includes(search.toLowerCase());
+      const matchSearch = drive.companyName.toLowerCase().includes(search.toLowerCase()) ||
+        drive.role.toLowerCase().includes(search.toLowerCase());
       const matchBranch = branchFilter ? drive.eligibleBranches.includes(branchFilter) : true;
       const matchSkill = skillFilter ? drive.requiredSkills.includes(skillFilter) : true;
       return matchSearch && matchBranch && matchSkill;
@@ -47,7 +47,7 @@ export function StudentJobs({ studentId }: StudentJobsProps) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
-      
+
       <div className="page-header" style={{ marginBottom: 0 }}>
         <div>
           <h1 className="page-title">Placement Discovery</h1>
@@ -57,12 +57,12 @@ export function StudentJobs({ studentId }: StudentJobsProps) {
 
       {/* Filter search bar */}
       <div className="filters-bar" style={{ display: 'flex', gap: 'var(--space-md)', flexWrap: 'wrap', backgroundColor: 'var(--card)', padding: 'var(--space-md)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
-        
+
         <div className="filter-input-group" style={{ flex: 2, minWidth: '200px', display: 'flex', alignItems: 'center', backgroundColor: 'var(--background)', padding: '8px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
           <Search size={16} style={{ color: 'var(--text-tertiary)', marginRight: '8px' }} />
-          <input 
-            type="text" 
-            placeholder="Search company or role..." 
+          <input
+            type="text"
+            placeholder="Search company or role..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             style={{ border: 'none', background: 'transparent', outline: 'none', width: '100%', fontSize: '13px' }}
@@ -70,8 +70,8 @@ export function StudentJobs({ studentId }: StudentJobsProps) {
         </div>
 
         <div className="filter-input-group" style={{ flex: 1, minWidth: '150px' }}>
-          <select 
-            className="form-control" 
+          <select
+            className="form-control"
             value={branchFilter}
             onChange={(e) => setBranchFilter(e.target.value)}
             style={{ padding: '8px 12px', fontSize: '13px', width: '100%' }}
@@ -85,8 +85,8 @@ export function StudentJobs({ studentId }: StudentJobsProps) {
         </div>
 
         <div className="filter-input-group" style={{ flex: 1, minWidth: '150px' }}>
-          <select 
-            className="form-control" 
+          <select
+            className="form-control"
             value={skillFilter}
             onChange={(e) => setSkillFilter(e.target.value)}
             style={{ padding: '8px 12px', fontSize: '13px', width: '100%' }}
@@ -110,7 +110,7 @@ export function StudentJobs({ studentId }: StudentJobsProps) {
         ) : (
           filteredDrives.map(drive => (
             <div key={drive.id} className="card drive-card" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              
+
               <div className="drive-card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <div className="company-logo-badge" style={{ width: '40px', height: '40px', backgroundColor: 'var(--primary-light)', color: 'var(--primary)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '18px' }}>

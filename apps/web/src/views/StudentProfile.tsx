@@ -13,7 +13,7 @@ export function StudentProfile({ studentId }: StudentProfileProps) {
   const [formData, setFormData] = useState<Partial<StudentProfileData>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [resumeName, setResumeName] = useState('Default_Academic_Resume.pdf');
 
@@ -38,10 +38,10 @@ export function StudentProfile({ studentId }: StudentProfileProps) {
     try {
       setIsLoading(true);
       // Clean up skills array (split by comma)
-      const skillsArray = typeof formData.skills === 'string' 
-        ? (formData.skills as string).split(',').map(s => s.trim()).filter(s => s) 
+      const skillsArray = typeof formData.skills === 'string'
+        ? (formData.skills as string).split(',').map(s => s.trim()).filter(s => s)
         : formData.skills;
-        
+
       const dataToSave = { ...formData, skills: skillsArray };
       const updated = await profileService.updateProfile(studentId, dataToSave);
       setProfile(updated);
@@ -95,7 +95,7 @@ export function StudentProfile({ studentId }: StudentProfileProps) {
       )}
 
       <div className="analytics-grid-two">
-        
+
         {/* Left card - details / form */}
         <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
           <div className="drawer-profile-header" style={{ borderBottom: 'none', paddingBottom: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -106,7 +106,7 @@ export function StudentProfile({ studentId }: StudentProfileProps) {
               <h3 className="drawer-profile-name" style={{ marginTop: '12px' }}>{profile.name}</h3>
               <span style={{ fontSize: '13px', color: 'var(--text-secondary)', fontFamily: 'monospace' }}>Roll ID: {profile.id}</span>
             </div>
-            
+
             {!isEditing ? (
               <button className="btn btn-secondary btn-sm" onClick={() => setIsEditing(true)}>
                 <Edit2 size={14} style={{ marginRight: '6px' }} />
@@ -146,9 +146,9 @@ export function StudentProfile({ studentId }: StudentProfileProps) {
             <form onSubmit={handleSave} style={{ padding: 'var(--space-md)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div>
                 <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Name</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
+                <input
+                  type="text"
+                  className="form-control"
                   value={formData.name || ''}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
@@ -156,7 +156,7 @@ export function StudentProfile({ studentId }: StudentProfileProps) {
               </div>
               <div>
                 <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Branch</label>
-                <select 
+                <select
                   className="form-control"
                   value={formData.branch || 'CSE'}
                   onChange={(e) => setFormData({ ...formData, branch: e.target.value })}
@@ -171,12 +171,12 @@ export function StudentProfile({ studentId }: StudentProfileProps) {
               </div>
               <div>
                 <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>CGPA</label>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   step="0.01"
                   min="0"
                   max="10"
-                  className="form-control" 
+                  className="form-control"
                   value={formData.cgpa || ''}
                   onChange={(e) => setFormData({ ...formData, cgpa: parseFloat(e.target.value) })}
                   required
@@ -184,9 +184,9 @@ export function StudentProfile({ studentId }: StudentProfileProps) {
               </div>
               <div>
                 <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Skills (comma separated)</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
+                <input
+                  type="text"
+                  className="form-control"
                   value={Array.isArray(formData.skills) ? formData.skills.join(', ') : (formData.skills || '')}
                   onChange={(e) => setFormData({ ...formData, skills: e.target.value as any })}
                   placeholder="e.g. React, Python, SQL"
@@ -215,7 +215,7 @@ export function StudentProfile({ studentId }: StudentProfileProps) {
             Upload your verified resume PDF. Our parser will extract core technical keywords for the recruiter matchmaking algorithm.
           </p>
 
-          <div 
+          <div
             style={{ border: '2px dashed var(--border)', borderRadius: 'var(--radius-md)', padding: 'var(--space-xl)', textAlign: 'center', backgroundColor: 'var(--background)', cursor: 'pointer' }}
             onClick={handleUpload}
           >
