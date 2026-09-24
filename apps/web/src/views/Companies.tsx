@@ -64,19 +64,29 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
     }
 
     try {
+      const hrContacts = newHrName ? [
+        {
+          name: newHrName,
+          role: 'HR Contact',
+          email: newHrEmail,
+          phone: newHrPhone,
+        }
+      ] : [];
+
       const newCompany = await companyService.createCompany({
         name: newCompanyName,
         sector: newSector,
-        hiresDepstar: parseInt(newHiresDepstar) || 0,
-        hiresCspit: parseInt(newHiresCspit) || 0,
+        hiresDepstar: parseInt(newHiresDepstar, 10) || 0,
+        hiresCspit: parseInt(newHiresCspit, 10) || 0,
         status: newStatus,
         avgPackage: parseFloat(newAvgPackage),
         notes: newNotes || 'No notes available.',
-        website: 'https://' + newCompanyName.toLowerCase().replace(' ', '') + '.com'
+        website: 'https://' + newCompanyName.toLowerCase().replace(/\s+/g, '') + '.com',
+        hrContacts,
       });
 
       setIsFormOpen(false);
-      setCompanies(prev => [...prev, newCompany]);
+      setCompanies(prev => [newCompany, ...prev]);
       
       setNewCompanyName('');
       setNewSector('Technology');
@@ -85,12 +95,13 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
       setNewHrName('');
       setNewHrEmail('');
       setNewHrPhone('');
-      setNewHiresDepstar('');
-      setNewHiresCspit('');
+      setNewHiresDepstar('0');
+      setNewHiresCspit('0');
       setNewNotes('');
-    } catch (error) {
+      alert('Recruiter Partner saved successfully.');
+    } catch (error: any) {
       console.error(error);
-      alert('Error creating company');
+      alert(error?.message || 'Error creating company');
     }
   };
 

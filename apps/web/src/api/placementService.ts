@@ -1,104 +1,96 @@
+import { apiClient } from './client';
 import type { Placement } from './types';
 
-// Initial Mock Data
-let mockPlacements: Placement[] = [
-  {
-    id: '1',
-    companyName: 'Google',
-    role: 'Software Engineer',
-    packageRange: '28 - 32 LPA',
-    deadline: '2026-08-15',
-    cgpaRequirement: 8.0,
-    eligibleBranches: ['CSE', 'CE', 'IT'],
-    requiredSkills: ['Algorithms', 'System Design', 'React'],
-    description: 'Google India campus drive for 2026 graduates.',
-    fitScore: 85,
-    status: 'Ongoing',
-  },
-  {
-    id: '2',
-    companyName: 'Microsoft',
-    role: 'Program Manager',
-    packageRange: '20 - 24 LPA',
-    deadline: '2026-08-20',
-    cgpaRequirement: 7.5,
-    eligibleBranches: ['CSE', 'CE', 'IT', 'ECE'],
-    requiredSkills: ['Product Management', 'Data Analytics'],
-    description: 'Microsoft campus recruitment for PM roles.',
-    fitScore: 60,
-    status: 'Completed',
-  },
-  {
-    id: '3',
-    companyName: 'Deloitte',
-    role: 'Technology Analyst',
-    packageRange: '8 - 10 LPA',
-    deadline: '2026-09-01',
-    cgpaRequirement: 7.0,
-    eligibleBranches: ['CSE', 'CE', 'IT', 'ECE', 'EE'],
-    requiredSkills: ['SQL', 'Java', 'Communication'],
-    description: 'Deloitte US India technology consulting drive.',
-    fitScore: 92,
-    status: 'Registration Open',
-  },
-];
+/**
+ * Shape that the real Express API returns in createPlacement.
+ * We map it to the frontend Placement type after creation.
+ */
+interface ApiPlacement {
+  id: number;
+  companyId: number;
+  position: string;
+  ctc: number;
+  deadline: string;
+  cgpaCutoff: number;
+  description?: string;
+  status: string;
+  company?: { id: number; name: string };
+  branches?: { branch: { id: number; name: string } }[];
+  skills?: { skill: { id: number; name: string } }[];
+}
+
+function mapApiPlacement(p: ApiPlacement): Placement {
+  return {
+    id: String(p.id),
+    companyName: p.company?.name ?? String(p.companyId),
+    role: p.position,
+    packageRange: `${p.ctc} LPA`,
+    deadline: p.deadline ? p.deadline.split('T')[0] : '',
+    cgpaRequirement: p.cgpaCutoff,
+    description: p.description ?? '',
+    eligibleBranches: p.branches?.map(b => b.branch.name) ?? [],
+    requiredSkills: p.skills?.map(s => s.skill.name) ?? [],
+    status: p.status ?? 'Upcoming',
+  };
+}
 
 export const placementService = {
-  // Use isolated mock data for now. Replace with real API calls when backend is ready.
   async getPlacements(): Promise<Placement[]> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([...mockPlacements]);
-      }, 300);
-    });
-    // return apiClient.get('/placements');
+    const res = await apiClient.get('/placements');
+    if (!res.success) throw new Error(res.message || 'Failed to fetch placements');
+    return (res.data as ApiPlacement[]).map(mapApiPlacement);
   },
 
   async getPlacementById(id: string): Promise<Placement | null> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(mockPlacements.find(p => p.id === id) || null);
-      }, 200);
-    });
-    // return apiClient.get(`/placements/${id}`);
+    // No single-placement endpoint; fetch all and find
+    const all = await placementService.getPlacements();
+    return all.find(p => p.id === id) ?? null;
   },
 
-  async createPlacement(data: Omit<Placement, 'id' | 'fitScore'>): Promise<Placement> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const newPlacement = {
-          ...data,
-          id: Date.now().toString(),
-        };
-        mockPlacements.push(newPlacement);
-        resolve(newPlacement);
-      }, 500);
-    });
-    // return apiClient.post('/placements', data);
+  /**
+   * Create a placement using the real API.
+   * @param data - structured placement fields (uses IDs for company/branches/skills)
+   * @param pdfFile - optional PDF notice file
+   */
+  async createPlacement(
+    data: {
+      companyId: number;
+      position: string;
+      ctc: number;
+      deadline: string;
+      cgpaCutoff: number;
+      description?: string;
+      branchIds: number[];
+      skillIds: number[];
+    },
+    pdfFile?: File | null,
+  ): Promise<{ placement: Placement; noticeResult?: any }> {
+    // Step 1: Create placement
+    const res = await apiClient.post('/placements', data);
+    if (!res.success) {
+      throw new Error(res.message || 'Failed to create placement');
+    }
+    const placement = mapApiPlacement(res.data as ApiPlacement);
+
+    // Step 2 (optional): Upload PDF notice
+    if (pdfFile) {
+      const formData = new FormData();
+      formData.append('file', pdfFile, pdfFile.name);
+      const noticeRes = await apiClient.postFormData(`/placements/${placement.id}/notice`, formData);
+      return { placement, noticeResult: noticeRes };
+    }
+
+    return { placement };
   },
 
   async updatePlacement(id: string, data: Partial<Placement>): Promise<Placement> {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const index = mockPlacements.findIndex(p => p.id === id);
-        if (index > -1) {
-          mockPlacements[index] = { ...mockPlacements[index], ...data };
-          resolve(mockPlacements[index]);
-        } else {
-          reject(new Error('Placement not found'));
-        }
-      }, 500);
-    });
-    // return apiClient.put(`/placements/${id}`, data);
+    const res = await apiClient.put(`/placements/${id}`, data);
+    if (!res.success) throw new Error(res.message || 'Failed to update placement');
+    return mapApiPlacement(res.data as ApiPlacement);
   },
 
   async deletePlacement(id: string): Promise<void> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        mockPlacements = mockPlacements.filter(p => p.id !== id);
-        resolve();
-      }, 400);
-    });
-    // return apiClient.delete(`/placements/${id}`);
-  }
+    const res = await apiClient.delete(`/placements/${id}`);
+    if (!res.success) throw new Error(res.message || 'Failed to delete placement');
+  },
 };

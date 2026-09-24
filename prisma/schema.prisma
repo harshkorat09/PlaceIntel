@@ -24,6 +24,7 @@ model User {
   updatedAt    DateTime       @updatedAt
   skills       StudentSkill[]
   branch       Branch?        @relation(fields: [branchId], references: [id])
+  sessions     ChatSession[]
 }
 
 model Company {
@@ -134,4 +135,22 @@ enum Role {
 enum Institute {
   DEPSTAR
   CSPIT
+}
+
+model ChatSession {
+  id        Int           @id @default(autoincrement())
+  userId    Int
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  ChatMessage[]
+}
+
+model ChatMessage {
+  id        Int         @id @default(autoincrement())
+  sessionId Int
+  role      String
+  content   String
+  createdAt DateTime    @default(now())
+  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 }

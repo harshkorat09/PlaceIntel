@@ -1,87 +1,72 @@
+import { apiClient } from './client';
 import type { Company } from './types';
-
-let mockCompanies: Company[] = [
-  {
-    id: '1',
-    name: 'Google',
-    sector: 'Technology',
-    hiresDepstar: 42,
-    hiresCspit: 43,
-    status: 'Active Recruiter',
-    avgPackage: 32.0,
-    notes: 'Premium partner',
-    website: 'https://careers.google.com',
-  },
-  {
-    id: '2',
-    name: 'Microsoft',
-    sector: 'Technology',
-    hiresDepstar: 30,
-    hiresCspit: 34,
-    status: 'Active Recruiter',
-    avgPackage: 28.0,
-    notes: 'Premium partner',
-    website: 'https://careers.microsoft.com',
-  },
-  {
-    id: '3',
-    name: 'Deloitte',
-    sector: 'Consulting',
-    hiresDepstar: 50,
-    hiresCspit: 60,
-    status: 'Active Recruiter',
-    avgPackage: 14.0,
-    notes: 'Mass recruiter',
-    website: 'https://www2.deloitte.com',
-  }
-];
 
 export const companyService = {
   async getCompanies(): Promise<Company[]> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([...mockCompanies]);
-      }, 300);
-    });
-    // return apiClient.get('/companies');
+    const res = await apiClient.get('/companies');
+    if (!res.success) {
+      throw new Error(res.message || 'Failed to fetch companies');
+    }
+    return (res.data || []).map((c: any) => ({
+      ...c,
+      id: String(c.id),
+      hiresDepstar: Number(c.hiresDepstar) || 0,
+      hiresCspit: Number(c.hiresCspit) || 0,
+      avgPackage: Number(c.avgPackage) || 0,
+      notes: c.notes || '',
+      website: c.website || '',
+      hrContacts: Array.isArray(c.hrContacts) ? c.hrContacts : [],
+      visits: Array.isArray(c.visits) ? c.visits : [],
+    }));
   },
 
   async createCompany(data: Omit<Company, 'id'>): Promise<Company> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const newCompany = {
-          ...data,
-          id: Date.now().toString(),
-        };
-        mockCompanies.push(newCompany);
-        resolve(newCompany);
-      }, 500);
-    });
-    // return apiClient.post('/companies', data);
+    const payload = {
+      name: data.name,
+      sector: data.sector,
+      hiresDepstar: Number(data.hiresDepstar) || 0,
+      hiresCspit: Number(data.hiresCspit) || 0,
+      status: data.status || 'Active Recruiter',
+      avgPackage: Number(data.avgPackage),
+      notes: data.notes || '',
+      website: data.website || '',
+      hrContacts: data.hrContacts || [],
+      visits: data.visits || [],
+    };
+    const res = await apiClient.post('/companies', payload);
+    if (!res.success) {
+      throw new Error(res.message || 'Failed to create company');
+    }
+    const c = res.data;
+    return {
+      ...c,
+      id: String(c.id),
+      hiresDepstar: Number(c.hiresDepstar) || 0,
+      hiresCspit: Number(c.hiresCspit) || 0,
+      avgPackage: Number(c.avgPackage) || 0,
+      notes: c.notes || '',
+      website: c.website || '',
+      hrContacts: Array.isArray(c.hrContacts) ? c.hrContacts : [],
+      visits: Array.isArray(c.visits) ? c.visits : [],
+    };
   },
 
   async updateCompany(id: string, data: Partial<Company>): Promise<Company> {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const index = mockCompanies.findIndex(c => c.id === id);
-        if (index > -1) {
-          mockCompanies[index] = { ...mockCompanies[index], ...data };
-          resolve(mockCompanies[index]);
-        } else {
-          reject(new Error('Company not found'));
-        }
-      }, 500);
-    });
-    // return apiClient.put(`/companies/${id}`, data);
+    const res = await apiClient.put(`/companies/${id}`, data);
+    if (!res.success) {
+      throw new Error(res.message || 'Failed to update company');
+    }
+    const c = res.data;
+    return {
+      ...c,
+      id: String(c.id),
+    };
   },
 
   async deleteCompany(id: string): Promise<void> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        mockCompanies = mockCompanies.filter(c => c.id !== id);
-        resolve();
-      }, 400);
-    });
-    // return apiClient.delete(`/companies/${id}`);
-  }
+    const res = await apiClient.delete(`/companies/${id}`);
+    if (!res.success) {
+      throw new Error(res.message || 'Failed to delete company');
+    }
+  },
 };

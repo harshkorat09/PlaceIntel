@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { prisma } from '../db.js';
+import type { AuthRequest } from '../middlewares/auth.middleware.js';
 
 export const getPlacements = async (req: Request, res: Response) => {
   try {
@@ -136,5 +137,89 @@ export const getPlacementFitScore = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+/**
+ * POST /api/placements/:id/notice
+ * Authenticated ADMIN only.
+ * Accepts multipart PDF via multer (handled in route).
+ * Forwards the file to the FastAPI ingestion endpoint.
+ */
+export const uploadPlacementNotice = async (req: AuthRequest, res: Response) => {
+  try {
+    const placementId = parseInt(req.params.id as string, 10);
+    if (isNaN(placementId) || placementId <= 0) {
+      return res.status(400).json({ success: false, message: 'Invalid placement ID.' });
+    }
+
+    // Validate placement exists
+    const placement = await prisma.placement.findUnique({ where: { id: placementId } });
+    if (!placement) {
+      return res.status(404).json({ success: false, message: 'Placement not found.' });
+    }
+
+    // multer attaches the file to req.file (memory storage)
+    const file = (req as any).file as Express.Multer.File | undefined;
+    if (!file) {
+      return res.status(400).json({ success: false, message: 'No file uploaded.' });
+    }
+
+    if (file.mimetype !== 'application/pdf') {
+      return res.status(400).json({ success: false, message: 'Only PDF files are accepted.' });
+    }
+
+    if (file.size === 0) {
+      return res.status(400).json({ success: false, message: 'Uploaded file is empty.' });
+    }
+
+    // Build native multipart form to forward to FastAPI
+    const blob = new Blob([new Uint8Array(file.buffer)], { type: file.mimetype });
+    const formData = new FormData();
+    formData.append('file', blob, file.originalname);
+
+    const chatbotUrl = process.env.CHATBOT_URL || 'http://127.0.0.1:8000';
+    const ingestUrl = `${chatbotUrl}/ingestion/placements/${placementId}/notice`;
+
+    let fastApiRes: globalThis.Response;
+    try {
+      fastApiRes = await fetch(ingestUrl, {
+        method: 'POST',
+        body: formData,
+      });
+    } catch (networkErr) {
+      console.error('[uploadPlacementNotice] FastAPI unreachable:', networkErr);
+      return res.status(502).json({
+        success: false,
+        message: 'AI service is unavailable. Placement was created but notice was not ingested.',
+      });
+    }
+
+    const payload = await fastApiRes.json().catch(() => null);
+
+    if (!fastApiRes.ok) {
+      const detail = payload?.detail || 'Notice ingestion failed.';
+      console.error('[uploadPlacementNotice] FastAPI error:', fastApiRes.status, detail);
+
+      // 400-level: propagate the message (duplicate, bad file, etc.)
+      if (fastApiRes.status >= 400 && fastApiRes.status < 500) {
+        return res.status(fastApiRes.status).json({ success: false, message: detail });
+      }
+
+      // 5xx: generic message, don't expose internals
+      return res.status(502).json({
+        success: false,
+        message: 'AI service returned an error. Notice was not ingested.',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Placement notice ingested successfully.',
+      data: payload?.data ?? null,
+    });
+  } catch (error) {
+    console.error('[uploadPlacementNotice] Unexpected error:', error);
+    return res.status(500).json({ success: false, message: 'Server error.' });
   }
 };

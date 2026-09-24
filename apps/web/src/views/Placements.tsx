@@ -1,17 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Search, 
   Plus, 
   Clock, 
   Sparkles,
-  AlertCircle
+  AlertCircle,
+  Upload,
+  X,
+  FileText
 } from 'lucide-react';
 import { placementService } from '../api/placementService';
+import { apiClient } from '../api/client';
 import type { Placement } from '../api/types';
 
-
-
-
+// ---------------------------------------------------------------------------
+// Types for real API entities
+// ---------------------------------------------------------------------------
+interface ApiCompany { id: number; name: string; }
+interface ApiBranch  { id: number; name: string; }
+interface ApiSkill   { id: number; name: string; }
 
 export default function Placements() {
   const [drives, setDrives] = useState<Placement[]>([]);
@@ -21,9 +28,15 @@ export default function Placements() {
   const [branchFilter, setBranchFilter] = useState('All');
   const [minCtc, setMinCtc] = useState(0);
 
+  // ---------------------------------------------------------------------------
+  // Reference data loaded from the real API
+  // ---------------------------------------------------------------------------
+  const [companies, setCompanies] = useState<ApiCompany[]>([]);
+  const [allBranches, setAllBranches] = useState<ApiBranch[]>([]);
+  const [allSkills, setAllSkills] = useState<ApiSkill[]>([]);
+
   const fetchDrives = async () => {
     try {
-      // Filtering is done client-side for now with mock data
       const data = await placementService.getPlacements();
       setDrives(data);
     } catch (error) {
@@ -34,67 +47,154 @@ export default function Placements() {
   useEffect(() => {
     fetchDrives();
   }, [branchFilter, minCtc, search]);
-  
+
+  // Load companies, branches, and skills once on mount
+  useEffect(() => {
+    apiClient.get('/companies')
+      .then(r => { if (r.success) setCompanies(r.data); })
+      .catch(e => console.error('Failed to load companies', e));
+
+    apiClient.get('/branches')
+      .then(r => { if (r.success) setAllBranches(r.data); })
+      .catch(e => console.error('Failed to load branches', e));
+
+    apiClient.get('/skills')
+      .then(r => { if (r.success) setAllSkills(r.data); })
+      .catch(e => console.error('Failed to load skills', e));
+  }, []);
+
+  // ---------------------------------------------------------------------------
   // Form Drawer Toggle
+  // ---------------------------------------------------------------------------
   const [isFormOpen, setIsFormOpen] = useState(false);
-  
-  // New Drive Form State
-  const [newCompanyName, setNewCompanyName] = useState('');
+
+  // Refresh companies when Schedule Drive drawer is opened
+  useEffect(() => {
+    if (isFormOpen) {
+      apiClient.get('/companies')
+        .then(r => { if (r.success) setCompanies(r.data); })
+        .catch(e => console.error('Failed to refresh companies', e));
+    }
+  }, [isFormOpen]);
+
+  // New Drive Form State — IDs for company/branches/skills
+  const [newCompanyId, setNewCompanyId] = useState<number | ''>('');
   const [newPosition, setNewPosition] = useState('');
   const [newCtc, setNewCtc] = useState('');
   const [newDeadline, setNewDeadline] = useState('');
   const [newCgpa, setNewCgpa] = useState('7.0');
-  const [newBranches, setNewBranches] = useState<string[]>(['CSE', 'IT']);
-  const [newSkills, setNewSkills] = useState('');
+  const [newBranchIds, setNewBranchIds] = useState<number[]>([]);
+  const [newSkillIds, setNewSkillIds] = useState<number[]>([]);
 
+  // Optional PDF notice
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Submission state
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error' | 'warn'; message: string } | null>(null);
+
+  // ---------------------------------------------------------------------------
   // Handle Form Submission
+  // ---------------------------------------------------------------------------
   const handleCreateDrive = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newCompanyName || !newPosition || !newCtc || !newDeadline) {
+    if (!newCompanyId || !newPosition || !newCtc || !newDeadline) {
       alert('Please fill out all required fields.');
       return;
     }
 
-    try {
-      const newPlacement = await placementService.createPlacement({
-        companyName: newCompanyName,
-        role: newPosition,
-        packageRange: newCtc + ' LPA',
-        deadline: newDeadline,
-        cgpaRequirement: parseFloat(newCgpa),
-        description: 'New drive',
-        eligibleBranches: newBranches,
-        requiredSkills: newSkills.split(',').map(s => s.trim()).filter(s => s),
-        status: 'Upcoming'
-      });
+    setIsSubmitting(true);
+    setSubmitStatus(null);
 
-      setIsFormOpen(false);
-      setDrives(prev => [...prev, newPlacement]);
-      
+    try {
+      const { placement, noticeResult } = await placementService.createPlacement(
+        {
+          companyId: Number(newCompanyId),
+          position: newPosition,
+          ctc: parseFloat(newCtc),
+          deadline: newDeadline,
+          cgpaCutoff: parseFloat(newCgpa),
+          description: 'Scheduled via Placement Officer portal.',
+          branchIds: newBranchIds,
+          skillIds: newSkillIds,
+        },
+        pdfFile ?? undefined,
+      );
+
+      // Determine final status message
+      if (pdfFile && noticeResult && !noticeResult.success) {
+        setSubmitStatus({
+          type: 'warn',
+          message: `Placement created (ID: ${placement.id}), but notice ingestion failed: ${noticeResult.message}`,
+        });
+      } else if (pdfFile && noticeResult?.success) {
+        setSubmitStatus({
+          type: 'success',
+          message: `Placement created and notice ingested successfully.`,
+        });
+      } else {
+        setSubmitStatus({ type: 'success', message: 'Placement created successfully.' });
+      }
+
+      setDrives(prev => [...prev, placement]);
+
       // Reset form
-      setNewCompanyName('');
+      setNewCompanyId('');
       setNewPosition('');
       setNewCtc('');
       setNewDeadline('');
       setNewCgpa('7.0');
-      setNewBranches(['CSE', 'IT']);
-      setNewSkills('');
-    } catch (error) {
+      setNewBranchIds([]);
+      setNewSkillIds([]);
+      setPdfFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+
+    } catch (error: any) {
       console.error(error);
-      alert('Error creating placement');
+      setSubmitStatus({ type: 'error', message: error?.message || 'Error creating placement.' });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  // Toggle Branch Checkbox
-  const handleBranchToggle = (branch: string) => {
-    if (newBranches.includes(branch)) {
-      setNewBranches(newBranches.filter(b => b !== branch));
-    } else {
-      setNewBranches([...newBranches, branch]);
-    }
+  // ---------------------------------------------------------------------------
+  // Toggle Branch / Skill checkboxes
+  // ---------------------------------------------------------------------------
+  const handleBranchToggle = (id: number) => {
+    setNewBranchIds(prev =>
+      prev.includes(id) ? prev.filter(b => b !== id) : [...prev, id]
+    );
   };
 
+  const handleSkillToggle = (id: number) => {
+    setNewSkillIds(prev =>
+      prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]
+    );
+  };
+
+  // ---------------------------------------------------------------------------
+  // PDF file handling
+  // ---------------------------------------------------------------------------
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    if (file && file.type !== 'application/pdf') {
+      alert('Only PDF files are accepted.');
+      e.target.value = '';
+      setPdfFile(null);
+      return;
+    }
+    setPdfFile(file);
+  };
+
+  const handleRemoveFile = () => {
+    setPdfFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  // ---------------------------------------------------------------------------
   // Filter drives
+  // ---------------------------------------------------------------------------
   const filteredDrives = drives.filter(drive => {
     const matchesSearch = 
       drive.companyName.toLowerCase().includes(search.toLowerCase()) ||
@@ -114,7 +214,9 @@ export default function Placements() {
     return matchesSearch && matchesStatus && matchesBranch && matchesCtc;
   });
 
+  // ---------------------------------------------------------------------------
   // Helper for Status Badge styling
+  // ---------------------------------------------------------------------------
   const renderStatusBadge = (status: string) => {
     switch (status) {
       case 'Registration Open':
@@ -143,7 +245,7 @@ export default function Placements() {
         </div>
         <button 
           className="btn btn-primary"
-          onClick={() => setIsFormOpen(!isFormOpen)}
+          onClick={() => { setIsFormOpen(!isFormOpen); setSubmitStatus(null); }}
         >
           <Plus size={16} />
           {isFormOpen ? 'Close Scheduler' : 'Schedule New Drive'}
@@ -306,18 +408,53 @@ export default function Placements() {
               <span>Schedule Recruitment Drive</span>
             </div>
 
+            {/* Submission status banner */}
+            {submitStatus && (
+              <div
+                style={{
+                  marginTop: 'var(--space-md)',
+                  padding: '10px 14px',
+                  borderRadius: '8px',
+                  fontSize: '13px',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '8px',
+                  backgroundColor:
+                    submitStatus.type === 'success' ? 'rgba(34,197,94,0.1)' :
+                    submitStatus.type === 'warn'    ? 'rgba(234,179,8,0.1)' :
+                                                     'rgba(239,68,68,0.1)',
+                  color:
+                    submitStatus.type === 'success' ? 'var(--success, #16a34a)' :
+                    submitStatus.type === 'warn'    ? '#b45309' :
+                                                     'var(--danger, #dc2626)',
+                  border: `1px solid ${
+                    submitStatus.type === 'success' ? 'rgba(34,197,94,0.3)' :
+                    submitStatus.type === 'warn'    ? 'rgba(234,179,8,0.3)' :
+                                                     'rgba(239,68,68,0.3)'
+                  }`,
+                }}
+              >
+                <AlertCircle size={15} style={{ flexShrink: 0, marginTop: '1px' }} />
+                <span>{submitStatus.message}</span>
+              </div>
+            )}
+
             <form onSubmit={handleCreateDrive} style={{ marginTop: 'var(--space-md)' }}>
               
+              {/* Company dropdown (real API) */}
               <div className="form-group">
-                <label className="form-label">Company Name *</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  placeholder="e.g. Amazon India" 
-                  value={newCompanyName}
-                  onChange={(e) => setNewCompanyName(e.target.value)}
+                <label className="form-label">Company *</label>
+                <select
+                  className="form-control"
+                  value={newCompanyId}
+                  onChange={(e) => setNewCompanyId(e.target.value ? Number(e.target.value) : '')}
                   required
-                />
+                >
+                  <option value="">— Select a company —</option>
+                  {companies.map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
               </div>
 
               <div className="form-group">
@@ -372,42 +509,123 @@ export default function Placements() {
                 />
               </div>
 
+              {/* Eligible Branches — resolved to IDs */}
               <div className="form-group">
                 <label className="form-label">Eligible Branches</label>
                 <div className="checkbox-group">
-                  {['CSE', 'IT', 'ECE', 'ME', 'EE'].map(branch => (
+                  {allBranches.map(branch => (
                     <label 
-                      key={branch} 
-                      className={`checkbox-btn ${newBranches.includes(branch) ? 'checked' : ''}`}
+                      key={branch.id} 
+                      className={`checkbox-btn ${newBranchIds.includes(branch.id) ? 'checked' : ''}`}
                     >
                       <input 
                         type="checkbox" 
-                        checked={newBranches.includes(branch)}
-                        onChange={() => handleBranchToggle(branch)}
+                        checked={newBranchIds.includes(branch.id)}
+                        onChange={() => handleBranchToggle(branch.id)}
                       />
-                      {branch}
+                      {branch.name}
                     </label>
                   ))}
                 </div>
               </div>
 
+              {/* Required Skills — resolved to IDs */}
               <div className="form-group">
-                <label className="form-label">Required Skills (Comma separated)</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  placeholder="e.g. React, Node.js, AWS" 
-                  value={newSkills}
-                  onChange={(e) => setNewSkills(e.target.value)}
-                />
+                <label className="form-label">Required Skills</label>
+                <div className="checkbox-group" style={{ flexWrap: 'wrap', gap: '6px' }}>
+                  {allSkills.map(skill => (
+                    <label 
+                      key={skill.id} 
+                      className={`checkbox-btn ${newSkillIds.includes(skill.id) ? 'checked' : ''}`}
+                    >
+                      <input 
+                        type="checkbox" 
+                        checked={newSkillIds.includes(skill.id)}
+                        onChange={() => handleSkillToggle(skill.id)}
+                      />
+                      {skill.name}
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Optional PDF Notice Upload */}
+              <div className="form-group">
+                <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <FileText size={14} />
+                  Placement Notice PDF
+                  <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontWeight: 400 }}>(Optional)</span>
+                </label>
+
+                {pdfFile ? (
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      border: '1px solid var(--border)',
+                      backgroundColor: 'var(--secondary-light, rgba(79,70,229,0.05))',
+                    }}
+                  >
+                    <FileText size={16} style={{ color: 'var(--primary)', flexShrink: 0 }} />
+                    <span style={{ fontSize: '13px', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {pdfFile.name}
+                    </span>
+                    <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', flexShrink: 0 }}>
+                      {(pdfFile.size / 1024).toFixed(0)} KB
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleRemoveFile}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '2px', color: 'var(--text-tertiary)', flexShrink: 0 }}
+                      title="Remove file"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                ) : (
+                  <label
+                    htmlFor="pdf-upload"
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '16px',
+                      borderRadius: '8px',
+                      border: '1.5px dashed var(--border)',
+                      cursor: 'pointer',
+                      color: 'var(--text-tertiary)',
+                      fontSize: '13px',
+                      transition: 'border-color 0.2s',
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--primary)')}
+                    onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border)')}
+                  >
+                    <Upload size={18} />
+                    <span>Click to upload PDF notice</span>
+                    <span style={{ fontSize: '11px' }}>Max 10 MB · PDF only</span>
+                    <input
+                      id="pdf-upload"
+                      ref={fileInputRef}
+                      type="file"
+                      accept="application/pdf"
+                      style={{ display: 'none' }}
+                      onChange={handleFileChange}
+                    />
+                  </label>
+                )}
               </div>
 
               <div style={{ display: 'flex', gap: 'var(--space-md)', marginTop: 'var(--space-lg)' }}>
                 <button 
                   type="button" 
                   className="btn btn-secondary" 
-                  onClick={() => setIsFormOpen(false)}
+                  onClick={() => { setIsFormOpen(false); setSubmitStatus(null); }}
                   style={{ flex: 1 }}
+                  disabled={isSubmitting}
                 >
                   Cancel
                 </button>
@@ -415,8 +633,9 @@ export default function Placements() {
                   type="submit" 
                   className="btn btn-primary" 
                   style={{ flex: 1 }}
+                  disabled={isSubmitting}
                 >
-                  Schedule Drive
+                  {isSubmitting ? 'Scheduling…' : 'Schedule Drive'}
                 </button>
               </div>
 

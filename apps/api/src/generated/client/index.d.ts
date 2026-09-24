@@ -1804,15 +1804,15 @@ export namespace Prisma {
    */
 
   export type PlacementCountOutputType = {
-    skills: number
-    branches: number
     attachments: number
+    branches: number
+    skills: number
   }
 
   export type PlacementCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    skills?: boolean | PlacementCountOutputTypeCountSkillsArgs
-    branches?: boolean | PlacementCountOutputTypeCountBranchesArgs
     attachments?: boolean | PlacementCountOutputTypeCountAttachmentsArgs
+    branches?: boolean | PlacementCountOutputTypeCountBranchesArgs
+    skills?: boolean | PlacementCountOutputTypeCountSkillsArgs
   }
 
   // Custom InputTypes
@@ -1829,8 +1829,8 @@ export namespace Prisma {
   /**
    * PlacementCountOutputType without action
    */
-  export type PlacementCountOutputTypeCountSkillsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PlacementSkillWhereInput
+  export type PlacementCountOutputTypeCountAttachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AttachmentWhereInput
   }
 
   /**
@@ -1843,8 +1843,8 @@ export namespace Prisma {
   /**
    * PlacementCountOutputType without action
    */
-  export type PlacementCountOutputTypeCountAttachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AttachmentWhereInput
+  export type PlacementCountOutputTypeCountSkillsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlacementSkillWhereInput
   }
 
 
@@ -1853,13 +1853,13 @@ export namespace Prisma {
    */
 
   export type BranchCountOutputType = {
-    users: number
     placements: number
+    users: number
   }
 
   export type BranchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    users?: boolean | BranchCountOutputTypeCountUsersArgs
     placements?: boolean | BranchCountOutputTypeCountPlacementsArgs
+    users?: boolean | BranchCountOutputTypeCountUsersArgs
   }
 
   // Custom InputTypes
@@ -1876,15 +1876,15 @@ export namespace Prisma {
   /**
    * BranchCountOutputType without action
    */
-  export type BranchCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserWhereInput
+  export type BranchCountOutputTypeCountPlacementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlacementBranchWhereInput
   }
 
   /**
    * BranchCountOutputType without action
    */
-  export type BranchCountOutputTypeCountPlacementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PlacementBranchWhereInput
+  export type BranchCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
   }
 
 
@@ -1893,13 +1893,13 @@ export namespace Prisma {
    */
 
   export type SkillCountOutputType = {
-    students: number
     placements: number
+    students: number
   }
 
   export type SkillCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    students?: boolean | SkillCountOutputTypeCountStudentsArgs
     placements?: boolean | SkillCountOutputTypeCountPlacementsArgs
+    students?: boolean | SkillCountOutputTypeCountStudentsArgs
   }
 
   // Custom InputTypes
@@ -1916,15 +1916,15 @@ export namespace Prisma {
   /**
    * SkillCountOutputType without action
    */
-  export type SkillCountOutputTypeCountStudentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: StudentSkillWhereInput
+  export type SkillCountOutputTypeCountPlacementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlacementSkillWhereInput
   }
 
   /**
    * SkillCountOutputType without action
    */
-  export type SkillCountOutputTypeCountPlacementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PlacementSkillWhereInput
+  export type SkillCountOutputTypeCountStudentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudentSkillWhereInput
   }
 
 
@@ -2225,8 +2225,8 @@ export namespace Prisma {
     branchId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    branch?: boolean | User$branchArgs<ExtArgs>
     skills?: boolean | User$skillsArgs<ExtArgs>
+    branch?: boolean | User$branchArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2279,8 +2279,8 @@ export namespace Prisma {
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "role" | "name" | "rollNo" | "cgpa" | "institute" | "phone" | "branchId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    branch?: boolean | User$branchArgs<ExtArgs>
     skills?: boolean | User$skillsArgs<ExtArgs>
+    branch?: boolean | User$branchArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2293,8 +2293,8 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      branch: Prisma.$BranchPayload<ExtArgs> | null
       skills: Prisma.$StudentSkillPayload<ExtArgs>[]
+      branch: Prisma.$BranchPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2703,8 +2703,8 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    branch<T extends User$branchArgs<ExtArgs> = {}>(args?: Subset<T, User$branchArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     skills<T extends User$skillsArgs<ExtArgs> = {}>(args?: Subset<T, User$skillsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentSkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    branch<T extends User$branchArgs<ExtArgs> = {}>(args?: Subset<T, User$branchArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3147,25 +3147,6 @@ export namespace Prisma {
   }
 
   /**
-   * User.branch
-   */
-  export type User$branchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Branch
-     */
-    select?: BranchSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Branch
-     */
-    omit?: BranchOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: BranchInclude<ExtArgs> | null
-    where?: BranchWhereInput
-  }
-
-  /**
    * User.skills
    */
   export type User$skillsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3187,6 +3168,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: StudentSkillScalarFieldEnum | StudentSkillScalarFieldEnum[]
+  }
+
+  /**
+   * User.branch
+   */
+  export type User$branchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Branch
+     */
+    select?: BranchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Branch
+     */
+    omit?: BranchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BranchInclude<ExtArgs> | null
+    where?: BranchWhereInput
   }
 
   /**
@@ -4719,10 +4719,10 @@ export namespace Prisma {
     offeredCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    company?: boolean | CompanyDefaultArgs<ExtArgs>
-    skills?: boolean | Placement$skillsArgs<ExtArgs>
-    branches?: boolean | Placement$branchesArgs<ExtArgs>
     attachments?: boolean | Placement$attachmentsArgs<ExtArgs>
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+    branches?: boolean | Placement$branchesArgs<ExtArgs>
+    skills?: boolean | Placement$skillsArgs<ExtArgs>
     _count?: boolean | PlacementCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["placement"]>
 
@@ -4781,10 +4781,10 @@ export namespace Prisma {
 
   export type PlacementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "companyId" | "position" | "ctc" | "deadline" | "cgpaCutoff" | "description" | "status" | "activeRound" | "appliedCount" | "shortlistedCount" | "offeredCount" | "createdAt" | "updatedAt", ExtArgs["result"]["placement"]>
   export type PlacementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    company?: boolean | CompanyDefaultArgs<ExtArgs>
-    skills?: boolean | Placement$skillsArgs<ExtArgs>
-    branches?: boolean | Placement$branchesArgs<ExtArgs>
     attachments?: boolean | Placement$attachmentsArgs<ExtArgs>
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
+    branches?: boolean | Placement$branchesArgs<ExtArgs>
+    skills?: boolean | Placement$skillsArgs<ExtArgs>
     _count?: boolean | PlacementCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PlacementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4797,10 +4797,10 @@ export namespace Prisma {
   export type $PlacementPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Placement"
     objects: {
-      company: Prisma.$CompanyPayload<ExtArgs>
-      skills: Prisma.$PlacementSkillPayload<ExtArgs>[]
-      branches: Prisma.$PlacementBranchPayload<ExtArgs>[]
       attachments: Prisma.$AttachmentPayload<ExtArgs>[]
+      company: Prisma.$CompanyPayload<ExtArgs>
+      branches: Prisma.$PlacementBranchPayload<ExtArgs>[]
+      skills: Prisma.$PlacementSkillPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -5211,10 +5211,10 @@ export namespace Prisma {
    */
   export interface Prisma__PlacementClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    company<T extends CompanyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyDefaultArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    skills<T extends Placement$skillsArgs<ExtArgs> = {}>(args?: Subset<T, Placement$skillsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlacementSkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    branches<T extends Placement$branchesArgs<ExtArgs> = {}>(args?: Subset<T, Placement$branchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlacementBranchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     attachments<T extends Placement$attachmentsArgs<ExtArgs> = {}>(args?: Subset<T, Placement$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    company<T extends CompanyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyDefaultArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    branches<T extends Placement$branchesArgs<ExtArgs> = {}>(args?: Subset<T, Placement$branchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlacementBranchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    skills<T extends Placement$skillsArgs<ExtArgs> = {}>(args?: Subset<T, Placement$skillsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlacementSkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5659,27 +5659,27 @@ export namespace Prisma {
   }
 
   /**
-   * Placement.skills
+   * Placement.attachments
    */
-  export type Placement$skillsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Placement$attachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the PlacementSkill
+     * Select specific fields to fetch from the Attachment
      */
-    select?: PlacementSkillSelect<ExtArgs> | null
+    select?: AttachmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the PlacementSkill
+     * Omit specific fields from the Attachment
      */
-    omit?: PlacementSkillOmit<ExtArgs> | null
+    omit?: AttachmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: PlacementSkillInclude<ExtArgs> | null
-    where?: PlacementSkillWhereInput
-    orderBy?: PlacementSkillOrderByWithRelationInput | PlacementSkillOrderByWithRelationInput[]
-    cursor?: PlacementSkillWhereUniqueInput
+    include?: AttachmentInclude<ExtArgs> | null
+    where?: AttachmentWhereInput
+    orderBy?: AttachmentOrderByWithRelationInput | AttachmentOrderByWithRelationInput[]
+    cursor?: AttachmentWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: PlacementSkillScalarFieldEnum | PlacementSkillScalarFieldEnum[]
+    distinct?: AttachmentScalarFieldEnum | AttachmentScalarFieldEnum[]
   }
 
   /**
@@ -5707,27 +5707,27 @@ export namespace Prisma {
   }
 
   /**
-   * Placement.attachments
+   * Placement.skills
    */
-  export type Placement$attachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Placement$skillsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Attachment
+     * Select specific fields to fetch from the PlacementSkill
      */
-    select?: AttachmentSelect<ExtArgs> | null
+    select?: PlacementSkillSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Attachment
+     * Omit specific fields from the PlacementSkill
      */
-    omit?: AttachmentOmit<ExtArgs> | null
+    omit?: PlacementSkillOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AttachmentInclude<ExtArgs> | null
-    where?: AttachmentWhereInput
-    orderBy?: AttachmentOrderByWithRelationInput | AttachmentOrderByWithRelationInput[]
-    cursor?: AttachmentWhereUniqueInput
+    include?: PlacementSkillInclude<ExtArgs> | null
+    where?: PlacementSkillWhereInput
+    orderBy?: PlacementSkillOrderByWithRelationInput | PlacementSkillOrderByWithRelationInput[]
+    cursor?: PlacementSkillWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: AttachmentScalarFieldEnum | AttachmentScalarFieldEnum[]
+    distinct?: PlacementSkillScalarFieldEnum | PlacementSkillScalarFieldEnum[]
   }
 
   /**
@@ -5923,8 +5923,8 @@ export namespace Prisma {
   export type BranchSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    users?: boolean | Branch$usersArgs<ExtArgs>
     placements?: boolean | Branch$placementsArgs<ExtArgs>
+    users?: boolean | Branch$usersArgs<ExtArgs>
     _count?: boolean | BranchCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["branch"]>
 
@@ -5945,8 +5945,8 @@ export namespace Prisma {
 
   export type BranchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name", ExtArgs["result"]["branch"]>
   export type BranchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    users?: boolean | Branch$usersArgs<ExtArgs>
     placements?: boolean | Branch$placementsArgs<ExtArgs>
+    users?: boolean | Branch$usersArgs<ExtArgs>
     _count?: boolean | BranchCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BranchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5955,8 +5955,8 @@ export namespace Prisma {
   export type $BranchPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Branch"
     objects: {
-      users: Prisma.$UserPayload<ExtArgs>[]
       placements: Prisma.$PlacementBranchPayload<ExtArgs>[]
+      users: Prisma.$UserPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -6355,8 +6355,8 @@ export namespace Prisma {
    */
   export interface Prisma__BranchClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    users<T extends Branch$usersArgs<ExtArgs> = {}>(args?: Subset<T, Branch$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     placements<T extends Branch$placementsArgs<ExtArgs> = {}>(args?: Subset<T, Branch$placementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlacementBranchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    users<T extends Branch$usersArgs<ExtArgs> = {}>(args?: Subset<T, Branch$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6781,30 +6781,6 @@ export namespace Prisma {
   }
 
   /**
-   * Branch.users
-   */
-  export type Branch$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    cursor?: UserWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
-  }
-
-  /**
    * Branch.placements
    */
   export type Branch$placementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6826,6 +6802,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PlacementBranchScalarFieldEnum | PlacementBranchScalarFieldEnum[]
+  }
+
+  /**
+   * Branch.users
+   */
+  export type Branch$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    cursor?: UserWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
@@ -7021,8 +7021,8 @@ export namespace Prisma {
   export type SkillSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    students?: boolean | Skill$studentsArgs<ExtArgs>
     placements?: boolean | Skill$placementsArgs<ExtArgs>
+    students?: boolean | Skill$studentsArgs<ExtArgs>
     _count?: boolean | SkillCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["skill"]>
 
@@ -7043,8 +7043,8 @@ export namespace Prisma {
 
   export type SkillOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name", ExtArgs["result"]["skill"]>
   export type SkillInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    students?: boolean | Skill$studentsArgs<ExtArgs>
     placements?: boolean | Skill$placementsArgs<ExtArgs>
+    students?: boolean | Skill$studentsArgs<ExtArgs>
     _count?: boolean | SkillCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type SkillIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -7053,8 +7053,8 @@ export namespace Prisma {
   export type $SkillPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Skill"
     objects: {
-      students: Prisma.$StudentSkillPayload<ExtArgs>[]
       placements: Prisma.$PlacementSkillPayload<ExtArgs>[]
+      students: Prisma.$StudentSkillPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -7453,8 +7453,8 @@ export namespace Prisma {
    */
   export interface Prisma__SkillClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    students<T extends Skill$studentsArgs<ExtArgs> = {}>(args?: Subset<T, Skill$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentSkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     placements<T extends Skill$placementsArgs<ExtArgs> = {}>(args?: Subset<T, Skill$placementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlacementSkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    students<T extends Skill$studentsArgs<ExtArgs> = {}>(args?: Subset<T, Skill$studentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudentSkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7879,30 +7879,6 @@ export namespace Prisma {
   }
 
   /**
-   * Skill.students
-   */
-  export type Skill$studentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StudentSkill
-     */
-    select?: StudentSkillSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the StudentSkill
-     */
-    omit?: StudentSkillOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: StudentSkillInclude<ExtArgs> | null
-    where?: StudentSkillWhereInput
-    orderBy?: StudentSkillOrderByWithRelationInput | StudentSkillOrderByWithRelationInput[]
-    cursor?: StudentSkillWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: StudentSkillScalarFieldEnum | StudentSkillScalarFieldEnum[]
-  }
-
-  /**
    * Skill.placements
    */
   export type Skill$placementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7924,6 +7900,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PlacementSkillScalarFieldEnum | PlacementSkillScalarFieldEnum[]
+  }
+
+  /**
+   * Skill.students
+   */
+  export type Skill$studentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudentSkill
+     */
+    select?: StudentSkillSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudentSkill
+     */
+    omit?: StudentSkillOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudentSkillInclude<ExtArgs> | null
+    where?: StudentSkillWhereInput
+    orderBy?: StudentSkillOrderByWithRelationInput | StudentSkillOrderByWithRelationInput[]
+    cursor?: StudentSkillWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudentSkillScalarFieldEnum | StudentSkillScalarFieldEnum[]
   }
 
   /**
@@ -8123,22 +8123,22 @@ export namespace Prisma {
   export type StudentSkillSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     userId?: boolean
     skillId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     skill?: boolean | SkillDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studentSkill"]>
 
   export type StudentSkillSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     userId?: boolean
     skillId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     skill?: boolean | SkillDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studentSkill"]>
 
   export type StudentSkillSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     userId?: boolean
     skillId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     skill?: boolean | SkillDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studentSkill"]>
 
   export type StudentSkillSelectScalar = {
@@ -8148,23 +8148,23 @@ export namespace Prisma {
 
   export type StudentSkillOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"userId" | "skillId", ExtArgs["result"]["studentSkill"]>
   export type StudentSkillInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     skill?: boolean | SkillDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type StudentSkillIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     skill?: boolean | SkillDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type StudentSkillIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     skill?: boolean | SkillDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $StudentSkillPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "StudentSkill"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
       skill: Prisma.$SkillPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       userId: number
@@ -8563,8 +8563,8 @@ export namespace Prisma {
    */
   export interface Prisma__StudentSkillClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     skill<T extends SkillDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SkillDefaultArgs<ExtArgs>>): Prisma__SkillClient<$Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10263,22 +10263,22 @@ export namespace Prisma {
   export type PlacementBranchSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     placementId?: boolean
     branchId?: boolean
-    placement?: boolean | PlacementDefaultArgs<ExtArgs>
     branch?: boolean | BranchDefaultArgs<ExtArgs>
+    placement?: boolean | PlacementDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["placementBranch"]>
 
   export type PlacementBranchSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     placementId?: boolean
     branchId?: boolean
-    placement?: boolean | PlacementDefaultArgs<ExtArgs>
     branch?: boolean | BranchDefaultArgs<ExtArgs>
+    placement?: boolean | PlacementDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["placementBranch"]>
 
   export type PlacementBranchSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     placementId?: boolean
     branchId?: boolean
-    placement?: boolean | PlacementDefaultArgs<ExtArgs>
     branch?: boolean | BranchDefaultArgs<ExtArgs>
+    placement?: boolean | PlacementDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["placementBranch"]>
 
   export type PlacementBranchSelectScalar = {
@@ -10288,23 +10288,23 @@ export namespace Prisma {
 
   export type PlacementBranchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"placementId" | "branchId", ExtArgs["result"]["placementBranch"]>
   export type PlacementBranchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    placement?: boolean | PlacementDefaultArgs<ExtArgs>
     branch?: boolean | BranchDefaultArgs<ExtArgs>
+    placement?: boolean | PlacementDefaultArgs<ExtArgs>
   }
   export type PlacementBranchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    placement?: boolean | PlacementDefaultArgs<ExtArgs>
     branch?: boolean | BranchDefaultArgs<ExtArgs>
+    placement?: boolean | PlacementDefaultArgs<ExtArgs>
   }
   export type PlacementBranchIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    placement?: boolean | PlacementDefaultArgs<ExtArgs>
     branch?: boolean | BranchDefaultArgs<ExtArgs>
+    placement?: boolean | PlacementDefaultArgs<ExtArgs>
   }
 
   export type $PlacementBranchPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "PlacementBranch"
     objects: {
-      placement: Prisma.$PlacementPayload<ExtArgs>
       branch: Prisma.$BranchPayload<ExtArgs>
+      placement: Prisma.$PlacementPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       placementId: number
@@ -10703,8 +10703,8 @@ export namespace Prisma {
    */
   export interface Prisma__PlacementBranchClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    placement<T extends PlacementDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PlacementDefaultArgs<ExtArgs>>): Prisma__PlacementClient<$Result.GetResult<Prisma.$PlacementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     branch<T extends BranchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BranchDefaultArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    placement<T extends PlacementDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PlacementDefaultArgs<ExtArgs>>): Prisma__PlacementClient<$Result.GetResult<Prisma.$PlacementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11182,6 +11182,7 @@ export namespace Prisma {
     placementId: number | null
     filePath: string | null
     fileType: string | null
+    fileHash: string | null
   }
 
   export type AttachmentMaxAggregateOutputType = {
@@ -11189,6 +11190,7 @@ export namespace Prisma {
     placementId: number | null
     filePath: string | null
     fileType: string | null
+    fileHash: string | null
   }
 
   export type AttachmentCountAggregateOutputType = {
@@ -11196,6 +11198,7 @@ export namespace Prisma {
     placementId: number
     filePath: number
     fileType: number
+    fileHash: number
     _all: number
   }
 
@@ -11215,6 +11218,7 @@ export namespace Prisma {
     placementId?: true
     filePath?: true
     fileType?: true
+    fileHash?: true
   }
 
   export type AttachmentMaxAggregateInputType = {
@@ -11222,6 +11226,7 @@ export namespace Prisma {
     placementId?: true
     filePath?: true
     fileType?: true
+    fileHash?: true
   }
 
   export type AttachmentCountAggregateInputType = {
@@ -11229,6 +11234,7 @@ export namespace Prisma {
     placementId?: true
     filePath?: true
     fileType?: true
+    fileHash?: true
     _all?: true
   }
 
@@ -11323,6 +11329,7 @@ export namespace Prisma {
     placementId: number
     filePath: string
     fileType: string
+    fileHash: string
     _count: AttachmentCountAggregateOutputType | null
     _avg: AttachmentAvgAggregateOutputType | null
     _sum: AttachmentSumAggregateOutputType | null
@@ -11349,6 +11356,7 @@ export namespace Prisma {
     placementId?: boolean
     filePath?: boolean
     fileType?: boolean
+    fileHash?: boolean
     placement?: boolean | PlacementDefaultArgs<ExtArgs>
     chunks?: boolean | Attachment$chunksArgs<ExtArgs>
     _count?: boolean | AttachmentCountOutputTypeDefaultArgs<ExtArgs>
@@ -11359,6 +11367,7 @@ export namespace Prisma {
     placementId?: boolean
     filePath?: boolean
     fileType?: boolean
+    fileHash?: boolean
     placement?: boolean | PlacementDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["attachment"]>
 
@@ -11367,6 +11376,7 @@ export namespace Prisma {
     placementId?: boolean
     filePath?: boolean
     fileType?: boolean
+    fileHash?: boolean
     placement?: boolean | PlacementDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["attachment"]>
 
@@ -11375,9 +11385,10 @@ export namespace Prisma {
     placementId?: boolean
     filePath?: boolean
     fileType?: boolean
+    fileHash?: boolean
   }
 
-  export type AttachmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "placementId" | "filePath" | "fileType", ExtArgs["result"]["attachment"]>
+  export type AttachmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "placementId" | "filePath" | "fileType" | "fileHash", ExtArgs["result"]["attachment"]>
   export type AttachmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     placement?: boolean | PlacementDefaultArgs<ExtArgs>
     chunks?: boolean | Attachment$chunksArgs<ExtArgs>
@@ -11401,6 +11412,7 @@ export namespace Prisma {
       placementId: number
       filePath: string
       fileType: string
+      fileHash: string
     }, ExtArgs["result"]["attachment"]>
     composites: {}
   }
@@ -11830,6 +11842,7 @@ export namespace Prisma {
     readonly placementId: FieldRef<"Attachment", 'Int'>
     readonly filePath: FieldRef<"Attachment", 'String'>
     readonly fileType: FieldRef<"Attachment", 'String'>
+    readonly fileHash: FieldRef<"Attachment", 'String'>
   }
     
 
@@ -12288,29 +12301,39 @@ export namespace Prisma {
   export type PlacementChunkAvgAggregateOutputType = {
     id: number | null
     attachmentId: number | null
+    pageNumber: number | null
+    chunkIndex: number | null
   }
 
   export type PlacementChunkSumAggregateOutputType = {
     id: number | null
     attachmentId: number | null
+    pageNumber: number | null
+    chunkIndex: number | null
   }
 
   export type PlacementChunkMinAggregateOutputType = {
     id: number | null
     attachmentId: number | null
     chunkText: string | null
+    pageNumber: number | null
+    chunkIndex: number | null
   }
 
   export type PlacementChunkMaxAggregateOutputType = {
     id: number | null
     attachmentId: number | null
     chunkText: string | null
+    pageNumber: number | null
+    chunkIndex: number | null
   }
 
   export type PlacementChunkCountAggregateOutputType = {
     id: number
     attachmentId: number
     chunkText: number
+    pageNumber: number
+    chunkIndex: number
     _all: number
   }
 
@@ -12318,29 +12341,39 @@ export namespace Prisma {
   export type PlacementChunkAvgAggregateInputType = {
     id?: true
     attachmentId?: true
+    pageNumber?: true
+    chunkIndex?: true
   }
 
   export type PlacementChunkSumAggregateInputType = {
     id?: true
     attachmentId?: true
+    pageNumber?: true
+    chunkIndex?: true
   }
 
   export type PlacementChunkMinAggregateInputType = {
     id?: true
     attachmentId?: true
     chunkText?: true
+    pageNumber?: true
+    chunkIndex?: true
   }
 
   export type PlacementChunkMaxAggregateInputType = {
     id?: true
     attachmentId?: true
     chunkText?: true
+    pageNumber?: true
+    chunkIndex?: true
   }
 
   export type PlacementChunkCountAggregateInputType = {
     id?: true
     attachmentId?: true
     chunkText?: true
+    pageNumber?: true
+    chunkIndex?: true
     _all?: true
   }
 
@@ -12434,6 +12467,8 @@ export namespace Prisma {
     id: number
     attachmentId: number
     chunkText: string
+    pageNumber: number
+    chunkIndex: number
     _count: PlacementChunkCountAggregateOutputType | null
     _avg: PlacementChunkAvgAggregateOutputType | null
     _sum: PlacementChunkSumAggregateOutputType | null
@@ -12459,6 +12494,8 @@ export namespace Prisma {
     id?: boolean
     attachmentId?: boolean
     chunkText?: boolean
+    pageNumber?: boolean
+    chunkIndex?: boolean
     attachment?: boolean | AttachmentDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["placementChunk"]>
 
@@ -12466,6 +12503,8 @@ export namespace Prisma {
     id?: boolean
     attachmentId?: boolean
     chunkText?: boolean
+    pageNumber?: boolean
+    chunkIndex?: boolean
     attachment?: boolean | AttachmentDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["placementChunk"]>
 
@@ -12473,6 +12512,8 @@ export namespace Prisma {
     id?: boolean
     attachmentId?: boolean
     chunkText?: boolean
+    pageNumber?: boolean
+    chunkIndex?: boolean
     attachment?: boolean | AttachmentDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["placementChunk"]>
 
@@ -12480,9 +12521,11 @@ export namespace Prisma {
     id?: boolean
     attachmentId?: boolean
     chunkText?: boolean
+    pageNumber?: boolean
+    chunkIndex?: boolean
   }
 
-  export type PlacementChunkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "attachmentId" | "chunkText", ExtArgs["result"]["placementChunk"]>
+  export type PlacementChunkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "attachmentId" | "chunkText" | "pageNumber" | "chunkIndex", ExtArgs["result"]["placementChunk"]>
   export type PlacementChunkInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     attachment?: boolean | AttachmentDefaultArgs<ExtArgs>
   }
@@ -12502,6 +12545,8 @@ export namespace Prisma {
       id: number
       attachmentId: number
       chunkText: string
+      pageNumber: number
+      chunkIndex: number
     }, ExtArgs["result"]["placementChunk"]>
     composites: {}
   }
@@ -12929,6 +12974,8 @@ export namespace Prisma {
     readonly id: FieldRef<"PlacementChunk", 'Int'>
     readonly attachmentId: FieldRef<"PlacementChunk", 'Int'>
     readonly chunkText: FieldRef<"PlacementChunk", 'String'>
+    readonly pageNumber: FieldRef<"PlacementChunk", 'Int'>
+    readonly chunkIndex: FieldRef<"PlacementChunk", 'Int'>
   }
     
 
@@ -13463,7 +13510,8 @@ export namespace Prisma {
     id: 'id',
     placementId: 'placementId',
     filePath: 'filePath',
-    fileType: 'fileType'
+    fileType: 'fileType',
+    fileHash: 'fileHash'
   };
 
   export type AttachmentScalarFieldEnum = (typeof AttachmentScalarFieldEnum)[keyof typeof AttachmentScalarFieldEnum]
@@ -13472,7 +13520,9 @@ export namespace Prisma {
   export const PlacementChunkScalarFieldEnum: {
     id: 'id',
     attachmentId: 'attachmentId',
-    chunkText: 'chunkText'
+    chunkText: 'chunkText',
+    pageNumber: 'pageNumber',
+    chunkIndex: 'chunkIndex'
   };
 
   export type PlacementChunkScalarFieldEnum = (typeof PlacementChunkScalarFieldEnum)[keyof typeof PlacementChunkScalarFieldEnum]
@@ -13641,8 +13691,8 @@ export namespace Prisma {
     branchId?: IntNullableFilter<"User"> | number | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     skills?: StudentSkillListRelationFilter
+    branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -13658,8 +13708,8 @@ export namespace Prisma {
     branchId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    branch?: BranchOrderByWithRelationInput
     skills?: StudentSkillOrderByRelationAggregateInput
+    branch?: BranchOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -13678,8 +13728,8 @@ export namespace Prisma {
     branchId?: IntNullableFilter<"User"> | number | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     skills?: StudentSkillListRelationFilter
+    branch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
   }, "id" | "email" | "rollNo">
 
   export type UserOrderByWithAggregationInput = {
@@ -13835,10 +13885,10 @@ export namespace Prisma {
     offeredCount?: IntFilter<"Placement"> | number
     createdAt?: DateTimeFilter<"Placement"> | Date | string
     updatedAt?: DateTimeFilter<"Placement"> | Date | string
-    company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
-    skills?: PlacementSkillListRelationFilter
-    branches?: PlacementBranchListRelationFilter
     attachments?: AttachmentListRelationFilter
+    company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
+    branches?: PlacementBranchListRelationFilter
+    skills?: PlacementSkillListRelationFilter
   }
 
   export type PlacementOrderByWithRelationInput = {
@@ -13856,10 +13906,10 @@ export namespace Prisma {
     offeredCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    company?: CompanyOrderByWithRelationInput
-    skills?: PlacementSkillOrderByRelationAggregateInput
-    branches?: PlacementBranchOrderByRelationAggregateInput
     attachments?: AttachmentOrderByRelationAggregateInput
+    company?: CompanyOrderByWithRelationInput
+    branches?: PlacementBranchOrderByRelationAggregateInput
+    skills?: PlacementSkillOrderByRelationAggregateInput
   }
 
   export type PlacementWhereUniqueInput = Prisma.AtLeast<{
@@ -13880,10 +13930,10 @@ export namespace Prisma {
     offeredCount?: IntFilter<"Placement"> | number
     createdAt?: DateTimeFilter<"Placement"> | Date | string
     updatedAt?: DateTimeFilter<"Placement"> | Date | string
-    company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
-    skills?: PlacementSkillListRelationFilter
-    branches?: PlacementBranchListRelationFilter
     attachments?: AttachmentListRelationFilter
+    company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
+    branches?: PlacementBranchListRelationFilter
+    skills?: PlacementSkillListRelationFilter
   }, "id">
 
   export type PlacementOrderByWithAggregationInput = {
@@ -13934,15 +13984,15 @@ export namespace Prisma {
     NOT?: BranchWhereInput | BranchWhereInput[]
     id?: IntFilter<"Branch"> | number
     name?: StringFilter<"Branch"> | string
-    users?: UserListRelationFilter
     placements?: PlacementBranchListRelationFilter
+    users?: UserListRelationFilter
   }
 
   export type BranchOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    users?: UserOrderByRelationAggregateInput
     placements?: PlacementBranchOrderByRelationAggregateInput
+    users?: UserOrderByRelationAggregateInput
   }
 
   export type BranchWhereUniqueInput = Prisma.AtLeast<{
@@ -13951,8 +14001,8 @@ export namespace Prisma {
     AND?: BranchWhereInput | BranchWhereInput[]
     OR?: BranchWhereInput[]
     NOT?: BranchWhereInput | BranchWhereInput[]
-    users?: UserListRelationFilter
     placements?: PlacementBranchListRelationFilter
+    users?: UserListRelationFilter
   }, "id" | "name">
 
   export type BranchOrderByWithAggregationInput = {
@@ -13979,15 +14029,15 @@ export namespace Prisma {
     NOT?: SkillWhereInput | SkillWhereInput[]
     id?: IntFilter<"Skill"> | number
     name?: StringFilter<"Skill"> | string
-    students?: StudentSkillListRelationFilter
     placements?: PlacementSkillListRelationFilter
+    students?: StudentSkillListRelationFilter
   }
 
   export type SkillOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    students?: StudentSkillOrderByRelationAggregateInput
     placements?: PlacementSkillOrderByRelationAggregateInput
+    students?: StudentSkillOrderByRelationAggregateInput
   }
 
   export type SkillWhereUniqueInput = Prisma.AtLeast<{
@@ -13996,8 +14046,8 @@ export namespace Prisma {
     AND?: SkillWhereInput | SkillWhereInput[]
     OR?: SkillWhereInput[]
     NOT?: SkillWhereInput | SkillWhereInput[]
-    students?: StudentSkillListRelationFilter
     placements?: PlacementSkillListRelationFilter
+    students?: StudentSkillListRelationFilter
   }, "id" | "name">
 
   export type SkillOrderByWithAggregationInput = {
@@ -14024,15 +14074,15 @@ export namespace Prisma {
     NOT?: StudentSkillWhereInput | StudentSkillWhereInput[]
     userId?: IntFilter<"StudentSkill"> | number
     skillId?: IntFilter<"StudentSkill"> | number
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     skill?: XOR<SkillScalarRelationFilter, SkillWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type StudentSkillOrderByWithRelationInput = {
     userId?: SortOrder
     skillId?: SortOrder
-    user?: UserOrderByWithRelationInput
     skill?: SkillOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
   }
 
   export type StudentSkillWhereUniqueInput = Prisma.AtLeast<{
@@ -14042,8 +14092,8 @@ export namespace Prisma {
     NOT?: StudentSkillWhereInput | StudentSkillWhereInput[]
     userId?: IntFilter<"StudentSkill"> | number
     skillId?: IntFilter<"StudentSkill"> | number
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     skill?: XOR<SkillScalarRelationFilter, SkillWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "userId_skillId">
 
   export type StudentSkillOrderByWithAggregationInput = {
@@ -14116,15 +14166,15 @@ export namespace Prisma {
     NOT?: PlacementBranchWhereInput | PlacementBranchWhereInput[]
     placementId?: IntFilter<"PlacementBranch"> | number
     branchId?: IntFilter<"PlacementBranch"> | number
-    placement?: XOR<PlacementScalarRelationFilter, PlacementWhereInput>
     branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
+    placement?: XOR<PlacementScalarRelationFilter, PlacementWhereInput>
   }
 
   export type PlacementBranchOrderByWithRelationInput = {
     placementId?: SortOrder
     branchId?: SortOrder
-    placement?: PlacementOrderByWithRelationInput
     branch?: BranchOrderByWithRelationInput
+    placement?: PlacementOrderByWithRelationInput
   }
 
   export type PlacementBranchWhereUniqueInput = Prisma.AtLeast<{
@@ -14134,8 +14184,8 @@ export namespace Prisma {
     NOT?: PlacementBranchWhereInput | PlacementBranchWhereInput[]
     placementId?: IntFilter<"PlacementBranch"> | number
     branchId?: IntFilter<"PlacementBranch"> | number
-    placement?: XOR<PlacementScalarRelationFilter, PlacementWhereInput>
     branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
+    placement?: XOR<PlacementScalarRelationFilter, PlacementWhereInput>
   }, "placementId_branchId">
 
   export type PlacementBranchOrderByWithAggregationInput = {
@@ -14164,6 +14214,7 @@ export namespace Prisma {
     placementId?: IntFilter<"Attachment"> | number
     filePath?: StringFilter<"Attachment"> | string
     fileType?: StringFilter<"Attachment"> | string
+    fileHash?: StringFilter<"Attachment"> | string
     placement?: XOR<PlacementScalarRelationFilter, PlacementWhereInput>
     chunks?: PlacementChunkListRelationFilter
   }
@@ -14173,12 +14224,14 @@ export namespace Prisma {
     placementId?: SortOrder
     filePath?: SortOrder
     fileType?: SortOrder
+    fileHash?: SortOrder
     placement?: PlacementOrderByWithRelationInput
     chunks?: PlacementChunkOrderByRelationAggregateInput
   }
 
   export type AttachmentWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    fileHash?: string
     AND?: AttachmentWhereInput | AttachmentWhereInput[]
     OR?: AttachmentWhereInput[]
     NOT?: AttachmentWhereInput | AttachmentWhereInput[]
@@ -14187,13 +14240,14 @@ export namespace Prisma {
     fileType?: StringFilter<"Attachment"> | string
     placement?: XOR<PlacementScalarRelationFilter, PlacementWhereInput>
     chunks?: PlacementChunkListRelationFilter
-  }, "id">
+  }, "id" | "fileHash">
 
   export type AttachmentOrderByWithAggregationInput = {
     id?: SortOrder
     placementId?: SortOrder
     filePath?: SortOrder
     fileType?: SortOrder
+    fileHash?: SortOrder
     _count?: AttachmentCountOrderByAggregateInput
     _avg?: AttachmentAvgOrderByAggregateInput
     _max?: AttachmentMaxOrderByAggregateInput
@@ -14209,6 +14263,7 @@ export namespace Prisma {
     placementId?: IntWithAggregatesFilter<"Attachment"> | number
     filePath?: StringWithAggregatesFilter<"Attachment"> | string
     fileType?: StringWithAggregatesFilter<"Attachment"> | string
+    fileHash?: StringWithAggregatesFilter<"Attachment"> | string
   }
 
   export type PlacementChunkWhereInput = {
@@ -14218,6 +14273,8 @@ export namespace Prisma {
     id?: IntFilter<"PlacementChunk"> | number
     attachmentId?: IntFilter<"PlacementChunk"> | number
     chunkText?: StringFilter<"PlacementChunk"> | string
+    pageNumber?: IntFilter<"PlacementChunk"> | number
+    chunkIndex?: IntFilter<"PlacementChunk"> | number
     attachment?: XOR<AttachmentScalarRelationFilter, AttachmentWhereInput>
   }
 
@@ -14225,6 +14282,8 @@ export namespace Prisma {
     id?: SortOrder
     attachmentId?: SortOrder
     chunkText?: SortOrder
+    pageNumber?: SortOrder
+    chunkIndex?: SortOrder
     attachment?: AttachmentOrderByWithRelationInput
   }
 
@@ -14235,6 +14294,8 @@ export namespace Prisma {
     NOT?: PlacementChunkWhereInput | PlacementChunkWhereInput[]
     attachmentId?: IntFilter<"PlacementChunk"> | number
     chunkText?: StringFilter<"PlacementChunk"> | string
+    pageNumber?: IntFilter<"PlacementChunk"> | number
+    chunkIndex?: IntFilter<"PlacementChunk"> | number
     attachment?: XOR<AttachmentScalarRelationFilter, AttachmentWhereInput>
   }, "id">
 
@@ -14242,6 +14303,8 @@ export namespace Prisma {
     id?: SortOrder
     attachmentId?: SortOrder
     chunkText?: SortOrder
+    pageNumber?: SortOrder
+    chunkIndex?: SortOrder
     _count?: PlacementChunkCountOrderByAggregateInput
     _avg?: PlacementChunkAvgOrderByAggregateInput
     _max?: PlacementChunkMaxOrderByAggregateInput
@@ -14256,6 +14319,8 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"PlacementChunk"> | number
     attachmentId?: IntWithAggregatesFilter<"PlacementChunk"> | number
     chunkText?: StringWithAggregatesFilter<"PlacementChunk"> | string
+    pageNumber?: IntWithAggregatesFilter<"PlacementChunk"> | number
+    chunkIndex?: IntWithAggregatesFilter<"PlacementChunk"> | number
   }
 
   export type UserCreateInput = {
@@ -14269,8 +14334,8 @@ export namespace Prisma {
     phone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    branch?: BranchCreateNestedOneWithoutUsersInput
     skills?: StudentSkillCreateNestedManyWithoutUserInput
+    branch?: BranchCreateNestedOneWithoutUsersInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -14300,8 +14365,8 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    branch?: BranchUpdateOneWithoutUsersNestedInput
     skills?: StudentSkillUpdateManyWithoutUserNestedInput
+    branch?: BranchUpdateOneWithoutUsersNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -14489,10 +14554,10 @@ export namespace Prisma {
     offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    company: CompanyCreateNestedOneWithoutPlacementsInput
-    skills?: PlacementSkillCreateNestedManyWithoutPlacementInput
-    branches?: PlacementBranchCreateNestedManyWithoutPlacementInput
     attachments?: AttachmentCreateNestedManyWithoutPlacementInput
+    company: CompanyCreateNestedOneWithoutPlacementsInput
+    branches?: PlacementBranchCreateNestedManyWithoutPlacementInput
+    skills?: PlacementSkillCreateNestedManyWithoutPlacementInput
   }
 
   export type PlacementUncheckedCreateInput = {
@@ -14510,9 +14575,9 @@ export namespace Prisma {
     offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    skills?: PlacementSkillUncheckedCreateNestedManyWithoutPlacementInput
-    branches?: PlacementBranchUncheckedCreateNestedManyWithoutPlacementInput
     attachments?: AttachmentUncheckedCreateNestedManyWithoutPlacementInput
+    branches?: PlacementBranchUncheckedCreateNestedManyWithoutPlacementInput
+    skills?: PlacementSkillUncheckedCreateNestedManyWithoutPlacementInput
   }
 
   export type PlacementUpdateInput = {
@@ -14528,10 +14593,10 @@ export namespace Prisma {
     offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    company?: CompanyUpdateOneRequiredWithoutPlacementsNestedInput
-    skills?: PlacementSkillUpdateManyWithoutPlacementNestedInput
-    branches?: PlacementBranchUpdateManyWithoutPlacementNestedInput
     attachments?: AttachmentUpdateManyWithoutPlacementNestedInput
+    company?: CompanyUpdateOneRequiredWithoutPlacementsNestedInput
+    branches?: PlacementBranchUpdateManyWithoutPlacementNestedInput
+    skills?: PlacementSkillUpdateManyWithoutPlacementNestedInput
   }
 
   export type PlacementUncheckedUpdateInput = {
@@ -14549,9 +14614,9 @@ export namespace Prisma {
     offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    skills?: PlacementSkillUncheckedUpdateManyWithoutPlacementNestedInput
-    branches?: PlacementBranchUncheckedUpdateManyWithoutPlacementNestedInput
     attachments?: AttachmentUncheckedUpdateManyWithoutPlacementNestedInput
+    branches?: PlacementBranchUncheckedUpdateManyWithoutPlacementNestedInput
+    skills?: PlacementSkillUncheckedUpdateManyWithoutPlacementNestedInput
   }
 
   export type PlacementCreateManyInput = {
@@ -14605,28 +14670,28 @@ export namespace Prisma {
 
   export type BranchCreateInput = {
     name: string
-    users?: UserCreateNestedManyWithoutBranchInput
     placements?: PlacementBranchCreateNestedManyWithoutBranchInput
+    users?: UserCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateInput = {
     id?: number
     name: string
-    users?: UserUncheckedCreateNestedManyWithoutBranchInput
     placements?: PlacementBranchUncheckedCreateNestedManyWithoutBranchInput
+    users?: UserUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
-    users?: UserUpdateManyWithoutBranchNestedInput
     placements?: PlacementBranchUpdateManyWithoutBranchNestedInput
+    users?: UserUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    users?: UserUncheckedUpdateManyWithoutBranchNestedInput
     placements?: PlacementBranchUncheckedUpdateManyWithoutBranchNestedInput
+    users?: UserUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchCreateManyInput = {
@@ -14645,28 +14710,28 @@ export namespace Prisma {
 
   export type SkillCreateInput = {
     name: string
-    students?: StudentSkillCreateNestedManyWithoutSkillInput
     placements?: PlacementSkillCreateNestedManyWithoutSkillInput
+    students?: StudentSkillCreateNestedManyWithoutSkillInput
   }
 
   export type SkillUncheckedCreateInput = {
     id?: number
     name: string
-    students?: StudentSkillUncheckedCreateNestedManyWithoutSkillInput
     placements?: PlacementSkillUncheckedCreateNestedManyWithoutSkillInput
+    students?: StudentSkillUncheckedCreateNestedManyWithoutSkillInput
   }
 
   export type SkillUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
-    students?: StudentSkillUpdateManyWithoutSkillNestedInput
     placements?: PlacementSkillUpdateManyWithoutSkillNestedInput
+    students?: StudentSkillUpdateManyWithoutSkillNestedInput
   }
 
   export type SkillUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    students?: StudentSkillUncheckedUpdateManyWithoutSkillNestedInput
     placements?: PlacementSkillUncheckedUpdateManyWithoutSkillNestedInput
+    students?: StudentSkillUncheckedUpdateManyWithoutSkillNestedInput
   }
 
   export type SkillCreateManyInput = {
@@ -14684,8 +14749,8 @@ export namespace Prisma {
   }
 
   export type StudentSkillCreateInput = {
-    user: UserCreateNestedOneWithoutSkillsInput
     skill: SkillCreateNestedOneWithoutStudentsInput
+    user: UserCreateNestedOneWithoutSkillsInput
   }
 
   export type StudentSkillUncheckedCreateInput = {
@@ -14694,8 +14759,8 @@ export namespace Prisma {
   }
 
   export type StudentSkillUpdateInput = {
-    user?: UserUpdateOneRequiredWithoutSkillsNestedInput
     skill?: SkillUpdateOneRequiredWithoutStudentsNestedInput
+    user?: UserUpdateOneRequiredWithoutSkillsNestedInput
   }
 
   export type StudentSkillUncheckedUpdateInput = {
@@ -14752,8 +14817,8 @@ export namespace Prisma {
   }
 
   export type PlacementBranchCreateInput = {
-    placement: PlacementCreateNestedOneWithoutBranchesInput
     branch: BranchCreateNestedOneWithoutPlacementsInput
+    placement: PlacementCreateNestedOneWithoutBranchesInput
   }
 
   export type PlacementBranchUncheckedCreateInput = {
@@ -14762,8 +14827,8 @@ export namespace Prisma {
   }
 
   export type PlacementBranchUpdateInput = {
-    placement?: PlacementUpdateOneRequiredWithoutBranchesNestedInput
     branch?: BranchUpdateOneRequiredWithoutPlacementsNestedInput
+    placement?: PlacementUpdateOneRequiredWithoutBranchesNestedInput
   }
 
   export type PlacementBranchUncheckedUpdateInput = {
@@ -14788,6 +14853,7 @@ export namespace Prisma {
   export type AttachmentCreateInput = {
     filePath: string
     fileType: string
+    fileHash: string
     placement: PlacementCreateNestedOneWithoutAttachmentsInput
     chunks?: PlacementChunkCreateNestedManyWithoutAttachmentInput
   }
@@ -14797,12 +14863,14 @@ export namespace Prisma {
     placementId: number
     filePath: string
     fileType: string
+    fileHash: string
     chunks?: PlacementChunkUncheckedCreateNestedManyWithoutAttachmentInput
   }
 
   export type AttachmentUpdateInput = {
     filePath?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
+    fileHash?: StringFieldUpdateOperationsInput | string
     placement?: PlacementUpdateOneRequiredWithoutAttachmentsNestedInput
     chunks?: PlacementChunkUpdateManyWithoutAttachmentNestedInput
   }
@@ -14812,6 +14880,7 @@ export namespace Prisma {
     placementId?: IntFieldUpdateOperationsInput | number
     filePath?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
+    fileHash?: StringFieldUpdateOperationsInput | string
     chunks?: PlacementChunkUncheckedUpdateManyWithoutAttachmentNestedInput
   }
 
@@ -14820,11 +14889,13 @@ export namespace Prisma {
     placementId: number
     filePath: string
     fileType: string
+    fileHash: string
   }
 
   export type AttachmentUpdateManyMutationInput = {
     filePath?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
+    fileHash?: StringFieldUpdateOperationsInput | string
   }
 
   export type AttachmentUncheckedUpdateManyInput = {
@@ -14832,10 +14903,13 @@ export namespace Prisma {
     placementId?: IntFieldUpdateOperationsInput | number
     filePath?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
+    fileHash?: StringFieldUpdateOperationsInput | string
   }
 
   export type PlacementChunkCreateInput = {
     chunkText: string
+    pageNumber: number
+    chunkIndex: number
     attachment: AttachmentCreateNestedOneWithoutChunksInput
   }
 
@@ -14843,10 +14917,14 @@ export namespace Prisma {
     id?: number
     attachmentId: number
     chunkText: string
+    pageNumber: number
+    chunkIndex: number
   }
 
   export type PlacementChunkUpdateInput = {
     chunkText?: StringFieldUpdateOperationsInput | string
+    pageNumber?: IntFieldUpdateOperationsInput | number
+    chunkIndex?: IntFieldUpdateOperationsInput | number
     attachment?: AttachmentUpdateOneRequiredWithoutChunksNestedInput
   }
 
@@ -14854,22 +14932,30 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     attachmentId?: IntFieldUpdateOperationsInput | number
     chunkText?: StringFieldUpdateOperationsInput | string
+    pageNumber?: IntFieldUpdateOperationsInput | number
+    chunkIndex?: IntFieldUpdateOperationsInput | number
   }
 
   export type PlacementChunkCreateManyInput = {
     id?: number
     attachmentId: number
     chunkText: string
+    pageNumber: number
+    chunkIndex: number
   }
 
   export type PlacementChunkUpdateManyMutationInput = {
     chunkText?: StringFieldUpdateOperationsInput | string
+    pageNumber?: IntFieldUpdateOperationsInput | number
+    chunkIndex?: IntFieldUpdateOperationsInput | number
   }
 
   export type PlacementChunkUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     attachmentId?: IntFieldUpdateOperationsInput | number
     chunkText?: StringFieldUpdateOperationsInput | string
+    pageNumber?: IntFieldUpdateOperationsInput | number
+    chunkIndex?: IntFieldUpdateOperationsInput | number
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -14960,15 +15046,15 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type BranchNullableScalarRelationFilter = {
-    is?: BranchWhereInput | null
-    isNot?: BranchWhereInput | null
-  }
-
   export type StudentSkillListRelationFilter = {
     every?: StudentSkillWhereInput
     some?: StudentSkillWhereInput
     none?: StudentSkillWhereInput
+  }
+
+  export type BranchNullableScalarRelationFilter = {
+    is?: BranchWhereInput | null
+    isNot?: BranchWhereInput | null
   }
 
   export type SortOrderInput = {
@@ -15299,15 +15385,15 @@ export namespace Prisma {
     _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
+  export type AttachmentListRelationFilter = {
+    every?: AttachmentWhereInput
+    some?: AttachmentWhereInput
+    none?: AttachmentWhereInput
+  }
+
   export type CompanyScalarRelationFilter = {
     is?: CompanyWhereInput
     isNot?: CompanyWhereInput
-  }
-
-  export type PlacementSkillListRelationFilter = {
-    every?: PlacementSkillWhereInput
-    some?: PlacementSkillWhereInput
-    none?: PlacementSkillWhereInput
   }
 
   export type PlacementBranchListRelationFilter = {
@@ -15316,13 +15402,13 @@ export namespace Prisma {
     none?: PlacementBranchWhereInput
   }
 
-  export type AttachmentListRelationFilter = {
-    every?: AttachmentWhereInput
-    some?: AttachmentWhereInput
-    none?: AttachmentWhereInput
+  export type PlacementSkillListRelationFilter = {
+    every?: PlacementSkillWhereInput
+    some?: PlacementSkillWhereInput
+    none?: PlacementSkillWhereInput
   }
 
-  export type PlacementSkillOrderByRelationAggregateInput = {
+  export type AttachmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -15330,7 +15416,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type AttachmentOrderByRelationAggregateInput = {
+  export type PlacementSkillOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -15461,14 +15547,14 @@ export namespace Prisma {
     id?: SortOrder
   }
 
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
-  }
-
   export type SkillScalarRelationFilter = {
     is?: SkillWhereInput
     isNot?: SkillWhereInput
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
   }
 
   export type StudentSkillUserIdSkillIdCompoundUniqueInput = {
@@ -15586,6 +15672,7 @@ export namespace Prisma {
     placementId?: SortOrder
     filePath?: SortOrder
     fileType?: SortOrder
+    fileHash?: SortOrder
   }
 
   export type AttachmentAvgOrderByAggregateInput = {
@@ -15598,6 +15685,7 @@ export namespace Prisma {
     placementId?: SortOrder
     filePath?: SortOrder
     fileType?: SortOrder
+    fileHash?: SortOrder
   }
 
   export type AttachmentMinOrderByAggregateInput = {
@@ -15605,6 +15693,7 @@ export namespace Prisma {
     placementId?: SortOrder
     filePath?: SortOrder
     fileType?: SortOrder
+    fileHash?: SortOrder
   }
 
   export type AttachmentSumOrderByAggregateInput = {
@@ -15621,34 +15710,38 @@ export namespace Prisma {
     id?: SortOrder
     attachmentId?: SortOrder
     chunkText?: SortOrder
+    pageNumber?: SortOrder
+    chunkIndex?: SortOrder
   }
 
   export type PlacementChunkAvgOrderByAggregateInput = {
     id?: SortOrder
     attachmentId?: SortOrder
+    pageNumber?: SortOrder
+    chunkIndex?: SortOrder
   }
 
   export type PlacementChunkMaxOrderByAggregateInput = {
     id?: SortOrder
     attachmentId?: SortOrder
     chunkText?: SortOrder
+    pageNumber?: SortOrder
+    chunkIndex?: SortOrder
   }
 
   export type PlacementChunkMinOrderByAggregateInput = {
     id?: SortOrder
     attachmentId?: SortOrder
     chunkText?: SortOrder
+    pageNumber?: SortOrder
+    chunkIndex?: SortOrder
   }
 
   export type PlacementChunkSumOrderByAggregateInput = {
     id?: SortOrder
     attachmentId?: SortOrder
-  }
-
-  export type BranchCreateNestedOneWithoutUsersInput = {
-    create?: XOR<BranchCreateWithoutUsersInput, BranchUncheckedCreateWithoutUsersInput>
-    connectOrCreate?: BranchCreateOrConnectWithoutUsersInput
-    connect?: BranchWhereUniqueInput
+    pageNumber?: SortOrder
+    chunkIndex?: SortOrder
   }
 
   export type StudentSkillCreateNestedManyWithoutUserInput = {
@@ -15656,6 +15749,12 @@ export namespace Prisma {
     connectOrCreate?: StudentSkillCreateOrConnectWithoutUserInput | StudentSkillCreateOrConnectWithoutUserInput[]
     createMany?: StudentSkillCreateManyUserInputEnvelope
     connect?: StudentSkillWhereUniqueInput | StudentSkillWhereUniqueInput[]
+  }
+
+  export type BranchCreateNestedOneWithoutUsersInput = {
+    create?: XOR<BranchCreateWithoutUsersInput, BranchUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: BranchCreateOrConnectWithoutUsersInput
+    connect?: BranchWhereUniqueInput
   }
 
   export type StudentSkillUncheckedCreateNestedManyWithoutUserInput = {
@@ -15693,16 +15792,6 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type BranchUpdateOneWithoutUsersNestedInput = {
-    create?: XOR<BranchCreateWithoutUsersInput, BranchUncheckedCreateWithoutUsersInput>
-    connectOrCreate?: BranchCreateOrConnectWithoutUsersInput
-    upsert?: BranchUpsertWithoutUsersInput
-    disconnect?: BranchWhereInput | boolean
-    delete?: BranchWhereInput | boolean
-    connect?: BranchWhereUniqueInput
-    update?: XOR<XOR<BranchUpdateToOneWithWhereWithoutUsersInput, BranchUpdateWithoutUsersInput>, BranchUncheckedUpdateWithoutUsersInput>
-  }
-
   export type StudentSkillUpdateManyWithoutUserNestedInput = {
     create?: XOR<StudentSkillCreateWithoutUserInput, StudentSkillUncheckedCreateWithoutUserInput> | StudentSkillCreateWithoutUserInput[] | StudentSkillUncheckedCreateWithoutUserInput[]
     connectOrCreate?: StudentSkillCreateOrConnectWithoutUserInput | StudentSkillCreateOrConnectWithoutUserInput[]
@@ -15715,6 +15804,16 @@ export namespace Prisma {
     update?: StudentSkillUpdateWithWhereUniqueWithoutUserInput | StudentSkillUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: StudentSkillUpdateManyWithWhereWithoutUserInput | StudentSkillUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: StudentSkillScalarWhereInput | StudentSkillScalarWhereInput[]
+  }
+
+  export type BranchUpdateOneWithoutUsersNestedInput = {
+    create?: XOR<BranchCreateWithoutUsersInput, BranchUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: BranchCreateOrConnectWithoutUsersInput
+    upsert?: BranchUpsertWithoutUsersInput
+    disconnect?: BranchWhereInput | boolean
+    delete?: BranchWhereInput | boolean
+    connect?: BranchWhereUniqueInput
+    update?: XOR<XOR<BranchUpdateToOneWithWhereWithoutUsersInput, BranchUpdateWithoutUsersInput>, BranchUncheckedUpdateWithoutUsersInput>
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -15797,17 +15896,17 @@ export namespace Prisma {
     deleteMany?: PlacementScalarWhereInput | PlacementScalarWhereInput[]
   }
 
+  export type AttachmentCreateNestedManyWithoutPlacementInput = {
+    create?: XOR<AttachmentCreateWithoutPlacementInput, AttachmentUncheckedCreateWithoutPlacementInput> | AttachmentCreateWithoutPlacementInput[] | AttachmentUncheckedCreateWithoutPlacementInput[]
+    connectOrCreate?: AttachmentCreateOrConnectWithoutPlacementInput | AttachmentCreateOrConnectWithoutPlacementInput[]
+    createMany?: AttachmentCreateManyPlacementInputEnvelope
+    connect?: AttachmentWhereUniqueInput | AttachmentWhereUniqueInput[]
+  }
+
   export type CompanyCreateNestedOneWithoutPlacementsInput = {
     create?: XOR<CompanyCreateWithoutPlacementsInput, CompanyUncheckedCreateWithoutPlacementsInput>
     connectOrCreate?: CompanyCreateOrConnectWithoutPlacementsInput
     connect?: CompanyWhereUniqueInput
-  }
-
-  export type PlacementSkillCreateNestedManyWithoutPlacementInput = {
-    create?: XOR<PlacementSkillCreateWithoutPlacementInput, PlacementSkillUncheckedCreateWithoutPlacementInput> | PlacementSkillCreateWithoutPlacementInput[] | PlacementSkillUncheckedCreateWithoutPlacementInput[]
-    connectOrCreate?: PlacementSkillCreateOrConnectWithoutPlacementInput | PlacementSkillCreateOrConnectWithoutPlacementInput[]
-    createMany?: PlacementSkillCreateManyPlacementInputEnvelope
-    connect?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
   }
 
   export type PlacementBranchCreateNestedManyWithoutPlacementInput = {
@@ -15817,25 +15916,11 @@ export namespace Prisma {
     connect?: PlacementBranchWhereUniqueInput | PlacementBranchWhereUniqueInput[]
   }
 
-  export type AttachmentCreateNestedManyWithoutPlacementInput = {
-    create?: XOR<AttachmentCreateWithoutPlacementInput, AttachmentUncheckedCreateWithoutPlacementInput> | AttachmentCreateWithoutPlacementInput[] | AttachmentUncheckedCreateWithoutPlacementInput[]
-    connectOrCreate?: AttachmentCreateOrConnectWithoutPlacementInput | AttachmentCreateOrConnectWithoutPlacementInput[]
-    createMany?: AttachmentCreateManyPlacementInputEnvelope
-    connect?: AttachmentWhereUniqueInput | AttachmentWhereUniqueInput[]
-  }
-
-  export type PlacementSkillUncheckedCreateNestedManyWithoutPlacementInput = {
+  export type PlacementSkillCreateNestedManyWithoutPlacementInput = {
     create?: XOR<PlacementSkillCreateWithoutPlacementInput, PlacementSkillUncheckedCreateWithoutPlacementInput> | PlacementSkillCreateWithoutPlacementInput[] | PlacementSkillUncheckedCreateWithoutPlacementInput[]
     connectOrCreate?: PlacementSkillCreateOrConnectWithoutPlacementInput | PlacementSkillCreateOrConnectWithoutPlacementInput[]
     createMany?: PlacementSkillCreateManyPlacementInputEnvelope
     connect?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
-  }
-
-  export type PlacementBranchUncheckedCreateNestedManyWithoutPlacementInput = {
-    create?: XOR<PlacementBranchCreateWithoutPlacementInput, PlacementBranchUncheckedCreateWithoutPlacementInput> | PlacementBranchCreateWithoutPlacementInput[] | PlacementBranchUncheckedCreateWithoutPlacementInput[]
-    connectOrCreate?: PlacementBranchCreateOrConnectWithoutPlacementInput | PlacementBranchCreateOrConnectWithoutPlacementInput[]
-    createMany?: PlacementBranchCreateManyPlacementInputEnvelope
-    connect?: PlacementBranchWhereUniqueInput | PlacementBranchWhereUniqueInput[]
   }
 
   export type AttachmentUncheckedCreateNestedManyWithoutPlacementInput = {
@@ -15845,40 +15930,18 @@ export namespace Prisma {
     connect?: AttachmentWhereUniqueInput | AttachmentWhereUniqueInput[]
   }
 
-  export type CompanyUpdateOneRequiredWithoutPlacementsNestedInput = {
-    create?: XOR<CompanyCreateWithoutPlacementsInput, CompanyUncheckedCreateWithoutPlacementsInput>
-    connectOrCreate?: CompanyCreateOrConnectWithoutPlacementsInput
-    upsert?: CompanyUpsertWithoutPlacementsInput
-    connect?: CompanyWhereUniqueInput
-    update?: XOR<XOR<CompanyUpdateToOneWithWhereWithoutPlacementsInput, CompanyUpdateWithoutPlacementsInput>, CompanyUncheckedUpdateWithoutPlacementsInput>
-  }
-
-  export type PlacementSkillUpdateManyWithoutPlacementNestedInput = {
-    create?: XOR<PlacementSkillCreateWithoutPlacementInput, PlacementSkillUncheckedCreateWithoutPlacementInput> | PlacementSkillCreateWithoutPlacementInput[] | PlacementSkillUncheckedCreateWithoutPlacementInput[]
-    connectOrCreate?: PlacementSkillCreateOrConnectWithoutPlacementInput | PlacementSkillCreateOrConnectWithoutPlacementInput[]
-    upsert?: PlacementSkillUpsertWithWhereUniqueWithoutPlacementInput | PlacementSkillUpsertWithWhereUniqueWithoutPlacementInput[]
-    createMany?: PlacementSkillCreateManyPlacementInputEnvelope
-    set?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
-    disconnect?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
-    delete?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
-    connect?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
-    update?: PlacementSkillUpdateWithWhereUniqueWithoutPlacementInput | PlacementSkillUpdateWithWhereUniqueWithoutPlacementInput[]
-    updateMany?: PlacementSkillUpdateManyWithWhereWithoutPlacementInput | PlacementSkillUpdateManyWithWhereWithoutPlacementInput[]
-    deleteMany?: PlacementSkillScalarWhereInput | PlacementSkillScalarWhereInput[]
-  }
-
-  export type PlacementBranchUpdateManyWithoutPlacementNestedInput = {
+  export type PlacementBranchUncheckedCreateNestedManyWithoutPlacementInput = {
     create?: XOR<PlacementBranchCreateWithoutPlacementInput, PlacementBranchUncheckedCreateWithoutPlacementInput> | PlacementBranchCreateWithoutPlacementInput[] | PlacementBranchUncheckedCreateWithoutPlacementInput[]
     connectOrCreate?: PlacementBranchCreateOrConnectWithoutPlacementInput | PlacementBranchCreateOrConnectWithoutPlacementInput[]
-    upsert?: PlacementBranchUpsertWithWhereUniqueWithoutPlacementInput | PlacementBranchUpsertWithWhereUniqueWithoutPlacementInput[]
     createMany?: PlacementBranchCreateManyPlacementInputEnvelope
-    set?: PlacementBranchWhereUniqueInput | PlacementBranchWhereUniqueInput[]
-    disconnect?: PlacementBranchWhereUniqueInput | PlacementBranchWhereUniqueInput[]
-    delete?: PlacementBranchWhereUniqueInput | PlacementBranchWhereUniqueInput[]
     connect?: PlacementBranchWhereUniqueInput | PlacementBranchWhereUniqueInput[]
-    update?: PlacementBranchUpdateWithWhereUniqueWithoutPlacementInput | PlacementBranchUpdateWithWhereUniqueWithoutPlacementInput[]
-    updateMany?: PlacementBranchUpdateManyWithWhereWithoutPlacementInput | PlacementBranchUpdateManyWithWhereWithoutPlacementInput[]
-    deleteMany?: PlacementBranchScalarWhereInput | PlacementBranchScalarWhereInput[]
+  }
+
+  export type PlacementSkillUncheckedCreateNestedManyWithoutPlacementInput = {
+    create?: XOR<PlacementSkillCreateWithoutPlacementInput, PlacementSkillUncheckedCreateWithoutPlacementInput> | PlacementSkillCreateWithoutPlacementInput[] | PlacementSkillUncheckedCreateWithoutPlacementInput[]
+    connectOrCreate?: PlacementSkillCreateOrConnectWithoutPlacementInput | PlacementSkillCreateOrConnectWithoutPlacementInput[]
+    createMany?: PlacementSkillCreateManyPlacementInputEnvelope
+    connect?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
   }
 
   export type AttachmentUpdateManyWithoutPlacementNestedInput = {
@@ -15895,21 +15958,15 @@ export namespace Prisma {
     deleteMany?: AttachmentScalarWhereInput | AttachmentScalarWhereInput[]
   }
 
-  export type PlacementSkillUncheckedUpdateManyWithoutPlacementNestedInput = {
-    create?: XOR<PlacementSkillCreateWithoutPlacementInput, PlacementSkillUncheckedCreateWithoutPlacementInput> | PlacementSkillCreateWithoutPlacementInput[] | PlacementSkillUncheckedCreateWithoutPlacementInput[]
-    connectOrCreate?: PlacementSkillCreateOrConnectWithoutPlacementInput | PlacementSkillCreateOrConnectWithoutPlacementInput[]
-    upsert?: PlacementSkillUpsertWithWhereUniqueWithoutPlacementInput | PlacementSkillUpsertWithWhereUniqueWithoutPlacementInput[]
-    createMany?: PlacementSkillCreateManyPlacementInputEnvelope
-    set?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
-    disconnect?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
-    delete?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
-    connect?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
-    update?: PlacementSkillUpdateWithWhereUniqueWithoutPlacementInput | PlacementSkillUpdateWithWhereUniqueWithoutPlacementInput[]
-    updateMany?: PlacementSkillUpdateManyWithWhereWithoutPlacementInput | PlacementSkillUpdateManyWithWhereWithoutPlacementInput[]
-    deleteMany?: PlacementSkillScalarWhereInput | PlacementSkillScalarWhereInput[]
+  export type CompanyUpdateOneRequiredWithoutPlacementsNestedInput = {
+    create?: XOR<CompanyCreateWithoutPlacementsInput, CompanyUncheckedCreateWithoutPlacementsInput>
+    connectOrCreate?: CompanyCreateOrConnectWithoutPlacementsInput
+    upsert?: CompanyUpsertWithoutPlacementsInput
+    connect?: CompanyWhereUniqueInput
+    update?: XOR<XOR<CompanyUpdateToOneWithWhereWithoutPlacementsInput, CompanyUpdateWithoutPlacementsInput>, CompanyUncheckedUpdateWithoutPlacementsInput>
   }
 
-  export type PlacementBranchUncheckedUpdateManyWithoutPlacementNestedInput = {
+  export type PlacementBranchUpdateManyWithoutPlacementNestedInput = {
     create?: XOR<PlacementBranchCreateWithoutPlacementInput, PlacementBranchUncheckedCreateWithoutPlacementInput> | PlacementBranchCreateWithoutPlacementInput[] | PlacementBranchUncheckedCreateWithoutPlacementInput[]
     connectOrCreate?: PlacementBranchCreateOrConnectWithoutPlacementInput | PlacementBranchCreateOrConnectWithoutPlacementInput[]
     upsert?: PlacementBranchUpsertWithWhereUniqueWithoutPlacementInput | PlacementBranchUpsertWithWhereUniqueWithoutPlacementInput[]
@@ -15921,6 +15978,20 @@ export namespace Prisma {
     update?: PlacementBranchUpdateWithWhereUniqueWithoutPlacementInput | PlacementBranchUpdateWithWhereUniqueWithoutPlacementInput[]
     updateMany?: PlacementBranchUpdateManyWithWhereWithoutPlacementInput | PlacementBranchUpdateManyWithWhereWithoutPlacementInput[]
     deleteMany?: PlacementBranchScalarWhereInput | PlacementBranchScalarWhereInput[]
+  }
+
+  export type PlacementSkillUpdateManyWithoutPlacementNestedInput = {
+    create?: XOR<PlacementSkillCreateWithoutPlacementInput, PlacementSkillUncheckedCreateWithoutPlacementInput> | PlacementSkillCreateWithoutPlacementInput[] | PlacementSkillUncheckedCreateWithoutPlacementInput[]
+    connectOrCreate?: PlacementSkillCreateOrConnectWithoutPlacementInput | PlacementSkillCreateOrConnectWithoutPlacementInput[]
+    upsert?: PlacementSkillUpsertWithWhereUniqueWithoutPlacementInput | PlacementSkillUpsertWithWhereUniqueWithoutPlacementInput[]
+    createMany?: PlacementSkillCreateManyPlacementInputEnvelope
+    set?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
+    disconnect?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
+    delete?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
+    connect?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
+    update?: PlacementSkillUpdateWithWhereUniqueWithoutPlacementInput | PlacementSkillUpdateWithWhereUniqueWithoutPlacementInput[]
+    updateMany?: PlacementSkillUpdateManyWithWhereWithoutPlacementInput | PlacementSkillUpdateManyWithWhereWithoutPlacementInput[]
+    deleteMany?: PlacementSkillScalarWhereInput | PlacementSkillScalarWhereInput[]
   }
 
   export type AttachmentUncheckedUpdateManyWithoutPlacementNestedInput = {
@@ -15937,11 +16008,32 @@ export namespace Prisma {
     deleteMany?: AttachmentScalarWhereInput | AttachmentScalarWhereInput[]
   }
 
-  export type UserCreateNestedManyWithoutBranchInput = {
-    create?: XOR<UserCreateWithoutBranchInput, UserUncheckedCreateWithoutBranchInput> | UserCreateWithoutBranchInput[] | UserUncheckedCreateWithoutBranchInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutBranchInput | UserCreateOrConnectWithoutBranchInput[]
-    createMany?: UserCreateManyBranchInputEnvelope
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  export type PlacementBranchUncheckedUpdateManyWithoutPlacementNestedInput = {
+    create?: XOR<PlacementBranchCreateWithoutPlacementInput, PlacementBranchUncheckedCreateWithoutPlacementInput> | PlacementBranchCreateWithoutPlacementInput[] | PlacementBranchUncheckedCreateWithoutPlacementInput[]
+    connectOrCreate?: PlacementBranchCreateOrConnectWithoutPlacementInput | PlacementBranchCreateOrConnectWithoutPlacementInput[]
+    upsert?: PlacementBranchUpsertWithWhereUniqueWithoutPlacementInput | PlacementBranchUpsertWithWhereUniqueWithoutPlacementInput[]
+    createMany?: PlacementBranchCreateManyPlacementInputEnvelope
+    set?: PlacementBranchWhereUniqueInput | PlacementBranchWhereUniqueInput[]
+    disconnect?: PlacementBranchWhereUniqueInput | PlacementBranchWhereUniqueInput[]
+    delete?: PlacementBranchWhereUniqueInput | PlacementBranchWhereUniqueInput[]
+    connect?: PlacementBranchWhereUniqueInput | PlacementBranchWhereUniqueInput[]
+    update?: PlacementBranchUpdateWithWhereUniqueWithoutPlacementInput | PlacementBranchUpdateWithWhereUniqueWithoutPlacementInput[]
+    updateMany?: PlacementBranchUpdateManyWithWhereWithoutPlacementInput | PlacementBranchUpdateManyWithWhereWithoutPlacementInput[]
+    deleteMany?: PlacementBranchScalarWhereInput | PlacementBranchScalarWhereInput[]
+  }
+
+  export type PlacementSkillUncheckedUpdateManyWithoutPlacementNestedInput = {
+    create?: XOR<PlacementSkillCreateWithoutPlacementInput, PlacementSkillUncheckedCreateWithoutPlacementInput> | PlacementSkillCreateWithoutPlacementInput[] | PlacementSkillUncheckedCreateWithoutPlacementInput[]
+    connectOrCreate?: PlacementSkillCreateOrConnectWithoutPlacementInput | PlacementSkillCreateOrConnectWithoutPlacementInput[]
+    upsert?: PlacementSkillUpsertWithWhereUniqueWithoutPlacementInput | PlacementSkillUpsertWithWhereUniqueWithoutPlacementInput[]
+    createMany?: PlacementSkillCreateManyPlacementInputEnvelope
+    set?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
+    disconnect?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
+    delete?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
+    connect?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
+    update?: PlacementSkillUpdateWithWhereUniqueWithoutPlacementInput | PlacementSkillUpdateWithWhereUniqueWithoutPlacementInput[]
+    updateMany?: PlacementSkillUpdateManyWithWhereWithoutPlacementInput | PlacementSkillUpdateManyWithWhereWithoutPlacementInput[]
+    deleteMany?: PlacementSkillScalarWhereInput | PlacementSkillScalarWhereInput[]
   }
 
   export type PlacementBranchCreateNestedManyWithoutBranchInput = {
@@ -15951,7 +16043,7 @@ export namespace Prisma {
     connect?: PlacementBranchWhereUniqueInput | PlacementBranchWhereUniqueInput[]
   }
 
-  export type UserUncheckedCreateNestedManyWithoutBranchInput = {
+  export type UserCreateNestedManyWithoutBranchInput = {
     create?: XOR<UserCreateWithoutBranchInput, UserUncheckedCreateWithoutBranchInput> | UserCreateWithoutBranchInput[] | UserUncheckedCreateWithoutBranchInput[]
     connectOrCreate?: UserCreateOrConnectWithoutBranchInput | UserCreateOrConnectWithoutBranchInput[]
     createMany?: UserCreateManyBranchInputEnvelope
@@ -15965,18 +16057,11 @@ export namespace Prisma {
     connect?: PlacementBranchWhereUniqueInput | PlacementBranchWhereUniqueInput[]
   }
 
-  export type UserUpdateManyWithoutBranchNestedInput = {
+  export type UserUncheckedCreateNestedManyWithoutBranchInput = {
     create?: XOR<UserCreateWithoutBranchInput, UserUncheckedCreateWithoutBranchInput> | UserCreateWithoutBranchInput[] | UserUncheckedCreateWithoutBranchInput[]
     connectOrCreate?: UserCreateOrConnectWithoutBranchInput | UserCreateOrConnectWithoutBranchInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutBranchInput | UserUpsertWithWhereUniqueWithoutBranchInput[]
     createMany?: UserCreateManyBranchInputEnvelope
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
     connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutBranchInput | UserUpdateWithWhereUniqueWithoutBranchInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutBranchInput | UserUpdateManyWithWhereWithoutBranchInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
   export type PlacementBranchUpdateManyWithoutBranchNestedInput = {
@@ -15993,7 +16078,7 @@ export namespace Prisma {
     deleteMany?: PlacementBranchScalarWhereInput | PlacementBranchScalarWhereInput[]
   }
 
-  export type UserUncheckedUpdateManyWithoutBranchNestedInput = {
+  export type UserUpdateManyWithoutBranchNestedInput = {
     create?: XOR<UserCreateWithoutBranchInput, UserUncheckedCreateWithoutBranchInput> | UserCreateWithoutBranchInput[] | UserUncheckedCreateWithoutBranchInput[]
     connectOrCreate?: UserCreateOrConnectWithoutBranchInput | UserCreateOrConnectWithoutBranchInput[]
     upsert?: UserUpsertWithWhereUniqueWithoutBranchInput | UserUpsertWithWhereUniqueWithoutBranchInput[]
@@ -16021,11 +16106,18 @@ export namespace Prisma {
     deleteMany?: PlacementBranchScalarWhereInput | PlacementBranchScalarWhereInput[]
   }
 
-  export type StudentSkillCreateNestedManyWithoutSkillInput = {
-    create?: XOR<StudentSkillCreateWithoutSkillInput, StudentSkillUncheckedCreateWithoutSkillInput> | StudentSkillCreateWithoutSkillInput[] | StudentSkillUncheckedCreateWithoutSkillInput[]
-    connectOrCreate?: StudentSkillCreateOrConnectWithoutSkillInput | StudentSkillCreateOrConnectWithoutSkillInput[]
-    createMany?: StudentSkillCreateManySkillInputEnvelope
-    connect?: StudentSkillWhereUniqueInput | StudentSkillWhereUniqueInput[]
+  export type UserUncheckedUpdateManyWithoutBranchNestedInput = {
+    create?: XOR<UserCreateWithoutBranchInput, UserUncheckedCreateWithoutBranchInput> | UserCreateWithoutBranchInput[] | UserUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: UserCreateOrConnectWithoutBranchInput | UserCreateOrConnectWithoutBranchInput[]
+    upsert?: UserUpsertWithWhereUniqueWithoutBranchInput | UserUpsertWithWhereUniqueWithoutBranchInput[]
+    createMany?: UserCreateManyBranchInputEnvelope
+    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+    update?: UserUpdateWithWhereUniqueWithoutBranchInput | UserUpdateWithWhereUniqueWithoutBranchInput[]
+    updateMany?: UserUpdateManyWithWhereWithoutBranchInput | UserUpdateManyWithWhereWithoutBranchInput[]
+    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
   }
 
   export type PlacementSkillCreateNestedManyWithoutSkillInput = {
@@ -16035,7 +16127,7 @@ export namespace Prisma {
     connect?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
   }
 
-  export type StudentSkillUncheckedCreateNestedManyWithoutSkillInput = {
+  export type StudentSkillCreateNestedManyWithoutSkillInput = {
     create?: XOR<StudentSkillCreateWithoutSkillInput, StudentSkillUncheckedCreateWithoutSkillInput> | StudentSkillCreateWithoutSkillInput[] | StudentSkillUncheckedCreateWithoutSkillInput[]
     connectOrCreate?: StudentSkillCreateOrConnectWithoutSkillInput | StudentSkillCreateOrConnectWithoutSkillInput[]
     createMany?: StudentSkillCreateManySkillInputEnvelope
@@ -16049,18 +16141,11 @@ export namespace Prisma {
     connect?: PlacementSkillWhereUniqueInput | PlacementSkillWhereUniqueInput[]
   }
 
-  export type StudentSkillUpdateManyWithoutSkillNestedInput = {
+  export type StudentSkillUncheckedCreateNestedManyWithoutSkillInput = {
     create?: XOR<StudentSkillCreateWithoutSkillInput, StudentSkillUncheckedCreateWithoutSkillInput> | StudentSkillCreateWithoutSkillInput[] | StudentSkillUncheckedCreateWithoutSkillInput[]
     connectOrCreate?: StudentSkillCreateOrConnectWithoutSkillInput | StudentSkillCreateOrConnectWithoutSkillInput[]
-    upsert?: StudentSkillUpsertWithWhereUniqueWithoutSkillInput | StudentSkillUpsertWithWhereUniqueWithoutSkillInput[]
     createMany?: StudentSkillCreateManySkillInputEnvelope
-    set?: StudentSkillWhereUniqueInput | StudentSkillWhereUniqueInput[]
-    disconnect?: StudentSkillWhereUniqueInput | StudentSkillWhereUniqueInput[]
-    delete?: StudentSkillWhereUniqueInput | StudentSkillWhereUniqueInput[]
     connect?: StudentSkillWhereUniqueInput | StudentSkillWhereUniqueInput[]
-    update?: StudentSkillUpdateWithWhereUniqueWithoutSkillInput | StudentSkillUpdateWithWhereUniqueWithoutSkillInput[]
-    updateMany?: StudentSkillUpdateManyWithWhereWithoutSkillInput | StudentSkillUpdateManyWithWhereWithoutSkillInput[]
-    deleteMany?: StudentSkillScalarWhereInput | StudentSkillScalarWhereInput[]
   }
 
   export type PlacementSkillUpdateManyWithoutSkillNestedInput = {
@@ -16077,7 +16162,7 @@ export namespace Prisma {
     deleteMany?: PlacementSkillScalarWhereInput | PlacementSkillScalarWhereInput[]
   }
 
-  export type StudentSkillUncheckedUpdateManyWithoutSkillNestedInput = {
+  export type StudentSkillUpdateManyWithoutSkillNestedInput = {
     create?: XOR<StudentSkillCreateWithoutSkillInput, StudentSkillUncheckedCreateWithoutSkillInput> | StudentSkillCreateWithoutSkillInput[] | StudentSkillUncheckedCreateWithoutSkillInput[]
     connectOrCreate?: StudentSkillCreateOrConnectWithoutSkillInput | StudentSkillCreateOrConnectWithoutSkillInput[]
     upsert?: StudentSkillUpsertWithWhereUniqueWithoutSkillInput | StudentSkillUpsertWithWhereUniqueWithoutSkillInput[]
@@ -16105,10 +16190,18 @@ export namespace Prisma {
     deleteMany?: PlacementSkillScalarWhereInput | PlacementSkillScalarWhereInput[]
   }
 
-  export type UserCreateNestedOneWithoutSkillsInput = {
-    create?: XOR<UserCreateWithoutSkillsInput, UserUncheckedCreateWithoutSkillsInput>
-    connectOrCreate?: UserCreateOrConnectWithoutSkillsInput
-    connect?: UserWhereUniqueInput
+  export type StudentSkillUncheckedUpdateManyWithoutSkillNestedInput = {
+    create?: XOR<StudentSkillCreateWithoutSkillInput, StudentSkillUncheckedCreateWithoutSkillInput> | StudentSkillCreateWithoutSkillInput[] | StudentSkillUncheckedCreateWithoutSkillInput[]
+    connectOrCreate?: StudentSkillCreateOrConnectWithoutSkillInput | StudentSkillCreateOrConnectWithoutSkillInput[]
+    upsert?: StudentSkillUpsertWithWhereUniqueWithoutSkillInput | StudentSkillUpsertWithWhereUniqueWithoutSkillInput[]
+    createMany?: StudentSkillCreateManySkillInputEnvelope
+    set?: StudentSkillWhereUniqueInput | StudentSkillWhereUniqueInput[]
+    disconnect?: StudentSkillWhereUniqueInput | StudentSkillWhereUniqueInput[]
+    delete?: StudentSkillWhereUniqueInput | StudentSkillWhereUniqueInput[]
+    connect?: StudentSkillWhereUniqueInput | StudentSkillWhereUniqueInput[]
+    update?: StudentSkillUpdateWithWhereUniqueWithoutSkillInput | StudentSkillUpdateWithWhereUniqueWithoutSkillInput[]
+    updateMany?: StudentSkillUpdateManyWithWhereWithoutSkillInput | StudentSkillUpdateManyWithWhereWithoutSkillInput[]
+    deleteMany?: StudentSkillScalarWhereInput | StudentSkillScalarWhereInput[]
   }
 
   export type SkillCreateNestedOneWithoutStudentsInput = {
@@ -16117,12 +16210,10 @@ export namespace Prisma {
     connect?: SkillWhereUniqueInput
   }
 
-  export type UserUpdateOneRequiredWithoutSkillsNestedInput = {
+  export type UserCreateNestedOneWithoutSkillsInput = {
     create?: XOR<UserCreateWithoutSkillsInput, UserUncheckedCreateWithoutSkillsInput>
     connectOrCreate?: UserCreateOrConnectWithoutSkillsInput
-    upsert?: UserUpsertWithoutSkillsInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSkillsInput, UserUpdateWithoutSkillsInput>, UserUncheckedUpdateWithoutSkillsInput>
   }
 
   export type SkillUpdateOneRequiredWithoutStudentsNestedInput = {
@@ -16131,6 +16222,14 @@ export namespace Prisma {
     upsert?: SkillUpsertWithoutStudentsInput
     connect?: SkillWhereUniqueInput
     update?: XOR<XOR<SkillUpdateToOneWithWhereWithoutStudentsInput, SkillUpdateWithoutStudentsInput>, SkillUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutSkillsNestedInput = {
+    create?: XOR<UserCreateWithoutSkillsInput, UserUncheckedCreateWithoutSkillsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSkillsInput
+    upsert?: UserUpsertWithoutSkillsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSkillsInput, UserUpdateWithoutSkillsInput>, UserUncheckedUpdateWithoutSkillsInput>
   }
 
   export type PlacementCreateNestedOneWithoutSkillsInput = {
@@ -16161,24 +16260,16 @@ export namespace Prisma {
     update?: XOR<XOR<SkillUpdateToOneWithWhereWithoutPlacementsInput, SkillUpdateWithoutPlacementsInput>, SkillUncheckedUpdateWithoutPlacementsInput>
   }
 
-  export type PlacementCreateNestedOneWithoutBranchesInput = {
-    create?: XOR<PlacementCreateWithoutBranchesInput, PlacementUncheckedCreateWithoutBranchesInput>
-    connectOrCreate?: PlacementCreateOrConnectWithoutBranchesInput
-    connect?: PlacementWhereUniqueInput
-  }
-
   export type BranchCreateNestedOneWithoutPlacementsInput = {
     create?: XOR<BranchCreateWithoutPlacementsInput, BranchUncheckedCreateWithoutPlacementsInput>
     connectOrCreate?: BranchCreateOrConnectWithoutPlacementsInput
     connect?: BranchWhereUniqueInput
   }
 
-  export type PlacementUpdateOneRequiredWithoutBranchesNestedInput = {
+  export type PlacementCreateNestedOneWithoutBranchesInput = {
     create?: XOR<PlacementCreateWithoutBranchesInput, PlacementUncheckedCreateWithoutBranchesInput>
     connectOrCreate?: PlacementCreateOrConnectWithoutBranchesInput
-    upsert?: PlacementUpsertWithoutBranchesInput
     connect?: PlacementWhereUniqueInput
-    update?: XOR<XOR<PlacementUpdateToOneWithWhereWithoutBranchesInput, PlacementUpdateWithoutBranchesInput>, PlacementUncheckedUpdateWithoutBranchesInput>
   }
 
   export type BranchUpdateOneRequiredWithoutPlacementsNestedInput = {
@@ -16187,6 +16278,14 @@ export namespace Prisma {
     upsert?: BranchUpsertWithoutPlacementsInput
     connect?: BranchWhereUniqueInput
     update?: XOR<XOR<BranchUpdateToOneWithWhereWithoutPlacementsInput, BranchUpdateWithoutPlacementsInput>, BranchUncheckedUpdateWithoutPlacementsInput>
+  }
+
+  export type PlacementUpdateOneRequiredWithoutBranchesNestedInput = {
+    create?: XOR<PlacementCreateWithoutBranchesInput, PlacementUncheckedCreateWithoutBranchesInput>
+    connectOrCreate?: PlacementCreateOrConnectWithoutBranchesInput
+    upsert?: PlacementUpsertWithoutBranchesInput
+    connect?: PlacementWhereUniqueInput
+    update?: XOR<XOR<PlacementUpdateToOneWithWhereWithoutBranchesInput, PlacementUpdateWithoutBranchesInput>, PlacementUncheckedUpdateWithoutBranchesInput>
   }
 
   export type PlacementCreateNestedOneWithoutAttachmentsInput = {
@@ -16511,22 +16610,6 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type BranchCreateWithoutUsersInput = {
-    name: string
-    placements?: PlacementBranchCreateNestedManyWithoutBranchInput
-  }
-
-  export type BranchUncheckedCreateWithoutUsersInput = {
-    id?: number
-    name: string
-    placements?: PlacementBranchUncheckedCreateNestedManyWithoutBranchInput
-  }
-
-  export type BranchCreateOrConnectWithoutUsersInput = {
-    where: BranchWhereUniqueInput
-    create: XOR<BranchCreateWithoutUsersInput, BranchUncheckedCreateWithoutUsersInput>
-  }
-
   export type StudentSkillCreateWithoutUserInput = {
     skill: SkillCreateNestedOneWithoutStudentsInput
   }
@@ -16545,26 +16628,20 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type BranchUpsertWithoutUsersInput = {
-    update: XOR<BranchUpdateWithoutUsersInput, BranchUncheckedUpdateWithoutUsersInput>
+  export type BranchCreateWithoutUsersInput = {
+    name: string
+    placements?: PlacementBranchCreateNestedManyWithoutBranchInput
+  }
+
+  export type BranchUncheckedCreateWithoutUsersInput = {
+    id?: number
+    name: string
+    placements?: PlacementBranchUncheckedCreateNestedManyWithoutBranchInput
+  }
+
+  export type BranchCreateOrConnectWithoutUsersInput = {
+    where: BranchWhereUniqueInput
     create: XOR<BranchCreateWithoutUsersInput, BranchUncheckedCreateWithoutUsersInput>
-    where?: BranchWhereInput
-  }
-
-  export type BranchUpdateToOneWithWhereWithoutUsersInput = {
-    where?: BranchWhereInput
-    data: XOR<BranchUpdateWithoutUsersInput, BranchUncheckedUpdateWithoutUsersInput>
-  }
-
-  export type BranchUpdateWithoutUsersInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    placements?: PlacementBranchUpdateManyWithoutBranchNestedInput
-  }
-
-  export type BranchUncheckedUpdateWithoutUsersInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    placements?: PlacementBranchUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type StudentSkillUpsertWithWhereUniqueWithoutUserInput = {
@@ -16591,6 +16668,28 @@ export namespace Prisma {
     skillId?: IntFilter<"StudentSkill"> | number
   }
 
+  export type BranchUpsertWithoutUsersInput = {
+    update: XOR<BranchUpdateWithoutUsersInput, BranchUncheckedUpdateWithoutUsersInput>
+    create: XOR<BranchCreateWithoutUsersInput, BranchUncheckedCreateWithoutUsersInput>
+    where?: BranchWhereInput
+  }
+
+  export type BranchUpdateToOneWithWhereWithoutUsersInput = {
+    where?: BranchWhereInput
+    data: XOR<BranchUpdateWithoutUsersInput, BranchUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type BranchUpdateWithoutUsersInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    placements?: PlacementBranchUpdateManyWithoutBranchNestedInput
+  }
+
+  export type BranchUncheckedUpdateWithoutUsersInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    placements?: PlacementBranchUncheckedUpdateManyWithoutBranchNestedInput
+  }
+
   export type PlacementCreateWithoutCompanyInput = {
     position: string
     ctc: number
@@ -16604,9 +16703,9 @@ export namespace Prisma {
     offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    skills?: PlacementSkillCreateNestedManyWithoutPlacementInput
-    branches?: PlacementBranchCreateNestedManyWithoutPlacementInput
     attachments?: AttachmentCreateNestedManyWithoutPlacementInput
+    branches?: PlacementBranchCreateNestedManyWithoutPlacementInput
+    skills?: PlacementSkillCreateNestedManyWithoutPlacementInput
   }
 
   export type PlacementUncheckedCreateWithoutCompanyInput = {
@@ -16623,9 +16722,9 @@ export namespace Prisma {
     offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    skills?: PlacementSkillUncheckedCreateNestedManyWithoutPlacementInput
-    branches?: PlacementBranchUncheckedCreateNestedManyWithoutPlacementInput
     attachments?: AttachmentUncheckedCreateNestedManyWithoutPlacementInput
+    branches?: PlacementBranchUncheckedCreateNestedManyWithoutPlacementInput
+    skills?: PlacementSkillUncheckedCreateNestedManyWithoutPlacementInput
   }
 
   export type PlacementCreateOrConnectWithoutCompanyInput = {
@@ -16674,6 +16773,31 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Placement"> | Date | string
   }
 
+  export type AttachmentCreateWithoutPlacementInput = {
+    filePath: string
+    fileType: string
+    fileHash: string
+    chunks?: PlacementChunkCreateNestedManyWithoutAttachmentInput
+  }
+
+  export type AttachmentUncheckedCreateWithoutPlacementInput = {
+    id?: number
+    filePath: string
+    fileType: string
+    fileHash: string
+    chunks?: PlacementChunkUncheckedCreateNestedManyWithoutAttachmentInput
+  }
+
+  export type AttachmentCreateOrConnectWithoutPlacementInput = {
+    where: AttachmentWhereUniqueInput
+    create: XOR<AttachmentCreateWithoutPlacementInput, AttachmentUncheckedCreateWithoutPlacementInput>
+  }
+
+  export type AttachmentCreateManyPlacementInputEnvelope = {
+    data: AttachmentCreateManyPlacementInput | AttachmentCreateManyPlacementInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CompanyCreateWithoutPlacementsInput = {
     name: string
     sector: string
@@ -16710,24 +16834,6 @@ export namespace Prisma {
     create: XOR<CompanyCreateWithoutPlacementsInput, CompanyUncheckedCreateWithoutPlacementsInput>
   }
 
-  export type PlacementSkillCreateWithoutPlacementInput = {
-    skill: SkillCreateNestedOneWithoutPlacementsInput
-  }
-
-  export type PlacementSkillUncheckedCreateWithoutPlacementInput = {
-    skillId: number
-  }
-
-  export type PlacementSkillCreateOrConnectWithoutPlacementInput = {
-    where: PlacementSkillWhereUniqueInput
-    create: XOR<PlacementSkillCreateWithoutPlacementInput, PlacementSkillUncheckedCreateWithoutPlacementInput>
-  }
-
-  export type PlacementSkillCreateManyPlacementInputEnvelope = {
-    data: PlacementSkillCreateManyPlacementInput | PlacementSkillCreateManyPlacementInput[]
-    skipDuplicates?: boolean
-  }
-
   export type PlacementBranchCreateWithoutPlacementInput = {
     branch: BranchCreateNestedOneWithoutPlacementsInput
   }
@@ -16746,27 +16852,49 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type AttachmentCreateWithoutPlacementInput = {
-    filePath: string
-    fileType: string
-    chunks?: PlacementChunkCreateNestedManyWithoutAttachmentInput
+  export type PlacementSkillCreateWithoutPlacementInput = {
+    skill: SkillCreateNestedOneWithoutPlacementsInput
   }
 
-  export type AttachmentUncheckedCreateWithoutPlacementInput = {
-    id?: number
-    filePath: string
-    fileType: string
-    chunks?: PlacementChunkUncheckedCreateNestedManyWithoutAttachmentInput
+  export type PlacementSkillUncheckedCreateWithoutPlacementInput = {
+    skillId: number
   }
 
-  export type AttachmentCreateOrConnectWithoutPlacementInput = {
+  export type PlacementSkillCreateOrConnectWithoutPlacementInput = {
+    where: PlacementSkillWhereUniqueInput
+    create: XOR<PlacementSkillCreateWithoutPlacementInput, PlacementSkillUncheckedCreateWithoutPlacementInput>
+  }
+
+  export type PlacementSkillCreateManyPlacementInputEnvelope = {
+    data: PlacementSkillCreateManyPlacementInput | PlacementSkillCreateManyPlacementInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AttachmentUpsertWithWhereUniqueWithoutPlacementInput = {
     where: AttachmentWhereUniqueInput
+    update: XOR<AttachmentUpdateWithoutPlacementInput, AttachmentUncheckedUpdateWithoutPlacementInput>
     create: XOR<AttachmentCreateWithoutPlacementInput, AttachmentUncheckedCreateWithoutPlacementInput>
   }
 
-  export type AttachmentCreateManyPlacementInputEnvelope = {
-    data: AttachmentCreateManyPlacementInput | AttachmentCreateManyPlacementInput[]
-    skipDuplicates?: boolean
+  export type AttachmentUpdateWithWhereUniqueWithoutPlacementInput = {
+    where: AttachmentWhereUniqueInput
+    data: XOR<AttachmentUpdateWithoutPlacementInput, AttachmentUncheckedUpdateWithoutPlacementInput>
+  }
+
+  export type AttachmentUpdateManyWithWhereWithoutPlacementInput = {
+    where: AttachmentScalarWhereInput
+    data: XOR<AttachmentUpdateManyMutationInput, AttachmentUncheckedUpdateManyWithoutPlacementInput>
+  }
+
+  export type AttachmentScalarWhereInput = {
+    AND?: AttachmentScalarWhereInput | AttachmentScalarWhereInput[]
+    OR?: AttachmentScalarWhereInput[]
+    NOT?: AttachmentScalarWhereInput | AttachmentScalarWhereInput[]
+    id?: IntFilter<"Attachment"> | number
+    placementId?: IntFilter<"Attachment"> | number
+    filePath?: StringFilter<"Attachment"> | string
+    fileType?: StringFilter<"Attachment"> | string
+    fileHash?: StringFilter<"Attachment"> | string
   }
 
   export type CompanyUpsertWithoutPlacementsInput = {
@@ -16811,30 +16939,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type PlacementSkillUpsertWithWhereUniqueWithoutPlacementInput = {
-    where: PlacementSkillWhereUniqueInput
-    update: XOR<PlacementSkillUpdateWithoutPlacementInput, PlacementSkillUncheckedUpdateWithoutPlacementInput>
-    create: XOR<PlacementSkillCreateWithoutPlacementInput, PlacementSkillUncheckedCreateWithoutPlacementInput>
-  }
-
-  export type PlacementSkillUpdateWithWhereUniqueWithoutPlacementInput = {
-    where: PlacementSkillWhereUniqueInput
-    data: XOR<PlacementSkillUpdateWithoutPlacementInput, PlacementSkillUncheckedUpdateWithoutPlacementInput>
-  }
-
-  export type PlacementSkillUpdateManyWithWhereWithoutPlacementInput = {
-    where: PlacementSkillScalarWhereInput
-    data: XOR<PlacementSkillUpdateManyMutationInput, PlacementSkillUncheckedUpdateManyWithoutPlacementInput>
-  }
-
-  export type PlacementSkillScalarWhereInput = {
-    AND?: PlacementSkillScalarWhereInput | PlacementSkillScalarWhereInput[]
-    OR?: PlacementSkillScalarWhereInput[]
-    NOT?: PlacementSkillScalarWhereInput | PlacementSkillScalarWhereInput[]
-    placementId?: IntFilter<"PlacementSkill"> | number
-    skillId?: IntFilter<"PlacementSkill"> | number
-  }
-
   export type PlacementBranchUpsertWithWhereUniqueWithoutPlacementInput = {
     where: PlacementBranchWhereUniqueInput
     update: XOR<PlacementBranchUpdateWithoutPlacementInput, PlacementBranchUncheckedUpdateWithoutPlacementInput>
@@ -16859,30 +16963,46 @@ export namespace Prisma {
     branchId?: IntFilter<"PlacementBranch"> | number
   }
 
-  export type AttachmentUpsertWithWhereUniqueWithoutPlacementInput = {
-    where: AttachmentWhereUniqueInput
-    update: XOR<AttachmentUpdateWithoutPlacementInput, AttachmentUncheckedUpdateWithoutPlacementInput>
-    create: XOR<AttachmentCreateWithoutPlacementInput, AttachmentUncheckedCreateWithoutPlacementInput>
+  export type PlacementSkillUpsertWithWhereUniqueWithoutPlacementInput = {
+    where: PlacementSkillWhereUniqueInput
+    update: XOR<PlacementSkillUpdateWithoutPlacementInput, PlacementSkillUncheckedUpdateWithoutPlacementInput>
+    create: XOR<PlacementSkillCreateWithoutPlacementInput, PlacementSkillUncheckedCreateWithoutPlacementInput>
   }
 
-  export type AttachmentUpdateWithWhereUniqueWithoutPlacementInput = {
-    where: AttachmentWhereUniqueInput
-    data: XOR<AttachmentUpdateWithoutPlacementInput, AttachmentUncheckedUpdateWithoutPlacementInput>
+  export type PlacementSkillUpdateWithWhereUniqueWithoutPlacementInput = {
+    where: PlacementSkillWhereUniqueInput
+    data: XOR<PlacementSkillUpdateWithoutPlacementInput, PlacementSkillUncheckedUpdateWithoutPlacementInput>
   }
 
-  export type AttachmentUpdateManyWithWhereWithoutPlacementInput = {
-    where: AttachmentScalarWhereInput
-    data: XOR<AttachmentUpdateManyMutationInput, AttachmentUncheckedUpdateManyWithoutPlacementInput>
+  export type PlacementSkillUpdateManyWithWhereWithoutPlacementInput = {
+    where: PlacementSkillScalarWhereInput
+    data: XOR<PlacementSkillUpdateManyMutationInput, PlacementSkillUncheckedUpdateManyWithoutPlacementInput>
   }
 
-  export type AttachmentScalarWhereInput = {
-    AND?: AttachmentScalarWhereInput | AttachmentScalarWhereInput[]
-    OR?: AttachmentScalarWhereInput[]
-    NOT?: AttachmentScalarWhereInput | AttachmentScalarWhereInput[]
-    id?: IntFilter<"Attachment"> | number
-    placementId?: IntFilter<"Attachment"> | number
-    filePath?: StringFilter<"Attachment"> | string
-    fileType?: StringFilter<"Attachment"> | string
+  export type PlacementSkillScalarWhereInput = {
+    AND?: PlacementSkillScalarWhereInput | PlacementSkillScalarWhereInput[]
+    OR?: PlacementSkillScalarWhereInput[]
+    NOT?: PlacementSkillScalarWhereInput | PlacementSkillScalarWhereInput[]
+    placementId?: IntFilter<"PlacementSkill"> | number
+    skillId?: IntFilter<"PlacementSkill"> | number
+  }
+
+  export type PlacementBranchCreateWithoutBranchInput = {
+    placement: PlacementCreateNestedOneWithoutBranchesInput
+  }
+
+  export type PlacementBranchUncheckedCreateWithoutBranchInput = {
+    placementId: number
+  }
+
+  export type PlacementBranchCreateOrConnectWithoutBranchInput = {
+    where: PlacementBranchWhereUniqueInput
+    create: XOR<PlacementBranchCreateWithoutBranchInput, PlacementBranchUncheckedCreateWithoutBranchInput>
+  }
+
+  export type PlacementBranchCreateManyBranchInputEnvelope = {
+    data: PlacementBranchCreateManyBranchInput | PlacementBranchCreateManyBranchInput[]
+    skipDuplicates?: boolean
   }
 
   export type UserCreateWithoutBranchInput = {
@@ -16924,22 +17044,20 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type PlacementBranchCreateWithoutBranchInput = {
-    placement: PlacementCreateNestedOneWithoutBranchesInput
-  }
-
-  export type PlacementBranchUncheckedCreateWithoutBranchInput = {
-    placementId: number
-  }
-
-  export type PlacementBranchCreateOrConnectWithoutBranchInput = {
+  export type PlacementBranchUpsertWithWhereUniqueWithoutBranchInput = {
     where: PlacementBranchWhereUniqueInput
+    update: XOR<PlacementBranchUpdateWithoutBranchInput, PlacementBranchUncheckedUpdateWithoutBranchInput>
     create: XOR<PlacementBranchCreateWithoutBranchInput, PlacementBranchUncheckedCreateWithoutBranchInput>
   }
 
-  export type PlacementBranchCreateManyBranchInputEnvelope = {
-    data: PlacementBranchCreateManyBranchInput | PlacementBranchCreateManyBranchInput[]
-    skipDuplicates?: boolean
+  export type PlacementBranchUpdateWithWhereUniqueWithoutBranchInput = {
+    where: PlacementBranchWhereUniqueInput
+    data: XOR<PlacementBranchUpdateWithoutBranchInput, PlacementBranchUncheckedUpdateWithoutBranchInput>
+  }
+
+  export type PlacementBranchUpdateManyWithWhereWithoutBranchInput = {
+    where: PlacementBranchScalarWhereInput
+    data: XOR<PlacementBranchUpdateManyMutationInput, PlacementBranchUncheckedUpdateManyWithoutBranchInput>
   }
 
   export type UserUpsertWithWhereUniqueWithoutBranchInput = {
@@ -16976,20 +17094,22 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
   }
 
-  export type PlacementBranchUpsertWithWhereUniqueWithoutBranchInput = {
-    where: PlacementBranchWhereUniqueInput
-    update: XOR<PlacementBranchUpdateWithoutBranchInput, PlacementBranchUncheckedUpdateWithoutBranchInput>
-    create: XOR<PlacementBranchCreateWithoutBranchInput, PlacementBranchUncheckedCreateWithoutBranchInput>
+  export type PlacementSkillCreateWithoutSkillInput = {
+    placement: PlacementCreateNestedOneWithoutSkillsInput
   }
 
-  export type PlacementBranchUpdateWithWhereUniqueWithoutBranchInput = {
-    where: PlacementBranchWhereUniqueInput
-    data: XOR<PlacementBranchUpdateWithoutBranchInput, PlacementBranchUncheckedUpdateWithoutBranchInput>
+  export type PlacementSkillUncheckedCreateWithoutSkillInput = {
+    placementId: number
   }
 
-  export type PlacementBranchUpdateManyWithWhereWithoutBranchInput = {
-    where: PlacementBranchScalarWhereInput
-    data: XOR<PlacementBranchUpdateManyMutationInput, PlacementBranchUncheckedUpdateManyWithoutBranchInput>
+  export type PlacementSkillCreateOrConnectWithoutSkillInput = {
+    where: PlacementSkillWhereUniqueInput
+    create: XOR<PlacementSkillCreateWithoutSkillInput, PlacementSkillUncheckedCreateWithoutSkillInput>
+  }
+
+  export type PlacementSkillCreateManySkillInputEnvelope = {
+    data: PlacementSkillCreateManySkillInput | PlacementSkillCreateManySkillInput[]
+    skipDuplicates?: boolean
   }
 
   export type StudentSkillCreateWithoutSkillInput = {
@@ -17010,22 +17130,20 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type PlacementSkillCreateWithoutSkillInput = {
-    placement: PlacementCreateNestedOneWithoutSkillsInput
-  }
-
-  export type PlacementSkillUncheckedCreateWithoutSkillInput = {
-    placementId: number
-  }
-
-  export type PlacementSkillCreateOrConnectWithoutSkillInput = {
+  export type PlacementSkillUpsertWithWhereUniqueWithoutSkillInput = {
     where: PlacementSkillWhereUniqueInput
+    update: XOR<PlacementSkillUpdateWithoutSkillInput, PlacementSkillUncheckedUpdateWithoutSkillInput>
     create: XOR<PlacementSkillCreateWithoutSkillInput, PlacementSkillUncheckedCreateWithoutSkillInput>
   }
 
-  export type PlacementSkillCreateManySkillInputEnvelope = {
-    data: PlacementSkillCreateManySkillInput | PlacementSkillCreateManySkillInput[]
-    skipDuplicates?: boolean
+  export type PlacementSkillUpdateWithWhereUniqueWithoutSkillInput = {
+    where: PlacementSkillWhereUniqueInput
+    data: XOR<PlacementSkillUpdateWithoutSkillInput, PlacementSkillUncheckedUpdateWithoutSkillInput>
+  }
+
+  export type PlacementSkillUpdateManyWithWhereWithoutSkillInput = {
+    where: PlacementSkillScalarWhereInput
+    data: XOR<PlacementSkillUpdateManyMutationInput, PlacementSkillUncheckedUpdateManyWithoutSkillInput>
   }
 
   export type StudentSkillUpsertWithWhereUniqueWithoutSkillInput = {
@@ -17044,20 +17162,20 @@ export namespace Prisma {
     data: XOR<StudentSkillUpdateManyMutationInput, StudentSkillUncheckedUpdateManyWithoutSkillInput>
   }
 
-  export type PlacementSkillUpsertWithWhereUniqueWithoutSkillInput = {
-    where: PlacementSkillWhereUniqueInput
-    update: XOR<PlacementSkillUpdateWithoutSkillInput, PlacementSkillUncheckedUpdateWithoutSkillInput>
-    create: XOR<PlacementSkillCreateWithoutSkillInput, PlacementSkillUncheckedCreateWithoutSkillInput>
+  export type SkillCreateWithoutStudentsInput = {
+    name: string
+    placements?: PlacementSkillCreateNestedManyWithoutSkillInput
   }
 
-  export type PlacementSkillUpdateWithWhereUniqueWithoutSkillInput = {
-    where: PlacementSkillWhereUniqueInput
-    data: XOR<PlacementSkillUpdateWithoutSkillInput, PlacementSkillUncheckedUpdateWithoutSkillInput>
+  export type SkillUncheckedCreateWithoutStudentsInput = {
+    id?: number
+    name: string
+    placements?: PlacementSkillUncheckedCreateNestedManyWithoutSkillInput
   }
 
-  export type PlacementSkillUpdateManyWithWhereWithoutSkillInput = {
-    where: PlacementSkillScalarWhereInput
-    data: XOR<PlacementSkillUpdateManyMutationInput, PlacementSkillUncheckedUpdateManyWithoutSkillInput>
+  export type SkillCreateOrConnectWithoutStudentsInput = {
+    where: SkillWhereUniqueInput
+    create: XOR<SkillCreateWithoutStudentsInput, SkillUncheckedCreateWithoutStudentsInput>
   }
 
   export type UserCreateWithoutSkillsInput = {
@@ -17094,20 +17212,26 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutSkillsInput, UserUncheckedCreateWithoutSkillsInput>
   }
 
-  export type SkillCreateWithoutStudentsInput = {
-    name: string
-    placements?: PlacementSkillCreateNestedManyWithoutSkillInput
-  }
-
-  export type SkillUncheckedCreateWithoutStudentsInput = {
-    id?: number
-    name: string
-    placements?: PlacementSkillUncheckedCreateNestedManyWithoutSkillInput
-  }
-
-  export type SkillCreateOrConnectWithoutStudentsInput = {
-    where: SkillWhereUniqueInput
+  export type SkillUpsertWithoutStudentsInput = {
+    update: XOR<SkillUpdateWithoutStudentsInput, SkillUncheckedUpdateWithoutStudentsInput>
     create: XOR<SkillCreateWithoutStudentsInput, SkillUncheckedCreateWithoutStudentsInput>
+    where?: SkillWhereInput
+  }
+
+  export type SkillUpdateToOneWithWhereWithoutStudentsInput = {
+    where?: SkillWhereInput
+    data: XOR<SkillUpdateWithoutStudentsInput, SkillUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type SkillUpdateWithoutStudentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    placements?: PlacementSkillUpdateManyWithoutSkillNestedInput
+  }
+
+  export type SkillUncheckedUpdateWithoutStudentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    placements?: PlacementSkillUncheckedUpdateManyWithoutSkillNestedInput
   }
 
   export type UserUpsertWithoutSkillsInput = {
@@ -17150,28 +17274,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type SkillUpsertWithoutStudentsInput = {
-    update: XOR<SkillUpdateWithoutStudentsInput, SkillUncheckedUpdateWithoutStudentsInput>
-    create: XOR<SkillCreateWithoutStudentsInput, SkillUncheckedCreateWithoutStudentsInput>
-    where?: SkillWhereInput
-  }
-
-  export type SkillUpdateToOneWithWhereWithoutStudentsInput = {
-    where?: SkillWhereInput
-    data: XOR<SkillUpdateWithoutStudentsInput, SkillUncheckedUpdateWithoutStudentsInput>
-  }
-
-  export type SkillUpdateWithoutStudentsInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    placements?: PlacementSkillUpdateManyWithoutSkillNestedInput
-  }
-
-  export type SkillUncheckedUpdateWithoutStudentsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    placements?: PlacementSkillUncheckedUpdateManyWithoutSkillNestedInput
-  }
-
   export type PlacementCreateWithoutSkillsInput = {
     position: string
     ctc: number
@@ -17185,9 +17287,9 @@ export namespace Prisma {
     offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    attachments?: AttachmentCreateNestedManyWithoutPlacementInput
     company: CompanyCreateNestedOneWithoutPlacementsInput
     branches?: PlacementBranchCreateNestedManyWithoutPlacementInput
-    attachments?: AttachmentCreateNestedManyWithoutPlacementInput
   }
 
   export type PlacementUncheckedCreateWithoutSkillsInput = {
@@ -17205,8 +17307,8 @@ export namespace Prisma {
     offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    branches?: PlacementBranchUncheckedCreateNestedManyWithoutPlacementInput
     attachments?: AttachmentUncheckedCreateNestedManyWithoutPlacementInput
+    branches?: PlacementBranchUncheckedCreateNestedManyWithoutPlacementInput
   }
 
   export type PlacementCreateOrConnectWithoutSkillsInput = {
@@ -17254,9 +17356,9 @@ export namespace Prisma {
     offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachments?: AttachmentUpdateManyWithoutPlacementNestedInput
     company?: CompanyUpdateOneRequiredWithoutPlacementsNestedInput
     branches?: PlacementBranchUpdateManyWithoutPlacementNestedInput
-    attachments?: AttachmentUpdateManyWithoutPlacementNestedInput
   }
 
   export type PlacementUncheckedUpdateWithoutSkillsInput = {
@@ -17274,8 +17376,8 @@ export namespace Prisma {
     offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    branches?: PlacementBranchUncheckedUpdateManyWithoutPlacementNestedInput
     attachments?: AttachmentUncheckedUpdateManyWithoutPlacementNestedInput
+    branches?: PlacementBranchUncheckedUpdateManyWithoutPlacementNestedInput
   }
 
   export type SkillUpsertWithoutPlacementsInput = {
@@ -17300,6 +17402,22 @@ export namespace Prisma {
     students?: StudentSkillUncheckedUpdateManyWithoutSkillNestedInput
   }
 
+  export type BranchCreateWithoutPlacementsInput = {
+    name: string
+    users?: UserCreateNestedManyWithoutBranchInput
+  }
+
+  export type BranchUncheckedCreateWithoutPlacementsInput = {
+    id?: number
+    name: string
+    users?: UserUncheckedCreateNestedManyWithoutBranchInput
+  }
+
+  export type BranchCreateOrConnectWithoutPlacementsInput = {
+    where: BranchWhereUniqueInput
+    create: XOR<BranchCreateWithoutPlacementsInput, BranchUncheckedCreateWithoutPlacementsInput>
+  }
+
   export type PlacementCreateWithoutBranchesInput = {
     position: string
     ctc: number
@@ -17313,9 +17431,9 @@ export namespace Prisma {
     offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    attachments?: AttachmentCreateNestedManyWithoutPlacementInput
     company: CompanyCreateNestedOneWithoutPlacementsInput
     skills?: PlacementSkillCreateNestedManyWithoutPlacementInput
-    attachments?: AttachmentCreateNestedManyWithoutPlacementInput
   }
 
   export type PlacementUncheckedCreateWithoutBranchesInput = {
@@ -17333,8 +17451,8 @@ export namespace Prisma {
     offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    skills?: PlacementSkillUncheckedCreateNestedManyWithoutPlacementInput
     attachments?: AttachmentUncheckedCreateNestedManyWithoutPlacementInput
+    skills?: PlacementSkillUncheckedCreateNestedManyWithoutPlacementInput
   }
 
   export type PlacementCreateOrConnectWithoutBranchesInput = {
@@ -17342,20 +17460,26 @@ export namespace Prisma {
     create: XOR<PlacementCreateWithoutBranchesInput, PlacementUncheckedCreateWithoutBranchesInput>
   }
 
-  export type BranchCreateWithoutPlacementsInput = {
-    name: string
-    users?: UserCreateNestedManyWithoutBranchInput
-  }
-
-  export type BranchUncheckedCreateWithoutPlacementsInput = {
-    id?: number
-    name: string
-    users?: UserUncheckedCreateNestedManyWithoutBranchInput
-  }
-
-  export type BranchCreateOrConnectWithoutPlacementsInput = {
-    where: BranchWhereUniqueInput
+  export type BranchUpsertWithoutPlacementsInput = {
+    update: XOR<BranchUpdateWithoutPlacementsInput, BranchUncheckedUpdateWithoutPlacementsInput>
     create: XOR<BranchCreateWithoutPlacementsInput, BranchUncheckedCreateWithoutPlacementsInput>
+    where?: BranchWhereInput
+  }
+
+  export type BranchUpdateToOneWithWhereWithoutPlacementsInput = {
+    where?: BranchWhereInput
+    data: XOR<BranchUpdateWithoutPlacementsInput, BranchUncheckedUpdateWithoutPlacementsInput>
+  }
+
+  export type BranchUpdateWithoutPlacementsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    users?: UserUpdateManyWithoutBranchNestedInput
+  }
+
+  export type BranchUncheckedUpdateWithoutPlacementsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    users?: UserUncheckedUpdateManyWithoutBranchNestedInput
   }
 
   export type PlacementUpsertWithoutBranchesInput = {
@@ -17382,9 +17506,9 @@ export namespace Prisma {
     offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attachments?: AttachmentUpdateManyWithoutPlacementNestedInput
     company?: CompanyUpdateOneRequiredWithoutPlacementsNestedInput
     skills?: PlacementSkillUpdateManyWithoutPlacementNestedInput
-    attachments?: AttachmentUpdateManyWithoutPlacementNestedInput
   }
 
   export type PlacementUncheckedUpdateWithoutBranchesInput = {
@@ -17402,30 +17526,8 @@ export namespace Prisma {
     offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    skills?: PlacementSkillUncheckedUpdateManyWithoutPlacementNestedInput
     attachments?: AttachmentUncheckedUpdateManyWithoutPlacementNestedInput
-  }
-
-  export type BranchUpsertWithoutPlacementsInput = {
-    update: XOR<BranchUpdateWithoutPlacementsInput, BranchUncheckedUpdateWithoutPlacementsInput>
-    create: XOR<BranchCreateWithoutPlacementsInput, BranchUncheckedCreateWithoutPlacementsInput>
-    where?: BranchWhereInput
-  }
-
-  export type BranchUpdateToOneWithWhereWithoutPlacementsInput = {
-    where?: BranchWhereInput
-    data: XOR<BranchUpdateWithoutPlacementsInput, BranchUncheckedUpdateWithoutPlacementsInput>
-  }
-
-  export type BranchUpdateWithoutPlacementsInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    users?: UserUpdateManyWithoutBranchNestedInput
-  }
-
-  export type BranchUncheckedUpdateWithoutPlacementsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    users?: UserUncheckedUpdateManyWithoutBranchNestedInput
+    skills?: PlacementSkillUncheckedUpdateManyWithoutPlacementNestedInput
   }
 
   export type PlacementCreateWithoutAttachmentsInput = {
@@ -17442,8 +17544,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     company: CompanyCreateNestedOneWithoutPlacementsInput
-    skills?: PlacementSkillCreateNestedManyWithoutPlacementInput
     branches?: PlacementBranchCreateNestedManyWithoutPlacementInput
+    skills?: PlacementSkillCreateNestedManyWithoutPlacementInput
   }
 
   export type PlacementUncheckedCreateWithoutAttachmentsInput = {
@@ -17461,8 +17563,8 @@ export namespace Prisma {
     offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    skills?: PlacementSkillUncheckedCreateNestedManyWithoutPlacementInput
     branches?: PlacementBranchUncheckedCreateNestedManyWithoutPlacementInput
+    skills?: PlacementSkillUncheckedCreateNestedManyWithoutPlacementInput
   }
 
   export type PlacementCreateOrConnectWithoutAttachmentsInput = {
@@ -17472,11 +17574,15 @@ export namespace Prisma {
 
   export type PlacementChunkCreateWithoutAttachmentInput = {
     chunkText: string
+    pageNumber: number
+    chunkIndex: number
   }
 
   export type PlacementChunkUncheckedCreateWithoutAttachmentInput = {
     id?: number
     chunkText: string
+    pageNumber: number
+    chunkIndex: number
   }
 
   export type PlacementChunkCreateOrConnectWithoutAttachmentInput = {
@@ -17514,8 +17620,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     company?: CompanyUpdateOneRequiredWithoutPlacementsNestedInput
-    skills?: PlacementSkillUpdateManyWithoutPlacementNestedInput
     branches?: PlacementBranchUpdateManyWithoutPlacementNestedInput
+    skills?: PlacementSkillUpdateManyWithoutPlacementNestedInput
   }
 
   export type PlacementUncheckedUpdateWithoutAttachmentsInput = {
@@ -17533,8 +17639,8 @@ export namespace Prisma {
     offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    skills?: PlacementSkillUncheckedUpdateManyWithoutPlacementNestedInput
     branches?: PlacementBranchUncheckedUpdateManyWithoutPlacementNestedInput
+    skills?: PlacementSkillUncheckedUpdateManyWithoutPlacementNestedInput
   }
 
   export type PlacementChunkUpsertWithWhereUniqueWithoutAttachmentInput = {
@@ -17560,11 +17666,14 @@ export namespace Prisma {
     id?: IntFilter<"PlacementChunk"> | number
     attachmentId?: IntFilter<"PlacementChunk"> | number
     chunkText?: StringFilter<"PlacementChunk"> | string
+    pageNumber?: IntFilter<"PlacementChunk"> | number
+    chunkIndex?: IntFilter<"PlacementChunk"> | number
   }
 
   export type AttachmentCreateWithoutChunksInput = {
     filePath: string
     fileType: string
+    fileHash: string
     placement: PlacementCreateNestedOneWithoutAttachmentsInput
   }
 
@@ -17573,6 +17682,7 @@ export namespace Prisma {
     placementId: number
     filePath: string
     fileType: string
+    fileHash: string
   }
 
   export type AttachmentCreateOrConnectWithoutChunksInput = {
@@ -17594,6 +17704,7 @@ export namespace Prisma {
   export type AttachmentUpdateWithoutChunksInput = {
     filePath?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
+    fileHash?: StringFieldUpdateOperationsInput | string
     placement?: PlacementUpdateOneRequiredWithoutAttachmentsNestedInput
   }
 
@@ -17602,6 +17713,7 @@ export namespace Prisma {
     placementId?: IntFieldUpdateOperationsInput | number
     filePath?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
+    fileHash?: StringFieldUpdateOperationsInput | string
   }
 
   export type StudentSkillCreateManyUserInput = {
@@ -17649,9 +17761,9 @@ export namespace Prisma {
     offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    skills?: PlacementSkillUpdateManyWithoutPlacementNestedInput
-    branches?: PlacementBranchUpdateManyWithoutPlacementNestedInput
     attachments?: AttachmentUpdateManyWithoutPlacementNestedInput
+    branches?: PlacementBranchUpdateManyWithoutPlacementNestedInput
+    skills?: PlacementSkillUpdateManyWithoutPlacementNestedInput
   }
 
   export type PlacementUncheckedUpdateWithoutCompanyInput = {
@@ -17668,9 +17780,9 @@ export namespace Prisma {
     offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    skills?: PlacementSkillUncheckedUpdateManyWithoutPlacementNestedInput
-    branches?: PlacementBranchUncheckedUpdateManyWithoutPlacementNestedInput
     attachments?: AttachmentUncheckedUpdateManyWithoutPlacementNestedInput
+    branches?: PlacementBranchUncheckedUpdateManyWithoutPlacementNestedInput
+    skills?: PlacementSkillUncheckedUpdateManyWithoutPlacementNestedInput
   }
 
   export type PlacementUncheckedUpdateManyWithoutCompanyInput = {
@@ -17689,30 +17801,41 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type PlacementSkillCreateManyPlacementInput = {
-    skillId: number
+  export type AttachmentCreateManyPlacementInput = {
+    id?: number
+    filePath: string
+    fileType: string
+    fileHash: string
   }
 
   export type PlacementBranchCreateManyPlacementInput = {
     branchId: number
   }
 
-  export type AttachmentCreateManyPlacementInput = {
-    id?: number
-    filePath: string
-    fileType: string
+  export type PlacementSkillCreateManyPlacementInput = {
+    skillId: number
   }
 
-  export type PlacementSkillUpdateWithoutPlacementInput = {
-    skill?: SkillUpdateOneRequiredWithoutPlacementsNestedInput
+  export type AttachmentUpdateWithoutPlacementInput = {
+    filePath?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileHash?: StringFieldUpdateOperationsInput | string
+    chunks?: PlacementChunkUpdateManyWithoutAttachmentNestedInput
   }
 
-  export type PlacementSkillUncheckedUpdateWithoutPlacementInput = {
-    skillId?: IntFieldUpdateOperationsInput | number
+  export type AttachmentUncheckedUpdateWithoutPlacementInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    filePath?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileHash?: StringFieldUpdateOperationsInput | string
+    chunks?: PlacementChunkUncheckedUpdateManyWithoutAttachmentNestedInput
   }
 
-  export type PlacementSkillUncheckedUpdateManyWithoutPlacementInput = {
-    skillId?: IntFieldUpdateOperationsInput | number
+  export type AttachmentUncheckedUpdateManyWithoutPlacementInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    filePath?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileHash?: StringFieldUpdateOperationsInput | string
   }
 
   export type PlacementBranchUpdateWithoutPlacementInput = {
@@ -17727,23 +17850,20 @@ export namespace Prisma {
     branchId?: IntFieldUpdateOperationsInput | number
   }
 
-  export type AttachmentUpdateWithoutPlacementInput = {
-    filePath?: StringFieldUpdateOperationsInput | string
-    fileType?: StringFieldUpdateOperationsInput | string
-    chunks?: PlacementChunkUpdateManyWithoutAttachmentNestedInput
+  export type PlacementSkillUpdateWithoutPlacementInput = {
+    skill?: SkillUpdateOneRequiredWithoutPlacementsNestedInput
   }
 
-  export type AttachmentUncheckedUpdateWithoutPlacementInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    filePath?: StringFieldUpdateOperationsInput | string
-    fileType?: StringFieldUpdateOperationsInput | string
-    chunks?: PlacementChunkUncheckedUpdateManyWithoutAttachmentNestedInput
+  export type PlacementSkillUncheckedUpdateWithoutPlacementInput = {
+    skillId?: IntFieldUpdateOperationsInput | number
   }
 
-  export type AttachmentUncheckedUpdateManyWithoutPlacementInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    filePath?: StringFieldUpdateOperationsInput | string
-    fileType?: StringFieldUpdateOperationsInput | string
+  export type PlacementSkillUncheckedUpdateManyWithoutPlacementInput = {
+    skillId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type PlacementBranchCreateManyBranchInput = {
+    placementId: number
   }
 
   export type UserCreateManyBranchInput = {
@@ -17760,8 +17880,16 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type PlacementBranchCreateManyBranchInput = {
-    placementId: number
+  export type PlacementBranchUpdateWithoutBranchInput = {
+    placement?: PlacementUpdateOneRequiredWithoutBranchesNestedInput
+  }
+
+  export type PlacementBranchUncheckedUpdateWithoutBranchInput = {
+    placementId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type PlacementBranchUncheckedUpdateManyWithoutBranchInput = {
+    placementId?: IntFieldUpdateOperationsInput | number
   }
 
   export type UserUpdateWithoutBranchInput = {
@@ -17807,36 +17935,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type PlacementBranchUpdateWithoutBranchInput = {
-    placement?: PlacementUpdateOneRequiredWithoutBranchesNestedInput
-  }
-
-  export type PlacementBranchUncheckedUpdateWithoutBranchInput = {
-    placementId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type PlacementBranchUncheckedUpdateManyWithoutBranchInput = {
-    placementId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type StudentSkillCreateManySkillInput = {
-    userId: number
-  }
-
   export type PlacementSkillCreateManySkillInput = {
     placementId: number
   }
 
-  export type StudentSkillUpdateWithoutSkillInput = {
-    user?: UserUpdateOneRequiredWithoutSkillsNestedInput
-  }
-
-  export type StudentSkillUncheckedUpdateWithoutSkillInput = {
-    userId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type StudentSkillUncheckedUpdateManyWithoutSkillInput = {
-    userId?: IntFieldUpdateOperationsInput | number
+  export type StudentSkillCreateManySkillInput = {
+    userId: number
   }
 
   export type PlacementSkillUpdateWithoutSkillInput = {
@@ -17851,23 +17955,43 @@ export namespace Prisma {
     placementId?: IntFieldUpdateOperationsInput | number
   }
 
+  export type StudentSkillUpdateWithoutSkillInput = {
+    user?: UserUpdateOneRequiredWithoutSkillsNestedInput
+  }
+
+  export type StudentSkillUncheckedUpdateWithoutSkillInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type StudentSkillUncheckedUpdateManyWithoutSkillInput = {
+    userId?: IntFieldUpdateOperationsInput | number
+  }
+
   export type PlacementChunkCreateManyAttachmentInput = {
     id?: number
     chunkText: string
+    pageNumber: number
+    chunkIndex: number
   }
 
   export type PlacementChunkUpdateWithoutAttachmentInput = {
     chunkText?: StringFieldUpdateOperationsInput | string
+    pageNumber?: IntFieldUpdateOperationsInput | number
+    chunkIndex?: IntFieldUpdateOperationsInput | number
   }
 
   export type PlacementChunkUncheckedUpdateWithoutAttachmentInput = {
     id?: IntFieldUpdateOperationsInput | number
     chunkText?: StringFieldUpdateOperationsInput | string
+    pageNumber?: IntFieldUpdateOperationsInput | number
+    chunkIndex?: IntFieldUpdateOperationsInput | number
   }
 
   export type PlacementChunkUncheckedUpdateManyWithoutAttachmentInput = {
     id?: IntFieldUpdateOperationsInput | number
     chunkText?: StringFieldUpdateOperationsInput | string
+    pageNumber?: IntFieldUpdateOperationsInput | number
+    chunkIndex?: IntFieldUpdateOperationsInput | number
   }
 
 

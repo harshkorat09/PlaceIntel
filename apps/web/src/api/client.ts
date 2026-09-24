@@ -48,5 +48,21 @@ export const apiClient = {
       }
     });
     return res.json();
+  },
+
+  /**
+   * POST multipart/form-data — used for file uploads.
+   * Do NOT set Content-Type manually; the browser will add the correct boundary.
+   */
+  async postFormData(endpoint: string, formData: FormData) {
+    const token = localStorage.getItem('token');
+    const res = await fetch(`${API_URL}${endpoint}`, {
+      method: 'POST',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
+      body: formData
+    });
+    return res.json();
   }
 };

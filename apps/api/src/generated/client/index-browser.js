@@ -197,13 +197,16 @@ exports.Prisma.AttachmentScalarFieldEnum = {
   id: 'id',
   placementId: 'placementId',
   filePath: 'filePath',
-  fileType: 'fileType'
+  fileType: 'fileType',
+  fileHash: 'fileHash'
 };
 
 exports.Prisma.PlacementChunkScalarFieldEnum = {
   id: 'id',
   attachmentId: 'attachmentId',
-  chunkText: 'chunkText'
+  chunkText: 'chunkText',
+  pageNumber: 'pageNumber',
+  chunkIndex: 'chunkIndex'
 };
 
 exports.Prisma.SortOrder = {
