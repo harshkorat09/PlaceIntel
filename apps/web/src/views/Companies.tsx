@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { 
-  Search, 
+import {
+  Search,
   Sparkles,
   AlertCircle,
   Mail,
@@ -77,7 +77,7 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
 
       setIsFormOpen(false);
       setCompanies(prev => [...prev, newCompany]);
-      
+
       setNewCompanyName('');
       setNewSector('Technology');
       setNewStatus('Active Recruiter');
@@ -98,13 +98,13 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
 
   // Filter logic
   const filteredCompanies = companies.filter(company => {
-    const matchesSearch = 
+    const matchesSearch =
       company.name.toLowerCase().includes(search.toLowerCase()) ||
       company.sector.toLowerCase().includes(search.toLowerCase());
 
     const matchesSector = sectorFilter === 'All' || company.sector === sectorFilter;
     const matchesStatus = statusFilter === 'All' || company.status === statusFilter;
-    
+
     const totalHires = company.hiresDepstar + company.hiresCspit;
     let matchesVolume = true;
     if (volumeFilter === 'High') {
@@ -131,7 +131,7 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
-      
+
       {/* Header */}
       <div className="page-header">
         <div>
@@ -139,7 +139,7 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
           <p className="page-subtitle">Coordinate corporate recruiter relations, check historical volumes, and manage visit schedules.</p>
         </div>
         {isAdmin && (
-          <button 
+          <button
             className="btn btn-primary"
             onClick={() => setIsFormOpen(!isFormOpen)}
           >
@@ -151,23 +151,23 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
 
       {/* Main Grid Layout */}
       <div className="companies-layout">
-        
+
         {/* Left List Pane */}
         <div className="companies-list-pane">
-          
+
           {/* Filters Bar */}
           <div className="filters-bar">
             <div className="filter-input-group">
               <Search size={16} style={{ color: 'var(--text-tertiary)' }} />
-              <input 
-                type="text" 
-                placeholder="Search company name or industry..." 
+              <input
+                type="text"
+                placeholder="Search company name or industry..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
 
-            <select 
+            <select
               className="filter-select"
               value={sectorFilter}
               onChange={(e) => setSectorFilter(e.target.value)}
@@ -179,7 +179,7 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
               <option value="Automotive">Automotive</option>
             </select>
 
-            <select 
+            <select
               className="filter-select"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -190,7 +190,7 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
               <option value="Inactive">Inactive</option>
             </select>
 
-            <select 
+            <select
               className="filter-select"
               value={volumeFilter}
               onChange={(e) => setVolumeFilter(e.target.value)}
@@ -202,7 +202,7 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
             </select>
 
             {(search || sectorFilter !== 'All' || statusFilter !== 'All' || volumeFilter !== 'All') && (
-              <button 
+              <button
                 className="btn btn-secondary btn-sm"
                 onClick={() => {
                   setSearch('');
@@ -231,13 +231,13 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
                 const depstarPct = totalHires === 0 ? 0 : Math.round((company.hiresDepstar / totalHires) * 100);
 
                 return (
-                  <div 
-                    key={company.id} 
+                  <div
+                    key={company.id}
                     className="card company-card"
                     style={{ cursor: 'pointer', border: selectedCompanyId === company.id ? '1px solid var(--primary)' : '1px solid var(--border)' }}
                     onClick={() => setSelectedCompanyId(company.id)}
                   >
-                    
+
                     {/* Header */}
                     <div className="drive-card-header">
                       <div style={{ display: 'flex', gap: 'var(--space-sm)', alignItems: 'center' }}>
@@ -285,7 +285,7 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
                     )}
 
                     {/* Core Recruiter Contact */}
-                    {company.hrContacts && company.hrContacts.length > 0 && (
+                    {company.hrContacts.length > 0 && (
                       <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', fontSize: '12px', color: 'var(--text-secondary)', borderTop: '1px solid var(--border)', paddingTop: 'var(--space-sm)', marginTop: 'var(--space-xs)' }}>
                         <Mail size={12} style={{ color: 'var(--text-tertiary)' }} />
                         <span>{company.hrContacts[0].name} ({company.hrContacts[0].email})</span>
@@ -294,8 +294,8 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
 
                     {/* Actions */}
                     <div style={{ display: 'flex', gap: 'var(--space-sm)', borderTop: '1px solid var(--border)', paddingTop: 'var(--space-sm)' }}>
-                      <button 
-                        className="btn btn-secondary btn-sm" 
+                      <button
+                        className="btn btn-secondary btn-sm"
                         style={{ flex: 1, padding: '4px' }}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -304,8 +304,8 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
                       >
                         Company Profile
                       </button>
-                      <button 
-                        className="btn btn-primary btn-sm" 
+                      <button
+                        className="btn btn-primary btn-sm"
                         style={{ padding: '4px 10px', backgroundColor: 'var(--secondary)' }}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -332,8 +332,8 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
               <div className="avatar-lg" style={{ backgroundColor: 'var(--secondary-light)', color: 'var(--text-primary)', width: '56px', height: '56px', fontSize: '20px' }}>
                 {selectedCompany.name.charAt(0)}
               </div>
-              <button 
-                className="icon-btn" 
+              <button
+                className="icon-btn"
                 onClick={() => setSelectedCompanyId(null)}
                 style={{ padding: '4px' }}
               >
@@ -344,10 +344,10 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
             {/* Profile Header */}
             <div className="drawer-profile-header">
               <span className="drawer-profile-name">{selectedCompany.name}</span>
-              <a 
-                href={selectedCompany.website} 
-                target="_blank" 
-                rel="noreferrer" 
+              <a
+                href={selectedCompany.website}
+                target="_blank"
+                rel="noreferrer"
                 style={{ fontSize: '12px', color: 'var(--primary)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '2px', marginTop: 'var(--space-xs)' }}
               >
                 {selectedCompany.website}
@@ -383,7 +383,7 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
                   <Mail size={16} style={{ color: 'var(--text-secondary)' }} />
                   <strong style={{ fontSize: '13px', color: 'var(--text-primary)' }}>HR Contact Directory</strong>
                 </div>
-                
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {selectedCompany.hrContacts?.map((hr: any, i: number) => (
                     <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
@@ -437,15 +437,15 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
             {/* Drawer Actions - admin only */}
             {isAdmin && (
               <div style={{ display: 'flex', gap: 'var(--space-sm)', borderTop: '1px solid var(--border)', paddingTop: 'var(--space-md)', marginTop: 'var(--space-xs)' }}>
-                <button 
-                  className="btn btn-secondary" 
+                <button
+                  className="btn btn-secondary"
                   style={{ flex: 1 }}
                   onClick={() => alert(`Generating PDF hiring report for ${selectedCompany.name}...`)}
                 >
                   Hiring Report
                 </button>
-                <button 
-                  className="btn btn-primary" 
+                <button
+                  className="btn btn-primary"
                   style={{ flex: 1, backgroundColor: 'var(--secondary)' }}
                   onClick={() => alert(`Opening interview panel scheduler for ${selectedCompany.name} visit...`)}
                 >
@@ -465,13 +465,13 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
             </div>
 
             <form onSubmit={handleCreateCompany} style={{ marginTop: 'var(--space-md)' }}>
-              
+
               <div className="form-group">
                 <label className="form-label">Company Name *</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  placeholder="e.g. Amazon India" 
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="e.g. Amazon India"
                   value={newCompanyName}
                   onChange={(e) => setNewCompanyName(e.target.value)}
                   required
@@ -480,7 +480,7 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
 
               <div className="form-group">
                 <label className="form-label">Sector / Industry *</label>
-                <select 
+                <select
                   className="form-control"
                   value={newSector}
                   onChange={(e) => setNewSector(e.target.value as any)}
@@ -496,18 +496,18 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
               <div className="form-row">
                 <div className="form-group">
                   <label className="form-label">DEPSTAR Hires</label>
-                  <input 
-                    type="number" 
-                    className="form-control" 
+                  <input
+                    type="number"
+                    className="form-control"
                     value={newHiresDepstar}
                     onChange={(e) => setNewHiresDepstar(e.target.value)}
                   />
                 </div>
                 <div className="form-group">
                   <label className="form-label">CSPIT Hires</label>
-                  <input 
-                    type="number" 
-                    className="form-control" 
+                  <input
+                    type="number"
+                    className="form-control"
                     value={newHiresCspit}
                     onChange={(e) => setNewHiresCspit(e.target.value)}
                   />
@@ -516,11 +516,11 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
 
               <div className="form-group">
                 <label className="form-label">Average Package (LPA) *</label>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   step="0.1"
-                  className="form-control" 
-                  placeholder="e.g. 15.5" 
+                  className="form-control"
+                  placeholder="e.g. 15.5"
                   value={newAvgPackage}
                   onChange={(e) => setNewAvgPackage(e.target.value)}
                   required
@@ -533,10 +533,10 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
 
               <div className="form-group">
                 <label className="form-label">HR Contact Name *</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  placeholder="e.g. Neha Shah" 
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="e.g. Neha Shah"
                   value={newHrName}
                   onChange={(e) => setNewHrName(e.target.value)}
                   required
@@ -546,10 +546,10 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
               <div className="form-row">
                 <div className="form-group">
                   <label className="form-label">HR Email *</label>
-                  <input 
-                    type="email" 
-                    className="form-control" 
-                    placeholder="neha@company.com" 
+                  <input
+                    type="email"
+                    className="form-control"
+                    placeholder="neha@company.com"
                     value={newHrEmail}
                     onChange={(e) => setNewHrEmail(e.target.value)}
                     required
@@ -557,10 +557,10 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
                 </div>
                 <div className="form-group">
                   <label className="form-label">HR Phone</label>
-                  <input 
-                    type="text" 
-                    className="form-control" 
-                    placeholder="+91..." 
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="+91..."
                     value={newHrPhone}
                     onChange={(e) => setNewHrPhone(e.target.value)}
                   />
@@ -569,7 +569,7 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
 
               <div className="form-group">
                 <label className="form-label">Recruiter Status</label>
-                <select 
+                <select
                   className="form-control"
                   value={newStatus}
                   onChange={(e) => setNewStatus(e.target.value as any)}
@@ -581,9 +581,9 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
 
               <div className="form-group">
                 <label className="form-label">AI Insights / Feedback Notes</label>
-                <textarea 
-                  className="form-control" 
-                  placeholder="Recruiter comments or placement preparation advice..." 
+                <textarea
+                  className="form-control"
+                  placeholder="Recruiter comments or placement preparation advice..."
                   value={newNotes}
                   onChange={(e) => setNewNotes(e.target.value)}
                   rows={3}
@@ -592,17 +592,17 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
               </div>
 
               <div style={{ display: 'flex', gap: 'var(--space-md)', marginTop: 'var(--space-lg)' }}>
-                <button 
-                  type="button" 
-                  className="btn btn-secondary" 
+                <button
+                  type="button"
+                  className="btn btn-secondary"
                   onClick={() => setIsFormOpen(false)}
                   style={{ flex: 1 }}
                 >
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
-                  className="btn btn-primary" 
+                <button
+                  type="submit"
+                  className="btn btn-primary"
                   style={{ flex: 1 }}
                 >
                   Save Partner
