@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { getCompanies, createCompany, updateCompany, deleteCompany } from '../controllers/company.controller.js';
 import { authenticate, requireAdmin } from '../middlewares/auth.middleware.js';
 
-const router = Router();
+const router: Router = Router();
 
 // GET is authenticated, writes are Admin only
 router.get('/', authenticate, getCompanies);

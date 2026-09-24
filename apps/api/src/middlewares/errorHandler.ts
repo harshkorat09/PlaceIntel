@@ -18,7 +18,7 @@ export const errorHandler = (
     code = 'APP_ERROR';
   } else if (err instanceof ZodError) {
     statusCode = 400;
-    message = err.errors.map((e) => e.message).join(', ');
+    message = err.issues.map((e: any) => e.message).join(', ');
     code = 'VALIDATION_ERROR';
   }
 

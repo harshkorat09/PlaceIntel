@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { prisma } from '../db.js';
 import { UnauthorizedError, ValidationError, NotFoundError } from '../utils/errors.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
-import { AuthRequest } from '../middlewares/auth.middleware.js';
+import type { AuthRequest } from '../middlewares/auth.middleware.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_for_dev';
 
