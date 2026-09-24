@@ -20,13 +20,13 @@ export const updateCompany = asyncHandler(async (req: Request, res: Response) =>
   const { id } = req.params;
   const data = req.body;
   
-  const existingCompany = await prisma.company.findUnique({ where: { id: parseInt(id) } });
+  const existingCompany = await prisma.company.findUnique({ where: { id: parseInt(id as string) } });
   if (!existingCompany) {
     throw new NotFoundError('Company not found');
   }
 
   const company = await prisma.company.update({
-    where: { id: parseInt(id) },
+    where: { id: parseInt(id as string) },
     data,
   });
   
@@ -36,13 +36,13 @@ export const updateCompany = asyncHandler(async (req: Request, res: Response) =>
 export const deleteCompany = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   
-  const existingCompany = await prisma.company.findUnique({ where: { id: parseInt(id) } });
+  const existingCompany = await prisma.company.findUnique({ where: { id: parseInt(id as string) } });
   if (!existingCompany) {
     throw new NotFoundError('Company not found');
   }
 
   await prisma.company.delete({
-    where: { id: parseInt(id) },
+    where: { id: parseInt(id as string) },
   });
   
   res.json({ success: true, message: 'Company deleted' });
