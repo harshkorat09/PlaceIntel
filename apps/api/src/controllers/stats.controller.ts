@@ -1,39 +1,63 @@
 import type { Request, Response } from 'express';
 import { prisma } from '../db.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
 
-export const getStats = async (_req: Request, res: Response) => {
-  try {
-    const totalCompanies = await prisma.company.count();
-    const totalPlacements = await prisma.placement.count();
-    const totalStudents = await prisma.user.count({ where: { role: 'STUDENT' } });
-    
-    const placements = await prisma.placement.findMany({ select: { ctc: true, offeredCount: true, appliedCount: true } });
-    
-    let totalPackage = 0;
-    let placedCount = 0;
-    let totalApplied = 0;
+export const getStats = asyncHandler(async (_req: Request, res: Response) => {
+  const totalCompanies = await prisma.company.count();
+  const totalPlacements = await prisma.placement.count();
+  
+  const allPlacements = await prisma.placement.findMany({
+    include: {
+      skills: { include: { skill: true } },
+      branches: { include: { branch: true } }
+    }
+  });
 
-    placements.forEach(p => {
-      totalPackage += p.ctc;
-      placedCount += p.offeredCount;
-      totalApplied += p.appliedCount;
+  const packageDistribution: Record<'< 5 LPA' | '5 - 10 LPA' | '10 - 20 LPA' | '20+ LPA', number> = {
+    '< 5 LPA': 0,
+    '5 - 10 LPA': 0,
+    '10 - 20 LPA': 0,
+    '20+ LPA': 0,
+  };
+
+  const skillDemand: Record<string, number> = {};
+  const branchDistribution: Record<string, number> = {};
+  const yearWiseTrends: Record<string, number> = {};
+
+  allPlacements.forEach(p => {
+    // Package Distribution
+    const ctc = p.ctc || 0;
+    if (ctc < 5) packageDistribution['< 5 LPA']++;
+    else if (ctc <= 10) packageDistribution['5 - 10 LPA']++;
+    else if (ctc <= 20) packageDistribution['10 - 20 LPA']++;
+    else packageDistribution['20+ LPA']++;
+
+    // Skill Demand
+    p.skills.forEach(s => {
+      const name = s.skill.name;
+      skillDemand[name] = (skillDemand[name] || 0) + 1;
     });
 
-    const averagePackage = placements.length > 0 ? (totalPackage / placements.length).toFixed(1) : 0;
-    const placementRate = totalStudents > 0 ? ((placedCount / totalStudents) * 100).toFixed(1) : 0;
-
-    res.json({ 
-      success: true, 
-      data: {
-        totalCompanies,
-        totalPlacements,
-        totalStudents,
-        averagePackage: Number(averagePackage),
-        placementRate: Number(placementRate)
-      } 
+    // Branch Distribution
+    p.branches.forEach(b => {
+      const name = b.branch.name;
+      branchDistribution[name] = (branchDistribution[name] || 0) + 1;
     });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Server error' });
-  }
-};
+
+    // Year-wise Trends
+    const year = p.deadline.getFullYear().toString();
+    yearWiseTrends[year] = (yearWiseTrends[year] || 0) + 1;
+  });
+
+  res.json({ 
+    success: true, 
+    data: {
+      totalCompanies,
+      totalPlacements,
+      packageDistribution,
+      skillDemand,
+      branchDistribution,
+      yearWiseTrends
+    } 
+  });
+});
