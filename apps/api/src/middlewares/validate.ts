@@ -13,15 +13,16 @@ export const validate = (schema: ZodObject<any, any>) => {
 
       // Update the request with the validated/coerced data
       req.body = validatedData.body;
-      req.query = validatedData.query as any;
-      req.params = validatedData.params as any;
+      // req.query and req.params are getters in Express, modifying them directly can fail. 
+      // Coercion from Zod is usually for body anyway.
 
       next();
     } catch (error) {
       if (error instanceof ZodError) {
         next(error);
       } else {
-        next(new ValidationError('Invalid request data'));
+        console.error('Validate Error:', error);
+        next(error); // Pass actual error
       }
     }
   };
