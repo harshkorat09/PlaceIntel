@@ -1,70 +1,49 @@
 import type { Request, Response } from 'express';
 import { prisma } from '../db.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
+import { NotFoundError } from '../utils/errors.js';
 
-export const getCompanies = async (_req: Request, res: Response) => {
-  try {
-    const companies = await prisma.company.findMany();
-    res.json({ success: true, data: companies });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Server error' });
-  }
-};
+export const getCompanies = asyncHandler(async (_req: Request, res: Response) => {
+  const companies = await prisma.company.findMany();
+  res.json({ success: true, data: companies });
+});
 
-export const createCompany = async (req: Request, res: Response) => {
-  try {
-    const { name, sector, hiresDepstar, hiresCspit, status, avgPackage, notes, hrContacts, visits, website } = req.body;
-    
-    const company = await prisma.company.create({
-      data: {
-        name,
-        sector,
-        hiresDepstar,
-        hiresCspit,
-        status,
-        avgPackage,
-        notes,
-        hrContacts,
-        visits,
-        website
-      }
-    });
-    
-    res.status(201).json({ success: true, message: 'Company created', data: company });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Server error' });
-  }
-};
+export const createCompany = asyncHandler(async (req: Request, res: Response) => {
+  const data = req.body;
+  const company = await prisma.company.create({
+    data,
+  });
+  res.status(201).json({ success: true, message: 'Company created', data: company });
+});
 
-export const updateCompany = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const data = req.body;
-    
-    const company = await prisma.company.update({
-      where: { id: parseInt(id as string) },
-      data
-    });
-    
-    res.json({ success: true, message: 'Company updated', data: company });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Server error' });
+export const updateCompany = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const data = req.body;
+  
+  const existingCompany = await prisma.company.findUnique({ where: { id: parseInt(id) } });
+  if (!existingCompany) {
+    throw new NotFoundError('Company not found');
   }
-};
 
-export const deleteCompany = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    
-    await prisma.company.delete({
-      where: { id: parseInt(id as string) }
-    });
-    
-    res.json({ success: true, message: 'Company deleted' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Server error' });
+  const company = await prisma.company.update({
+    where: { id: parseInt(id) },
+    data,
+  });
+  
+  res.json({ success: true, message: 'Company updated', data: company });
+});
+
+export const deleteCompany = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  
+  const existingCompany = await prisma.company.findUnique({ where: { id: parseInt(id) } });
+  if (!existingCompany) {
+    throw new NotFoundError('Company not found');
   }
-};
+
+  await prisma.company.delete({
+    where: { id: parseInt(id) },
+  });
+  
+  res.json({ success: true, message: 'Company deleted' });
+});

@@ -7,6 +7,7 @@ import authRoutes from './routes/auth.routes.js';
 import companyRoutes from './routes/company.routes.js';
 import placementRoutes from './routes/placement.routes.js';
 import skillsRoutes from './routes/skills.routes.js';
+import branchRoutes from './routes/branch.routes.js';
 import statsRoutes from './routes/stats.routes.js';
 import chatRoutes from './routes/chat.routes.js';
 import { login } from './controllers/auth.controller.js';
@@ -20,6 +21,7 @@ app.post('/api/login', login); // Direct map for SRS requirement
 app.use('/api/companies', companyRoutes);
 app.use('/api/placements', placementRoutes);
 app.use('/api/skills', skillsRoutes);
+app.use('/api/branches', branchRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/chat', chatRoutes);
 
