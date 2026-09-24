@@ -1,104 +1,92 @@
 import type { Placement } from './types';
+import { apiClient } from './client';
 
-// Initial Mock Data
-let mockPlacements: Placement[] = [
-  {
-    id: '1',
-    companyName: 'Google',
-    role: 'Software Engineer',
-    packageRange: '28 - 32 LPA',
-    deadline: '2026-08-15',
-    cgpaRequirement: 8.0,
-    eligibleBranches: ['CSE', 'CE', 'IT'],
-    requiredSkills: ['Algorithms', 'System Design', 'React'],
-    description: 'Google India campus drive for 2026 graduates.',
-    fitScore: 85,
-    status: 'Ongoing',
-  },
-  {
-    id: '2',
-    companyName: 'Microsoft',
-    role: 'Program Manager',
-    packageRange: '20 - 24 LPA',
-    deadline: '2026-08-20',
-    cgpaRequirement: 7.5,
-    eligibleBranches: ['CSE', 'CE', 'IT', 'ECE'],
-    requiredSkills: ['Product Management', 'Data Analytics'],
-    description: 'Microsoft campus recruitment for PM roles.',
-    fitScore: 60,
-    status: 'Completed',
-  },
-  {
-    id: '3',
-    companyName: 'Deloitte',
-    role: 'Technology Analyst',
-    packageRange: '8 - 10 LPA',
-    deadline: '2026-09-01',
-    cgpaRequirement: 7.0,
-    eligibleBranches: ['CSE', 'CE', 'IT', 'ECE', 'EE'],
-    requiredSkills: ['SQL', 'Java', 'Communication'],
-    description: 'Deloitte US India technology consulting drive.',
-    fitScore: 92,
-    status: 'Registration Open',
-  },
-];
+// Helper to map backend placement to frontend placement
+const mapPlacement = (p: any): Placement => {
+  return {
+    id: String(p.id),
+    companyName: p.company?.name || 'Unknown',
+    role: p.position,
+    packageRange: p.ctc ? `${p.ctc} LPA` : 'TBD',
+    deadline: p.deadline ? new Date(p.deadline).toISOString().split('T')[0] : '',
+    cgpaRequirement: p.cgpaCutoff,
+    eligibleBranches: p.branches ? p.branches.map((b: any) => b.branch.name) : [],
+    requiredSkills: p.skills ? p.skills.map((s: any) => s.skill.name) : [],
+    description: p.description || '',
+    status: p.status || 'Upcoming',
+  };
+};
 
 export const placementService = {
-  // Use isolated mock data for now. Replace with real API calls when backend is ready.
   async getPlacements(): Promise<Placement[]> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([...mockPlacements]);
-      }, 300);
-    });
-    // return apiClient.get('/placements');
+    const data = await apiClient.get('/placements');
+    return (data || []).map(mapPlacement);
   },
 
   async getPlacementById(id: string): Promise<Placement | null> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(mockPlacements.find(p => p.id === id) || null);
-      }, 200);
-    });
-    // return apiClient.get(`/placements/${id}`);
+    const data = await apiClient.get('/placements');
+    const p = data.find((x: any) => String(x.id) === id);
+    return p ? mapPlacement(p) : null;
   },
 
   async createPlacement(data: Omit<Placement, 'id' | 'fitScore'>): Promise<Placement> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const newPlacement = {
-          ...data,
-          id: Date.now().toString(),
-        };
-        mockPlacements.push(newPlacement);
-        resolve(newPlacement);
-      }, 500);
-    });
-    // return apiClient.post('/placements', data);
+    // Note: A robust implementation would resolve the string names to IDs.
+    // Since the frontend form doesn't provide IDs natively in this mock-based UI,
+    // we fetch them to map correctly.
+    const [companies, branches, skills] = await Promise.all([
+      apiClient.get('/companies'),
+      apiClient.get('/branches'),
+      apiClient.get('/skills')
+    ]);
+
+    const company = companies.find((c: any) => c.name.toLowerCase() === data.companyName.toLowerCase());
+    if (!company) throw new Error(`Company '${data.companyName}' not found`);
+
+    const branchIds = data.eligibleBranches
+      .map(name => branches.find((b: any) => b.name === name)?.id)
+      .filter(Boolean);
+
+    const skillIds = data.requiredSkills
+      .map(name => skills.find((s: any) => s.name === name)?.id)
+      .filter(Boolean);
+
+    const ctcMatch = data.packageRange.match(/(\d+)/);
+    const ctc = ctcMatch ? parseInt(ctcMatch[1]) : 0;
+
+    const payload = {
+      companyId: company.id,
+      position: data.role,
+      ctc,
+      deadline: data.deadline,
+      cgpaCutoff: data.cgpaRequirement,
+      description: data.description,
+      branchIds,
+      skillIds,
+      status: data.status
+    };
+
+    const res = await apiClient.post('/placements', payload);
+    // The create response might not include nested relations, so we might need a refetch or partial map
+    return mapPlacement(res);
   },
 
   async updatePlacement(id: string, data: Partial<Placement>): Promise<Placement> {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const index = mockPlacements.findIndex(p => p.id === id);
-        if (index > -1) {
-          mockPlacements[index] = { ...mockPlacements[index], ...data };
-          resolve(mockPlacements[index]);
-        } else {
-          reject(new Error('Placement not found'));
-        }
-      }, 500);
-    });
-    // return apiClient.put(`/placements/${id}`, data);
+    const payload: any = {};
+    if (data.role) payload.position = data.role;
+    if (data.deadline) payload.deadline = data.deadline;
+    if (data.cgpaRequirement !== undefined) payload.cgpaCutoff = data.cgpaRequirement;
+    if (data.description) payload.description = data.description;
+    if (data.status) payload.status = data.status;
+    if (data.packageRange) {
+       const ctcMatch = data.packageRange.match(/(\d+)/);
+       if (ctcMatch) payload.ctc = parseInt(ctcMatch[1]);
+    }
+
+    const res = await apiClient.put(`/placements/${id}`, payload);
+    return mapPlacement(res);
   },
 
   async deletePlacement(id: string): Promise<void> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        mockPlacements = mockPlacements.filter(p => p.id !== id);
-        resolve();
-      }, 400);
-    });
-    // return apiClient.delete(`/placements/${id}`);
+    await apiClient.delete(`/placements/${id}`);
   }
 };
