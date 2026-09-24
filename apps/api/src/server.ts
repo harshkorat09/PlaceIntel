@@ -17,8 +17,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+import { validate } from './middlewares/validate.js';
+import { loginSchema } from './validators/auth.validator.js';
+
 app.use('/api/auth', authRoutes);
-app.post('/api/login', login); // Direct map for SRS requirement
+app.post('/api/login', validate(loginSchema), login); // Direct map for SRS requirement
 app.use('/api/companies', companyRoutes);
 app.use('/api/placements', placementRoutes);
 app.use('/api/skills', skillsRoutes);
@@ -32,4 +35,9 @@ app.get('/health', (_req, res) => res.json({ service: 'placeintel-api', status: 
 app.use(errorHandler);
 
 const port = Number(process.env.API_PORT ?? 4000);
-app.listen(port, () => console.log(`PlaceIntel API listening on :${port}`));
+
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => console.log(`PlaceIntel API listening on :${port}`));
+}
+
+export { app };
