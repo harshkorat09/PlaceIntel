@@ -51,15 +51,15 @@ export default function Placements() {
   // Load companies, branches, and skills once on mount
   useEffect(() => {
     apiClient.get('/companies')
-      .then(r => { if (r.success) setCompanies(r.data); })
+      .then(r => setCompanies(r || []))
       .catch(e => console.error('Failed to load companies', e));
 
     apiClient.get('/branches')
-      .then(r => { if (r.success) setAllBranches(r.data); })
+      .then(r => setAllBranches(r || []))
       .catch(e => console.error('Failed to load branches', e));
 
     apiClient.get('/skills')
-      .then(r => { if (r.success) setAllSkills(r.data); })
+      .then(r => setAllSkills(r || []))
       .catch(e => console.error('Failed to load skills', e));
   }, []);
 
@@ -72,7 +72,7 @@ export default function Placements() {
   useEffect(() => {
     if (isFormOpen) {
       apiClient.get('/companies')
-        .then(r => { if (r.success) setCompanies(r.data); })
+        .then(r => setCompanies(r || []))
         .catch(e => console.error('Failed to refresh companies', e));
     }
   }, [isFormOpen]);

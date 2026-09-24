@@ -58,8 +58,8 @@ export default function Auth() {
         password: password
       });
 
-      if (res.success && res.data?.token) {
-        login(res.data.token, res.data.user);
+      if (res && res.token) {
+        login(res.token, res.user);
         navigate('/');
       } else {
         setErrorMessage(res.message || 'Login failed');

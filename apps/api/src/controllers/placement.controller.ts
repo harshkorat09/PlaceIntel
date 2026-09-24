@@ -213,10 +213,11 @@ export const uploadPlacementNotice = async (req: AuthRequest, res: Response) => 
         return res.status(fastApiRes.status).json({ success: false, message: detail });
       }
 
-      // 5xx: generic message, don't expose internals
+      // 5xx: generic message, don't expose internals in production
+      const isDev = process.env.NODE_ENV === 'development';
       return res.status(502).json({
         success: false,
-        message: 'AI service returned an error. Notice was not ingested.',
+        message: isDev ? `AI service error: ${detail}` : 'AI service returned an error. Notice was not ingested.',
       });
     }
 

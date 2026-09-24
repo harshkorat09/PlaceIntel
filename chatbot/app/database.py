@@ -7,7 +7,9 @@ from app.config import DATABASE_URL
 def get_connection() -> PostgreSQLConnection:
     """Create and return a PostgreSQL database connection."""
 
-    return psycopg2.connect(DATABASE_URL)
+    # psycopg2 does not support Prisma-specific query parameters like ?schema=public
+    clean_url = DATABASE_URL.split('?')[0]
+    return psycopg2.connect(clean_url)
 
 
 def test_database_connection() -> None:

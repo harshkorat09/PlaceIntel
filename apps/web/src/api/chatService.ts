@@ -15,15 +15,15 @@ export const chatService = {
     try {
       const response = await apiClient.post('/chat', { question });
 
-      if (response.success && response.data) {
+      if (response && response.answer) {
         return {
-          answer: response.data.answer,
-          sources: response.data.sources ?? [],
+          answer: response.answer,
+          sources: response.sources ?? [],
         };
       }
 
       throw new Error(
-        response.message ||
+        response?.message ||
           'Failed to get a response from the intelligence server.'
       );
     } catch (error) {
