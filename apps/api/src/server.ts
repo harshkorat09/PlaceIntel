@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
+import { errorHandler } from './middlewares/errorHandler.js';
 
 import authRoutes from './routes/auth.routes.js';
 import companyRoutes from './routes/company.routes.js';
@@ -23,6 +24,8 @@ app.use('/api/stats', statsRoutes);
 app.use('/api/chat', chatRoutes);
 
 app.get('/health', (_req, res) => res.json({ service: 'placeintel-api', status: 'ok' }));
+
+app.use(errorHandler);
 
 const port = Number(process.env.API_PORT ?? 4000);
 app.listen(port, () => console.log(`PlaceIntel API listening on :${port}`));
