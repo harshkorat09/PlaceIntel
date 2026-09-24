@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
+import type { Express } from 'express';
 import { errorHandler } from './middlewares/errorHandler.js';
 
 import authRoutes from './routes/auth.routes.js';
@@ -13,7 +14,7 @@ import profileRoutes from './routes/profile.routes.js';
 import chatRoutes from './routes/chat.routes.js';
 import { login } from './controllers/auth.controller.js';
 
-const app = express();
+const app: Express = express();
 app.use(cors());
 app.use(express.json());
 
