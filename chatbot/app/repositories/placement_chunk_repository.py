@@ -3,6 +3,7 @@ from app.database import get_connection
 
 EMBEDDING_DIMENSIONS = 1536
 
+
 def find_attachment_by_hash(file_hash: str) -> dict | None:
     """
     Find an existing attachment using its SHA-256 document hash.
@@ -48,6 +49,7 @@ def find_attachment_by_hash(file_hash: str) -> dict | None:
 
     finally:
         connection.close()
+
 
 def create_attachment(
     placement_id: int,
@@ -98,6 +100,7 @@ def create_attachment(
     finally:
         connection.close()
 
+
 def delete_chunks_by_attachment(attachment_id: int) -> int:
     """
     Delete all chunks belonging to an attachment.
@@ -132,7 +135,8 @@ def delete_chunks_by_attachment(attachment_id: int) -> int:
 
     finally:
         connection.close()
-        
+
+
 def create_chunk(
     attachment_id: int,
     chunk_text: str,
@@ -220,27 +224,33 @@ def search_similar_chunks(
     query_embedding: list[float],
     top_k: int = 5,
     similarity_threshold: float = 0.45,
+    company_filter: str | None = None,
 ) -> list[dict]:
     """
     Search PlacementChunk records using pgvector cosine similarity.
 
-    Only chunks whose similarity is greater than or equal to the
-    configured threshold are returned.
+    Retrieval includes placement and company metadata so the RAG
+    pipeline knows which placement generated each chunk.
 
     Args:
         query_embedding: 1536-dimensional Gemini embedding.
         top_k: Maximum number of chunks to return.
         similarity_threshold: Minimum cosine similarity required
             for a chunk to be considered relevant.
+        company_filter: Optional company name to restrict retrieval.
 
     Returns:
         List of relevant chunks containing:
         - chunk ID
+        - placement ID
+        - company ID
+        - company name
         - attachment ID
         - chunk text
         - page number
         - chunk index
         - source file
+        - placement status
         - vector distance
         - similarity score
     """
@@ -266,28 +276,41 @@ def search_similar_chunks(
 
     try:
         with connection.cursor() as cursor:
+            where_clause = 'pc.embedding IS NOT NULL'
+            params = [str(query_embedding)]
+            
+            if company_filter:
+                where_clause += ' AND LOWER(c.name) = LOWER(%s)'
+                params.append(company_filter)
+                
+            params.extend([str(query_embedding), top_k])
+            
             cursor.execute(
-                """
+                f"""
                 SELECT
                     pc.id,
                     pc."attachmentId",
+                    a."placementId",
+                    p."companyId",
+                    c.name,
                     pc."chunkText",
                     pc."pageNumber",
                     pc."chunkIndex",
                     a."filePath",
+                    p.status,
                     pc.embedding <=> %s::vector AS distance
                 FROM "PlacementChunk" pc
                 INNER JOIN "Attachment" a
                     ON a.id = pc."attachmentId"
-                WHERE pc.embedding IS NOT NULL
+                INNER JOIN "Placement" p
+                    ON p.id = a."placementId"
+                INNER JOIN "Company" c
+                    ON c.id = p."companyId"
+                WHERE {where_clause}
                 ORDER BY pc.embedding <=> %s::vector
                 LIMIT %s;
                 """,
-                (
-                    str(query_embedding),
-                    str(query_embedding),
-                    top_k,
-                ),
+                tuple(params),
             )
 
             rows = cursor.fetchall()
@@ -295,7 +318,7 @@ def search_similar_chunks(
         results = []
 
         for row in rows:
-            distance = float(row[6])
+            distance = float(row[10])
 
             # pgvector cosine distance:
             #
@@ -313,10 +336,14 @@ def search_similar_chunks(
                 {
                     "id": row[0],
                     "attachment_id": row[1],
-                    "chunk_text": row[2],
-                    "page_number": row[3],
-                    "chunk_index": row[4],
-                    "source_file": row[5],
+                    "placement_id": row[2],
+                    "company_id": row[3],
+                    "company_name": row[4],
+                    "chunk_text": row[5],
+                    "page_number": row[6],
+                    "chunk_index": row[7],
+                    "source_file": row[8],
+                    "placement_status": row[9],
                     "distance": distance,
                     "similarity": similarity,
                 }

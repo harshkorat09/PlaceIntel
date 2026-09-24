@@ -25,8 +25,8 @@ app.use('/api/auth', authRoutes);
 app.post('/api/login', validate(loginSchema), login); // Direct map for SRS requirement
 app.use('/api/companies', companyRoutes);
 app.use('/api/placements', placementRoutes);
-app.use('/api/skills', skillsRoutes);
 app.use('/api/branches', branchRoutes);
+app.use('/api/skills', skillsRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/chat', chatRoutes);

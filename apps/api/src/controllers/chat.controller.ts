@@ -1,49 +1,111 @@
 import type { Request, Response } from 'express';
 
-export const chatWithAssistant = async (req: Request, res: Response) => {
+interface ChatSource {
+  notice: string;
+  pages: number[];
+}
+
+interface ChatbotResponse {
+  answer: string;
+  sources: ChatSource[];
+}
+
+interface ChatbotSuccessResponse {
+  success: true;
+  data: ChatbotResponse;
+}
+
+const CHATBOT_URL =
+  process.env.CHATBOT_URL ?? 'http://127.0.0.1:8000';
+
+const CHATBOT_TIMEOUT_MS = 30_000;
+
+export const chatWithAssistant = async (
+  req: Request,
+  res: Response,
+) => {
   try {
-    const { question } = req.body;
-    
-    if (!question) {
-      return res.status(400).json({ success: false, message: 'Question is required' });
-    }
+    const { question, session_id } = req.body;
+    // req.user might be defined by authenticate middleware
+    const user = (req as any).user;
 
-    // Mock/heuristic logic to fulfill the skeleton requirement for Week 5-6
-    let answer = "I found some information in the recent placement drives. Please check the dashboard for the most up-to-date schedule.";
-    let source_notice = "General Placement Cell Guidelines";
-
-    const q = question.toLowerCase();
-    
-    if (q.includes('google')) {
-      answer = "Google is visiting the campus for the Software Engineer role with a 32.0 LPA package. The CGPA cutoff is 8.0, and they will conduct a Coding Test.";
-      source_notice = "Notice: Google India SDE Campus Drive";
-    } else if (q.includes('microsoft')) {
-      answer = "Microsoft is actively shortlisting for the Program Manager role. Make sure your resume highlights product planning and data analytics.";
-      source_notice = "Notice: Microsoft Recruitment Update";
-    } else if (q.includes('deloitte')) {
-      answer = "Deloitte US is looking for Technology Consultants. The deadline is upcoming. Check the placement portal for eligible branches (CSE, IT, ECE, ME, EE).";
-      source_notice = "Notice: Deloitte US Consultant Drive";
-    } else if (q.includes('deadline')) {
-      answer = "There are several upcoming deadlines. Please refer to the Placements tab to filter by deadlines and statuses.";
-      source_notice = "Placement Calendar 2026";
-    } else if (q.includes('highest package') || q.includes('maximum package')) {
-      answer = "Currently, Google India is offering the highest package at 32.0 LPA.";
-      source_notice = "Placement Statistics 2026";
-    }
-
-    // Simulate slight delay to mimic LLM generation
-    setTimeout(() => {
-      res.json({
-        success: true,
-        data: {
-          answer,
-          source_notice
-        }
+    if (
+      typeof question !== 'string' ||
+      !question.trim()
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: 'Question is required',
       });
-    }, 800);
+    }
 
+    const controller = new AbortController();
+
+    const timeout = setTimeout(() => {
+      controller.abort();
+    }, CHATBOT_TIMEOUT_MS);
+
+    try {
+      const chatbotResponse = await fetch(
+        `${CHATBOT_URL}/chat`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            question: question.trim(),
+            user_id: user?.id,
+            session_id: session_id ? Number(session_id) : undefined,
+          }),
+          signal: controller.signal,
+        },
+      );
+
+      if (!chatbotResponse.ok) {
+        console.error(
+          `Chatbot service returned HTTP ${chatbotResponse.status}`,
+        );
+
+        return res.status(502).json({
+          success: false,
+          message: 'Chatbot service is unavailable',
+        });
+      }
+
+      const data =
+        (await chatbotResponse.json()) as ChatbotResponse;
+
+      const response: ChatbotSuccessResponse = {
+        success: true,
+        data,
+      };
+
+      return res.json(response);
+    } finally {
+      clearTimeout(timeout);
+    }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    if (
+      error instanceof DOMException &&
+      error.name === 'AbortError'
+    ) {
+      console.error('Chatbot service request timed out');
+
+      return res.status(504).json({
+        success: false,
+        message: 'Chatbot service request timed out',
+      });
+    }
+
+    console.error(
+      'Chatbot service communication error:',
+      error,
+    );
+
+    return res.status(502).json({
+      success: false,
+      message: 'Unable to reach chatbot service',
+    });
   }
 };

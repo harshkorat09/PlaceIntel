@@ -4,8 +4,15 @@ def build_sources(retrieved_chunks: list[dict]) -> list[dict]:
     """
 
     sources: dict[str, set[int]] = {}
+    structured_companies = set()
 
     for chunk in retrieved_chunks:
+        if chunk.get("source_type") == "structured":
+            company = chunk.get("company_name")
+            if company:
+                structured_companies.add(company)
+            continue
+            
         source_file = chunk.get("source_file")
         page_number = chunk.get("page_number")
 
@@ -17,10 +24,18 @@ def build_sources(retrieved_chunks: list[dict]) -> list[dict]:
 
         sources[source_file].add(page_number)
 
-    return [
+    results = [
         {
             "notice": notice,
             "pages": sorted(pages),
         }
         for notice, pages in sources.items()
     ]
+    
+    if structured_companies:
+        results.append({
+            "notice": f"Database (Companies: {', '.join(sorted(structured_companies))})",
+            "pages": [],
+        })
+
+    return results

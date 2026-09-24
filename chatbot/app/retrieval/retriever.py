@@ -20,6 +20,7 @@ def retrieve_chunks(
     query: str,
     top_k: int = 5,
     similarity_threshold: float = 0.45,
+    company_filter: str | None = None,
 ) -> list[dict]:
     """
     Retrieve relevant placement chunks.
@@ -79,6 +80,7 @@ def retrieve_chunks(
         query_embedding=query_embedding,
         top_k=top_k,
         similarity_threshold=similarity_threshold,
+        company_filter=company_filter,
     )
 
     retrieval_time = (

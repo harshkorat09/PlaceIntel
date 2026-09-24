@@ -64,20 +64,29 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
     }
 
     try {
+      const hrContacts = newHrName ? [
+        {
+          name: newHrName,
+          role: 'HR Contact',
+          email: newHrEmail,
+          phone: newHrPhone,
+        }
+      ] : [];
+
       const newCompany = await companyService.createCompany({
         name: newCompanyName,
         sector: newSector,
-        hiresDepstar: parseInt(newHiresDepstar) || 0,
-        hiresCspit: parseInt(newHiresCspit) || 0,
+        hiresDepstar: parseInt(newHiresDepstar, 10) || 0,
+        hiresCspit: parseInt(newHiresCspit, 10) || 0,
         status: newStatus,
         avgPackage: parseFloat(newAvgPackage),
         notes: newNotes || 'No notes available.',
-        website: 'https://' + newCompanyName.toLowerCase().replace(' ', '') + '.com'
+        website: 'https://' + newCompanyName.toLowerCase().replace(/\s+/g, '') + '.com',
+        hrContacts,
       });
 
       setIsFormOpen(false);
       setCompanies(prev => [...prev, newCompany]);
-
       setNewCompanyName('');
       setNewSector('Technology');
       setNewStatus('Active Recruiter');
@@ -85,12 +94,13 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
       setNewHrName('');
       setNewHrEmail('');
       setNewHrPhone('');
-      setNewHiresDepstar('');
-      setNewHiresCspit('');
+      setNewHiresDepstar('0');
+      setNewHiresCspit('0');
       setNewNotes('');
-    } catch (error) {
+      alert('Recruiter Partner saved successfully.');
+    } catch (error: any) {
       console.error(error);
-      alert('Error creating company');
+      alert(error?.message || 'Error creating company');
     }
   };
 
@@ -285,10 +295,10 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
                     )}
 
                     {/* Core Recruiter Contact */}
-                    {company.hrContacts.length > 0 && (
+                    {(company.hrContacts?.length ?? 0) > 0 && (
                       <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', fontSize: '12px', color: 'var(--text-secondary)', borderTop: '1px solid var(--border)', paddingTop: 'var(--space-sm)', marginTop: 'var(--space-xs)' }}>
                         <Mail size={12} style={{ color: 'var(--text-tertiary)' }} />
-                        <span>{company.hrContacts[0].name} ({company.hrContacts[0].email})</span>
+                        <span>{company.hrContacts![0].name} ({company.hrContacts![0].email})</span>
                       </div>
                     )}
 

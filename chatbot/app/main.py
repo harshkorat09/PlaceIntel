@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 
 from app.api.chat import router as chat_router
+from app.api.ingestion import router as ingestion_router
 
 
 app = FastAPI(
@@ -10,8 +11,20 @@ app = FastAPI(
 )
 
 
+# ---------------------------------------------------------
+# API Routers
+# ---------------------------------------------------------
+
+# Chatbot / RAG endpoint
 app.include_router(chat_router)
 
+# Placement notice ingestion endpoint
+app.include_router(ingestion_router)
+
+
+# ---------------------------------------------------------
+# Health Check
+# ---------------------------------------------------------
 
 @app.get("/health")
 async def health_check():
