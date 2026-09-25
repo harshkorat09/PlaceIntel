@@ -24,6 +24,9 @@ export const getStats = asyncHandler(async (_req: Request, res: Response) => {
   const branchDistribution: Record<string, number> = {};
   const yearWiseTrends: Record<string, number> = {};
 
+  const yearWiseCtcSum: Record<string, number> = {};
+  const yearWiseCount: Record<string, number> = {};
+
   allPlacements.forEach(p => {
     // Package Distribution
     const ctc = p.ctc || 0;
@@ -46,8 +49,15 @@ export const getStats = asyncHandler(async (_req: Request, res: Response) => {
 
     // Year-wise Trends
     const year = p.deadline.getFullYear().toString();
-    yearWiseTrends[year] = (yearWiseTrends[year] || 0) + 1;
+    yearWiseCtcSum[year] = (yearWiseCtcSum[year] || 0) + ctc;
+    yearWiseCount[year] = (yearWiseCount[year] || 0) + 1;
   });
+
+  for (const year in yearWiseCtcSum) {
+    const sum = yearWiseCtcSum[year] || 0;
+    const count = yearWiseCount[year] || 1;
+    yearWiseTrends[year] = parseFloat((sum / count).toFixed(2));
+  }
 
   res.json({ 
     success: true, 

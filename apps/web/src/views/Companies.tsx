@@ -18,13 +18,20 @@ import type { Company } from '../api/types';
 export default function Companies({ role = 'officer' }: { role?: 'officer' | 'student' }) {
   const isAdmin = role === 'officer';
   const [companies, setCompanies] = useState<Company[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchCompanies = async () => {
     try {
+      setIsLoading(true);
+      setError(null);
       const data = await companyService.getCompanies();
       setCompanies(data);
-    } catch (error) {
-      console.error('Failed to fetch companies:', error);
+    } catch (err) {
+      console.error('Failed to fetch companies:', err);
+      setError('Failed to load company partners.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -229,7 +236,15 @@ export default function Companies({ role = 'officer' }: { role?: 'officer' | 'st
 
           {/* Companies Grid */}
           <div className="companies-grid">
-            {filteredCompanies.length === 0 ? (
+            {isLoading ? (
+              <div className="card" style={{ gridColumn: '1 / -1', textAlign: 'center', padding: 'var(--space-xl)' }}>
+                Loading partners...
+              </div>
+            ) : error ? (
+              <div className="card" style={{ gridColumn: '1 / -1', textAlign: 'center', padding: 'var(--space-xl)', color: 'var(--danger)' }}>
+                {error}
+              </div>
+            ) : filteredCompanies.length === 0 ? (
               <div className="card" style={{ gridColumn: '1 / -1', textAlign: 'center', padding: 'var(--space-xl)' }}>
                 <AlertCircle size={36} style={{ color: 'var(--text-tertiary)', margin: '0 auto var(--space-md)' }} />
                 <h3>No partners match your criteria</h3>

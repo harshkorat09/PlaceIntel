@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { placementService } from '../api/placementService';
 import type { Placement } from '../api/types';
@@ -21,7 +21,11 @@ export function StudentJobs({ studentId }: StudentJobsProps) {
     const fetchDrives = async () => {
       try {
         setIsLoading(true);
-        const data = await placementService.getPlacements();
+        const data = await placementService.getPlacements({
+          search,
+          branch: branchFilter,
+          skills: skillFilter
+        });
         setDrives(data);
       } catch (err) {
         setError('Failed to fetch placement drives.');
@@ -30,17 +34,9 @@ export function StudentJobs({ studentId }: StudentJobsProps) {
       }
     };
     fetchDrives();
-  }, [studentId]);
+  }, [studentId, search, branchFilter, skillFilter]);
 
-  const filteredDrives = useMemo(() => {
-    return drives.filter(drive => {
-      const matchSearch = drive.companyName.toLowerCase().includes(search.toLowerCase()) ||
-        drive.role.toLowerCase().includes(search.toLowerCase());
-      const matchBranch = branchFilter ? drive.eligibleBranches.includes(branchFilter) : true;
-      const matchSkill = skillFilter ? drive.requiredSkills.includes(skillFilter) : true;
-      return matchSearch && matchBranch && matchSkill;
-    });
-  }, [drives, search, branchFilter, skillFilter]);
+  const filteredDrives = drives;
 
   if (isLoading) return <div style={{ padding: 'var(--space-xl)', textAlign: 'center' }}>Loading opportunities...</div>;
   if (error) return <div style={{ padding: 'var(--space-xl)', color: 'var(--danger)', textAlign: 'center' }}>{error}</div>;

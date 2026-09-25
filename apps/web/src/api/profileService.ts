@@ -31,7 +31,7 @@ export const profileService = {
     }
 
     if (data.skills) {
-      payload.skillIds = data.skills
+      payload.skills = data.skills
         .map(name => skills.find((s: any) => s.name === name)?.id)
         .filter(Boolean);
     }
