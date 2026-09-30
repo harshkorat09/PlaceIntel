@@ -2,10 +2,12 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { apiClient } from '../api/client';
 
 interface User {
-  userId: number;
+  id: number;
   role: 'ADMIN' | 'STUDENT';
   email?: string;
   name?: string;
+  // keep userId for backwards compatibility during transition if needed
+  userId?: number;
 }
 
 interface AuthContextType {
@@ -41,8 +43,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       try {
         const res = await apiClient.get('/auth/me');
-        if (res.success && res.data) {
-          setUser(res.data);
+        if (res.success && res.data && res.data.user) {
+          setUser(res.data.user);
           setToken(storedToken);
         } else {
           logout(); // Invalid token

@@ -162,10 +162,9 @@ def generate_answer(
     if not selected_chunks:
         return GenerationResult(
             answer=(
-                "I searched the placement knowledge base, but "
-                "couldn't find enough relevant evidence for that. "
-                "Try asking about companies, roles, eligibility, "
-                "skills, packages, or placement notices."
+                "I could not find relevant information in the placement database for that. "
+                "Try asking about specific companies, CTC, eligibility, skills, branches, "
+                "placement notices, or comparisons between companies in the system."
             ),
             context_chunks=[],
         )
@@ -181,10 +180,7 @@ def generate_answer(
     if not context:
         return GenerationResult(
             answer=(
-                "I searched the placement knowledge base, but "
-                "couldn't find enough relevant evidence for that. "
-                "Try asking about companies, roles, eligibility, "
-                "skills, packages, or placement notices."
+                "I could not find relevant information."
             ),
             context_chunks=[],
         )

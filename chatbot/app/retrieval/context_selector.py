@@ -6,7 +6,7 @@ from typing import Any
 MIN_CONTEXT_SIMILARITY = 0.60
 
 # Maximum number of chunks sent to the LLM.
-MAX_CONTEXT_CHUNKS = 5
+MAX_CONTEXT_CHUNKS = 10
 
 
 def select_context_chunks(

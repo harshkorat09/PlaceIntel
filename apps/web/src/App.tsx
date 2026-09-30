@@ -34,7 +34,7 @@ function DashboardLayout() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
-  const student = user?.role === 'STUDENT' ? getStudentData(String(user.userId)) : null;
+  const student = user?.role === 'STUDENT' ? getStudentData(String(user?.id || user?.userId)) : null;
   const userInitials = student ? student.name.split(' ').map((n: string) => n[0]).join('') : 'AD';
   const userName = student ? student.name : 'Dr. Amit Das';
   const userEmail = user?.email || 'placement.dir@univ.edu';
@@ -171,15 +171,15 @@ function DashboardLayout() {
           {/* Page Routing Contents */}
           <main className="main-content">
             <Routes>
-              <Route path="/" element={<ProtectedRoute>{user?.role === 'ADMIN' ? <Dashboard /> : <StudentDashboard studentId={String(user?.userId)} />}</ProtectedRoute>} />
-              <Route path="/placements" element={<ProtectedRoute>{user?.role === 'ADMIN' ? <Placements /> : <StudentJobs studentId={String(user?.userId)} />}</ProtectedRoute>} />
+              <Route path="/" element={<ProtectedRoute>{user?.role === 'ADMIN' ? <Dashboard /> : <StudentDashboard studentId={String(user?.id || user?.userId)} />}</ProtectedRoute>} />
+              <Route path="/placements" element={<ProtectedRoute>{user?.role === 'ADMIN' ? <Placements /> : <StudentJobs studentId={String(user?.id || user?.userId)} />}</ProtectedRoute>} />
               
               <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminPanel /></ProtectedRoute>} />
               
               <Route path="/companies" element={<ProtectedRoute><Companies role={user?.role === 'ADMIN' ? 'officer' : 'student'} /></ProtectedRoute>} />
               <Route path="/analytics" element={<ProtectedRoute><Analytics role={user?.role === 'ADMIN' ? 'officer' : 'student'} /></ProtectedRoute>} />
               <Route path="/ai-assistant" element={<ProtectedRoute><AIAssistant /></ProtectedRoute>} />
-              <Route path="/settings" element={<ProtectedRoute>{user?.role === 'ADMIN' ? <Settings /> : <StudentProfile studentId={String(user?.userId)} />}</ProtectedRoute>} />
+              <Route path="/settings" element={<ProtectedRoute>{user?.role === 'ADMIN' ? <Settings /> : <StudentProfile studentId={String(user?.id || user?.userId)} />}</ProtectedRoute>} />
               
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>

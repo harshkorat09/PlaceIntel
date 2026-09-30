@@ -8,6 +8,7 @@ interface ChatSource {
 interface ChatbotResponse {
   answer: string;
   sources: ChatSource[];
+  session_id?: number | null;
 }
 
 interface ChatbotSuccessResponse {
@@ -26,7 +27,7 @@ export const chatWithAssistant = async (
 ) => {
   try {
     const { question, session_id } = req.body;
-    // req.user might be defined by authenticate middleware
+    // req.user is set by the authenticate middleware
     const user = (req as any).user;
 
     if (
@@ -55,7 +56,7 @@ export const chatWithAssistant = async (
           },
           body: JSON.stringify({
             question: question.trim(),
-            user_id: user?.id,
+            user_id: user?.userId,
             session_id: session_id ? Number(session_id) : undefined,
           }),
           signal: controller.signal,
@@ -76,9 +77,15 @@ export const chatWithAssistant = async (
       const data =
         (await chatbotResponse.json()) as ChatbotResponse;
 
+      // Pass session_id back to the frontend so it can reuse the
+      // same session on subsequent messages and on remount.
       const response: ChatbotSuccessResponse = {
         success: true,
-        data,
+        data: {
+          answer: data.answer,
+          sources: data.sources ?? [],
+          session_id: data.session_id ?? null,
+        },
       };
 
       return res.json(response);
@@ -107,5 +114,74 @@ export const chatWithAssistant = async (
       success: false,
       message: 'Unable to reach chatbot service',
     });
+  }
+};
+
+// ─────────────────────────────────────────────────────────────────────
+// GET /api/chat/history
+// Returns the full message history for the authenticated user's most
+// recent ChatSession, or for a specific session_id if provided.
+// ─────────────────────────────────────────────────────────────────────
+export const getChatHistory = async (
+  req: Request,
+  res: Response,
+) => {
+  const user = (req as any).user;
+
+  if (!user?.userId) {
+    return res.status(401).json({ success: false, message: 'Unauthorized' });
+  }
+
+  const { session_id } = req.query;
+
+  try {
+    const { prisma } = await import('../db.js');
+
+    let session;
+
+    if (session_id) {
+      // Fetch the requested session — ownership-checked
+      session = await prisma.chatSession.findFirst({
+        where: {
+          id: Number(session_id),
+          userId: user.userId,
+        },
+        include: {
+          messages: {
+            orderBy: { createdAt: 'asc' },
+          },
+        },
+      });
+    } else {
+      // Fetch the user's most recent session
+      session = await prisma.chatSession.findFirst({
+        where: { userId: user.userId },
+        orderBy: { updatedAt: 'desc' },
+        include: {
+          messages: {
+            orderBy: { createdAt: 'asc' },
+          },
+        },
+      });
+    }
+
+    if (!session) {
+      return res.json({ success: true, data: { session_id: null, messages: [] } });
+    }
+
+    return res.json({
+      success: true,
+      data: {
+        session_id: session.id,
+        messages: session.messages.map((m) => ({
+          role: m.role,    // "USER" | "ASSISTANT"
+          content: m.content,
+          createdAt: m.createdAt,
+        })),
+      },
+    });
+  } catch (error) {
+    console.error('getChatHistory error:', error);
+    return res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };

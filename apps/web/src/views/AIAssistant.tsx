@@ -31,33 +31,88 @@ const suggestedPrompts = [
   'Show me companies visiting next week.',
 ];
 
+const GREETING_ID = 0; // stable ID so the greeting is never duplicated
+
 export default function AIAssistant() {
   const { user } = useAuth();
 
   const isStudent = user?.role === 'STUDENT';
-  const student = isStudent ? getStudentData(String(user.userId)) : null;
+  const student = isStudent ? getStudentData(String(user?.id || user?.userId)) : null;
   const userName = isStudent ? student?.name : 'Placement Officer';
 
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      sender: 'ai',
-      text: `Hello ${userName}! I am your AI Placement Assistant. You can ask me about upcoming placement drives, company criteria, or general placement information.`,
-    },
-  ]);
+  const greeting: Message = {
+    id: GREETING_ID,
+    sender: 'ai',
+    text: `Hello ${userName}! I am your AI Placement Assistant. You can ask me about upcoming placement drives, company criteria, or general placement information.`,
+  };
 
+  const [messages, setMessages] = useState<Message[]>([greeting]);
   const [inputQuery, setInputQuery] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
+
+  // sessionId is the persistent ChatSession ID from the backend.
+  // It is null until the first message is sent or history is loaded.
+  const [sessionId, setSessionId] = useState<number | null>(null);
 
   const chatLogsRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll chat to bottom whenever messages or typing state changes.
+  // ── Load persisted history on mount ─────────────────────────────
+  useEffect(() => {
+    // Only load history when the user is authenticated.
+    if (!(user?.id || user?.userId)) return;
+
+    let cancelled = false;
+
+    const loadHistory = async () => {
+      setIsLoadingHistory(true);
+      try {
+        const history = await chatService.getHistory();
+
+        if (cancelled) return;
+
+        if (history.session_id && history.messages.length > 0) {
+          setSessionId(history.session_id);
+
+          // Convert backend messages to UI Message objects.
+          // Insert the greeting first, then append the persisted messages.
+          const restored: Message[] = [greeting];
+
+          history.messages.forEach((m, index) => {
+            restored.push({
+              // Use negative indices so IDs never clash with Date.now() values.
+              id: -(index + 1),
+              sender: m.role === 'USER' ? 'user' : 'ai',
+              text: m.content,
+            });
+          });
+
+          setMessages(restored);
+        }
+        // If there is no prior session, keep the greeting-only state.
+      } catch {
+        // History load failure is non-fatal; start fresh.
+      } finally {
+        if (!cancelled) setIsLoadingHistory(false);
+      }
+    };
+
+    loadHistory();
+
+    return () => {
+      cancelled = true;
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.userId]);
+
+  // ── Auto-scroll chat to bottom ────────────────────────────────────
   useEffect(() => {
     if (chatLogsRef.current) {
       chatLogsRef.current.scrollTop = chatLogsRef.current.scrollHeight;
     }
   }, [messages, isTyping]);
 
+  // ── Send a question ───────────────────────────────────────────────
   const handleSendQuery = async (queryText: string) => {
     const trimmedQuery = queryText.trim();
 
@@ -76,7 +131,16 @@ export default function AIAssistant() {
     setIsTyping(true);
 
     try {
-      const response = await chatService.askQuestion(trimmedQuery);
+      // Pass the active session ID so the backend reuses the same
+      // ChatSession instead of creating a new one.
+      const response = await chatService.askQuestion(trimmedQuery, sessionId);
+
+      // Capture the session ID returned by the backend.
+      // On the first message this will be a newly created session.
+      // On follow-up messages it will be the same session.
+      if (response.session_id) {
+        setSessionId(response.session_id);
+      }
 
       const aiMsg: Message = {
         id: Date.now() + 1,
@@ -102,7 +166,11 @@ export default function AIAssistant() {
     }
   };
 
+  // ── New Conversation (explicit user action) ───────────────────────
   const handleClearChat = () => {
+    // Reset state — a new session will be created by the backend
+    // on the next message the user sends.
+    setSessionId(null);
     setMessages([
       {
         id: Date.now(),
@@ -110,7 +178,6 @@ export default function AIAssistant() {
         text: `Hello ${userName}! I am your AI Placement Assistant. You can ask me about upcoming placement drives, company criteria, or general placement information.`,
       },
     ]);
-
     setInputQuery('');
   };
 
@@ -138,7 +205,7 @@ export default function AIAssistant() {
           <button
             className="btn btn-secondary btn-sm"
             onClick={handleClearChat}
-            disabled={isTyping}
+            disabled={isTyping || isLoadingHistory}
           >
             New Conversation
           </button>
@@ -192,7 +259,7 @@ export default function AIAssistant() {
                   key={index}
                   className="prompt-chip"
                   onClick={() => handleSendQuery(prompt)}
-                  disabled={isTyping}
+                  disabled={isTyping || isLoadingHistory}
                   style={{
                     textAlign: 'left',
                     whiteSpace: 'normal',
@@ -263,7 +330,7 @@ export default function AIAssistant() {
                 }}
               >
                 <span className="chat-status-indicator"></span>
-                AI Agent Active
+                {isLoadingHistory ? 'Loading conversation…' : 'AI Agent Active'}
               </span>
             </div>
           </div>
@@ -278,100 +345,116 @@ export default function AIAssistant() {
               padding: 'var(--space-lg)',
             }}
           >
-            {messages.map((msg) => (
+            {/* Loading skeleton while history is being fetched */}
+            {isLoadingHistory && (
               <div
-                key={msg.id}
-                className={`chat-bubble ${
-                  msg.sender === 'user' ? 'user' : 'ai'
-                }`}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  padding: 'var(--space-lg)',
+                  color: 'var(--text-secondary)',
+                  fontSize: '13px',
+                }}
               >
-                <span className="chat-bubble-sender">
-                  {msg.sender === 'user' ? userName : 'PlaceIntel AI'}
-                </span>
+                Restoring conversation…
+              </div>
+            )}
 
-                {/* Message Body */}
+            {!isLoadingHistory &&
+              messages.map((msg) => (
                 <div
-                  style={{
-                    fontSize: '13px',
-                    lineHeight: '1.6',
-                  }}
+                  key={msg.id}
+                  className={`chat-bubble ${
+                    msg.sender === 'user' ? 'user' : 'ai'
+                  }`}
                 >
-                  {msg.isError ? (
-                    <div
-                      style={{
-                        display: 'flex',
-                        gap: '8px',
-                        alignItems: 'flex-start',
-                        color: 'var(--danger)',
-                      }}
-                    >
-                      <AlertCircle
-                        size={16}
-                        style={{ marginTop: '2px' }}
-                      />
+                  <span className="chat-bubble-sender">
+                    {msg.sender === 'user' ? userName : 'PlaceIntel AI'}
+                  </span>
 
-                      <span>{msg.text}</span>
-                    </div>
-                  ) : msg.sender === 'ai' && msg.id !== 1 ? (
-                    <div className="markdown-body">
-                      <ReactMarkdown>{msg.text}</ReactMarkdown>
-                    </div>
-                  ) : (
-                    <span style={{ whiteSpace: 'pre-wrap' }}>
-                      {msg.text}
-                    </span>
-                  )}
-                </div>
-
-                {/* Sources */}
-                {msg.sources && msg.sources.length > 0 && (
+                  {/* Message Body */}
                   <div
                     style={{
-                      marginTop: 'var(--space-md)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 'var(--space-sm)',
+                      fontSize: '13px',
+                      lineHeight: '1.6',
                     }}
                   >
-                    {msg.sources.map((source, index) => (
+                    {msg.isError ? (
                       <div
-                        key={`${source.notice}-${index}`}
                         style={{
-                          padding: '8px 12px',
-                          backgroundColor: 'var(--background)',
-                          border: '1px solid var(--border)',
-                          borderRadius: 'var(--radius-sm)',
                           display: 'flex',
-                          alignItems: 'center',
-                          gap: '6px',
+                          gap: '8px',
+                          alignItems: 'flex-start',
+                          color: 'var(--danger)',
                         }}
                       >
-                        <FileText
-                          size={14}
-                          style={{
-                            color: 'var(--text-secondary)',
-                            flexShrink: 0,
-                          }}
+                        <AlertCircle
+                          size={16}
+                          style={{ marginTop: '2px' }}
                         />
 
-                        <span
+                        <span>{msg.text}</span>
+                      </div>
+                    ) : msg.sender === 'ai' && msg.id !== GREETING_ID ? (
+                      <div className="markdown-body">
+                        <ReactMarkdown>{msg.text}</ReactMarkdown>
+                      </div>
+                    ) : (
+                      <span style={{ whiteSpace: 'pre-wrap' }}>
+                        {msg.text}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Sources */}
+                  {msg.sources && msg.sources.length > 0 && (
+                    <div
+                      style={{
+                        marginTop: 'var(--space-md)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 'var(--space-sm)',
+                      }}
+                    >
+                      {msg.sources.map((source, index) => (
+                        <div
+                          key={`${source.notice}-${index}`}
                           style={{
-                            fontSize: '11px',
-                            color: 'var(--text-secondary)',
-                            fontWeight: '500',
+                            padding: '8px 12px',
+                            backgroundColor: 'var(--background)',
+                            border: '1px solid var(--border)',
+                            borderRadius: 'var(--radius-sm)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px',
                           }}
                         >
-                          Source: {source.notice}
-                          {' · '}
-                          Page{source.pages.length > 1 ? 's' : ''}{' '}
-                          {source.pages.join(', ')}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+                          <FileText
+                            size={14}
+                            style={{
+                              color: 'var(--text-secondary)',
+                              flexShrink: 0,
+                            }}
+                          />
+
+                          <span
+                            style={{
+                              fontSize: '11px',
+                              color: 'var(--text-secondary)',
+                              fontWeight: '500',
+                            }}
+                          >
+                            Source: {source.notice}
+                            {' · '}
+                            Page{source.pages.length > 1 ? 's' : ''}{' '}
+                            {source.pages.join(', ')}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
 
             {/* Typing Indicator */}
             {isTyping && (
@@ -417,7 +500,7 @@ export default function AIAssistant() {
                 onChange={(event) =>
                   setInputQuery(event.target.value)
                 }
-                disabled={isTyping}
+                disabled={isTyping || isLoadingHistory}
                 style={{
                   width: '100%',
                   padding: '10px 14px',
@@ -430,7 +513,7 @@ export default function AIAssistant() {
             <button
               type="submit"
               className="btn btn-primary"
-              disabled={isTyping || !inputQuery.trim()}
+              disabled={isTyping || isLoadingHistory || !inputQuery.trim()}
               style={{
                 padding: '10px 16px',
                 display: 'flex',

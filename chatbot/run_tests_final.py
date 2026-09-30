@@ -1,12 +1,11 @@
 import requests
-import json
 import time
 
 URL = "http://localhost:8000/chat"
 user_id = 1
 
 def run_scenario(scenario_name, questions):
-    print(f"\n{'#'*60}\n{scenario_name}\n{'#'*60}")
+    print(f"\n{'='*60}\n{scenario_name}\n{'='*60}")
     session_id = None
     for q in questions:
         print(f"\nQ: {q}")
@@ -14,7 +13,7 @@ def run_scenario(scenario_name, questions):
         if session_id:
             payload["session_id"] = session_id
         start = time.time()
-        resp = requests.post(URL, json=payload, timeout=30)
+        resp = requests.post(URL, json=payload, timeout=45)
         end = time.time()
         if resp.status_code == 200:
             data = resp.json()
@@ -32,25 +31,18 @@ if __name__ == "__main__":
     scenario_1 = [
         "What is the CTC for PlaceIntel RAG Test Company?",
         "What is the minimum CGPA?",
-        "Which branches are eligible?",
-        "What skills are required?",
-        "How can I apply for this company?"
-    ]
-    
-    scenario_2 = [
-        "What is the minimum CGPA for TCS RAG Test?",
-        "What is the CTC?"
-    ]
-    
-    scenario_3 = [
-        "What is the minimum CGPA for Microsoft?"
-    ]
-    
-    scenario_4 = [
-        "Are there any service bonds mentioned for tech placements?"
+        "Which companies accept CSE?",
+        "Which companies require Python?",
+        "Which company has the highest CTC?",
+        "Compare TCS and Infosys.",
+        "Which company is better if I prioritize higher CTC?",
+        "What is the TCS selection process?",
+        "Which company has the highest CTC and what is its selection process?",
+        "Which one has the lower CGPA requirement?",
+        "What is the CEO name for PlaceIntel RAG Test Company?",
+        "What is the capital of France?",
+        "What is the minimum CGPA for PlaceIntel RAG Test Company?",
+        "What about the eligibility for that company?"
     ]
 
-    run_scenario("SCENARIO 1: Deep follow-up context", scenario_1)
-    run_scenario("SCENARIO 2: Explicit switch", scenario_2)
-    run_scenario("SCENARIO 3: Missing Company", scenario_3)
-    run_scenario("SCENARIO 4: Existing PDF retrieval", scenario_4)
+    run_scenario("SCENARIO 1: Comprehensive Intent Test", scenario_1)

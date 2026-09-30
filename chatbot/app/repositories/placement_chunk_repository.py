@@ -280,8 +280,8 @@ def search_similar_chunks(
             params = [str(query_embedding)]
             
             if company_filter:
-                where_clause += ' AND LOWER(c.name) = LOWER(%s)'
-                params.append(company_filter)
+                where_clause += ' AND c.name ILIKE %s'
+                params.append(f'%{company_filter}%')
                 
             params.extend([str(query_embedding), top_k])
             
