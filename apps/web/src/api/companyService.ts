@@ -12,6 +12,11 @@ export const companyService = {
     return (data || []).map(mapCompany);
   },
 
+  async getCompanyById(id: string): Promise<Company> {
+    const res = await apiClient.get(`/companies/${id}`);
+    return mapCompany(res);
+  },
+
   async createCompany(data: Omit<Company, 'id'>): Promise<Company> {
     const res = await apiClient.post('/companies', data);
     return mapCompany(res);

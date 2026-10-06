@@ -24,6 +24,7 @@ model User {
   updatedAt    DateTime       @updatedAt
   skills       StudentSkill[]
   branch       Branch?        @relation(fields: [branchId], references: [id])
+  sessions     ChatSession[]
 }
 
 model Company {
@@ -47,8 +48,10 @@ model Placement {
   id               Int               @id @default(autoincrement())
   companyId        Int
   position         String
-  ctc              Float
+  minPackage       Float?
+  maxPackage       Float?
   deadline         DateTime
+  driveDate        DateTime?
   cgpaCutoff       Float
   description      String?
   status           String            @default("Upcoming")
@@ -133,4 +136,22 @@ enum Role {
 enum Institute {
   DEPSTAR
   CSPIT
+}
+
+model ChatSession {
+  id        Int           @id @default(autoincrement())
+  userId    Int
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  ChatMessage[]
+}
+
+model ChatMessage {
+  id        Int         @id @default(autoincrement())
+  sessionId Int
+  role      String
+  content   String
+  createdAt DateTime    @default(now())
+  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 }

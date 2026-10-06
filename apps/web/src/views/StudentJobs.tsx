@@ -1,257 +1,373 @@
 import { useState, useEffect } from 'react';
-
 import { Link } from 'react-router-dom';
 import { placementService } from '../api/placementService';
 import type { Placement } from '../api/types';
 
-interface StudentJobsProps {
-  studentId: string;
-}
-
-export function StudentJobs({ studentId }: StudentJobsProps) {
-  const [drives, setDrives] = useState<Placement[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+export function StudentJobs() {
+  const [placements, setPlacements] = useState<Placement[]>([]);
+  const [selectedPlacement, setSelectedPlacement] = useState<Placement | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // Filters
-  const [search, setSearch] = useState('');
-  const [branchFilter] = useState('');
-  const [skillFilter] = useState('');
+  // Calendar State
+  const [currentDate, setCurrentDate] = useState(new Date(2026, 9, 1)); // Fixed to Oct 2026 to match original design, or use new Date()
+  const [viewMode, setViewMode] = useState<'month' | 'week' | 'list'>('month');
 
   useEffect(() => {
-    const fetchDrives = async () => {
+    const fetchPlacements = async () => {
       try {
-        setIsLoading(true);
-        const data = await placementService.getPlacements({
-          search,
-          branch: branchFilter,
-          skills: skillFilter
-        });
-        setDrives(data);
-      } catch (err) {
-        setError('Failed to fetch placement drives.');
+        setLoading(true);
+        const data = await placementService.getPlacements();
+        setPlacements(data);
+        if (data.length > 0) {
+          setSelectedPlacement(data[0]);
+        }
+      } catch (err: any) {
+        console.error("Failed to fetch placements:", err);
+        setError("Unable to load placement drives. Please try again.");
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
-    fetchDrives();
-  }, [studentId, search, branchFilter, skillFilter]);
+    fetchPlacements();
+  }, []);
 
-  const filteredDrives = drives;
+  // Generate Calendar Days (Simplified for the current month)
+  const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
+  const getFirstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay(); // 0 is Sunday
+  
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+  const daysInMonth = getDaysInMonth(year, month);
+  let firstDay = getFirstDayOfMonth(year, month) - 1; // Adjust for Monday start
+  if (firstDay === -1) firstDay = 6;
+  
+  const days = [];
+  // Previous month padding
+  for (let i = 0; i < firstDay; i++) {
+    days.push({ day: '', isCurrentMonth: false, date: null });
+  }
+  // Current month days
+  for (let i = 1; i <= daysInMonth; i++) {
+    const d = new Date(year, month, i);
+    days.push({ day: i, isCurrentMonth: true, date: d });
+  }
+  // Next month padding to complete grid
+  const remainingCells = 42 - days.length;
+  for (let i = 1; i <= remainingCells; i++) {
+    days.push({ day: '', isCurrentMonth: false, date: null });
+  }
 
-  if (isLoading) return <div style={{ padding: 'var(--space-xl)', textAlign: 'center' }}>Loading opportunities...</div>;
-  if (error) return <div style={{ padding: 'var(--space-xl)', color: 'var(--danger)', textAlign: 'center' }}>{error}</div>;
+  // Helper to find events for a day
+  const getEventsForDay = (date: Date | null) => {
+    if (!date) return { drives: [], deadlines: [] };
+    const dateStr = date.toISOString().split('T')[0];
+    
+    const drives = placements.filter(p => p.driveDate === dateStr);
+    const deadlines = placements.filter(p => p.deadline === dateStr);
+    
+    return { drives, deadlines };
+  };
+
+  const getMonogram = (name: string) => name ? name.substring(0, 1).toUpperCase() : 'C';
 
   return (
-    <div className="flex flex-col w-full">
-      <div className="px-space-xl py-space-xl max-w-[1440px] mx-auto w-full flex flex-col gap-space-xl">
-        {/* Top Context & Header */}
-        <div className="flex flex-col gap-space-md">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
-            <div className="flex flex-col gap-space-xxs max-w-2xl">
-              <div className="flex items-center gap-space-xs text-primary-container">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
-                <span className="font-label-uppercase text-label-uppercase text-secondary tracking-wider">CHARUSAT Placement Division • Verified Stream</span>
-              </div>
-              <h1 className="font-headline-lg text-headline-lg text-primary tracking-tight">Opportunities</h1>
-              <p className="font-body-md text-body-md text-secondary">Explore verified campus placement drives matching your academic eligibility and verified credentials.</p>
+    <div className="flex flex-col w-full min-h-screen">
+      <div className="px-4 sm:px-6 lg:px-8 py-8 w-full flex flex-col gap-space-md">
+        {/* Sub-Header & Global Calendar Navigation Bar */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md mb-space-xl">
+          <div>
+            <div className="flex items-center gap-space-xs text-on-surface-variant font-label-uppercase text-label-uppercase tracking-wider uppercase mb-space-xxs">
+              <span>PlaceIntel Candidate</span>
+              <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+              <span className="text-primary font-semibold">Placement Calendar</span>
             </div>
-            <div className="flex items-center gap-space-sm self-start md:self-auto bg-surface-container-low px-space-md py-space-xs rounded-xl shadow-sm">
-              <div className="flex items-center gap-space-xs">
-                <span className="material-symbols-outlined text-[18px] text-primary-container">verified_user</span>
-                <span className="font-label-uppercase text-label-uppercase text-primary-container">Audit Status</span>
-              </div>
-              <span className="text-secondary font-label-regular text-label-regular">•</span>
-              <span className="font-body-sm text-body-sm text-secondary">Verified for 14 Active Drives</span>
-            </div>
+            <h1 className="font-headline-md text-headline-md text-primary tracking-tight">Institutional Placement Schedule</h1>
+            <p className="font-body-md text-body-md text-on-surface-variant max-w-2xl mt-1">
+              Track upcoming campus placement drives, registration deadlines, and technical assessments.
+            </p>
           </div>
-          {/* Search & Filtering Bar */}
-          <div className="flex flex-col gap-space-sm bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
-            <div className="relative flex items-center w-full">
-              <span className="material-symbols-outlined absolute left-4 text-outline text-[20px]">search</span>
-              <input 
-                className="w-full h-12 pl-12 pr-28 rounded-lg bg-surface-container-low font-body-md text-body-md text-primary placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest transition-all" 
-                placeholder="Search by role, company, skill (e.g. Distributed Systems, React, Python)..." 
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              <div className="absolute right-3 hidden sm:flex items-center gap-1 bg-surface-container px-space-xs py-0.5 rounded text-secondary font-label-regular text-label-regular">
-                <kbd className="font-title-sm text-label-uppercase">⌘</kbd>
-                <kbd className="font-title-sm text-label-uppercase">K</kbd>
-              </div>
-            </div>
-            {/* Filter Chips & Selectors */}
-            <div className="flex flex-wrap items-center justify-between gap-space-sm pt-space-xs">
-              {/* Tier Badges */}
-              <div className="flex flex-wrap items-center gap-space-xs">
-                <button className="px-space-sm py-1.5 rounded-full bg-primary-container text-on-primary font-label-uppercase text-label-uppercase transition-all">All Packages</button>
-                <button className="px-space-sm py-1.5 rounded-full bg-surface-container hover:bg-secondary-container text-secondary font-label-uppercase text-label-uppercase transition-all">Marquee (₹20+ LPA)</button>
-                <button className="px-space-sm py-1.5 rounded-full bg-surface-container hover:bg-secondary-container text-secondary font-label-uppercase text-label-uppercase transition-all">Super Dream (₹15–20 LPA)</button>
-                <button className="px-space-sm py-1.5 rounded-full bg-surface-container hover:bg-secondary-container text-secondary font-label-uppercase text-label-uppercase transition-all">Dream (₹10–15 LPA)</button>
-                <button className="px-space-sm py-1.5 rounded-full bg-surface-container hover:bg-secondary-container text-secondary font-label-uppercase text-label-uppercase transition-all">Prime (₹6–10 LPA)</button>
-              </div>
-              {/* Dropdowns */}
-              <div className="flex flex-wrap items-center gap-space-xs">
-                <div className="relative flex items-center bg-surface-container-low px-space-sm py-1.5 rounded-lg text-primary font-body-sm text-body-sm cursor-pointer hover:bg-surface-container transition-colors">
-                  <span className="text-secondary mr-1 font-label-regular text-label-regular">Dept:</span>
-                  <span className="font-title-sm text-title-sm">CE / IT</span>
-                  <span className="material-symbols-outlined text-[18px] ml-1 text-secondary">expand_more</span>
-                </div>
-                <div className="relative flex items-center bg-surface-container-low px-space-sm py-1.5 rounded-lg text-primary font-body-sm text-body-sm cursor-pointer hover:bg-surface-container transition-colors">
-                  <span className="text-secondary mr-1 font-label-regular text-label-regular">Status:</span>
-                  <span className="font-title-sm text-title-sm">Active Only</span>
-                  <span className="material-symbols-outlined text-[18px] ml-1 text-secondary">expand_more</span>
-                </div>
-              </div>
+          
+          {/* Actions & View Selectors */}
+          <div className="flex flex-wrap items-center gap-space-sm">
+            <div className="bg-surface-container-high p-1 rounded-xl flex items-center shadow-sm">
+              <button onClick={() => setViewMode('month')} className={`px-space-md py-1.5 rounded-lg font-title-sm text-title-sm transition-all flex items-center gap-1 ${viewMode === 'month' ? 'bg-surface-container-lowest text-primary shadow-sm' : 'text-on-surface-variant hover:text-primary'}`} type="button">
+                <span className="material-symbols-outlined text-[18px]">calendar_view_month</span>
+                Month View
+              </button>
+              <button onClick={() => setViewMode('list')} className={`px-space-md py-1.5 rounded-lg font-title-sm text-title-sm transition-all flex items-center gap-1 ${viewMode === 'list' ? 'bg-surface-container-lowest text-primary shadow-sm' : 'text-on-surface-variant hover:text-primary'}`} type="button">
+                <span className="material-symbols-outlined text-[18px]">format_list_bulleted</span>
+                List View
+              </button>
             </div>
           </div>
         </div>
-        
 
-        {/* Main Content Workspace (8-col cards + 4-col intelligence rail) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-xl">
-          {/* Opportunities Stream (8 cols) */}
-          <div className="lg:col-span-8 flex flex-col gap-space-md">
-            <div className="flex items-center justify-between pb-space-xxs">
-              <div className="flex items-center gap-space-xs">
-                <span className="font-title-md text-title-md text-primary tracking-tight">Active Matched Roles</span>
-                <span className="px-space-xs py-0.5 rounded-full bg-surface-container font-label-uppercase text-label-uppercase text-secondary">5 Direct Matches</span>
+        {/* Calendar Sub-Controller Bar */}
+        <div className="bg-surface-container-lowest rounded-2xl p-space-md mb-space-lg flex flex-wrap items-center justify-between gap-space-md shadow-sm">
+          <div className="flex items-center gap-space-md">
+            <div className="flex items-center bg-surface-container-low rounded-xl p-1">
+              <button 
+                onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1))}
+                className="w-9 h-9 rounded-lg flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-all" type="button"
+              >
+                <span className="material-symbols-outlined text-[20px]">chevron_left</span>
+              </button>
+              <span className="px-space-md font-title-md text-title-md text-primary min-w-[170px] text-center">
+                {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
+              </span>
+              <button 
+                onClick={() => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1))}
+                className="w-9 h-9 rounded-lg flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-all" type="button"
+              >
+                <span className="material-symbols-outlined text-[20px]">chevron_right</span>
+              </button>
+            </div>
+            <button 
+              onClick={() => setCurrentDate(new Date())}
+              className="px-space-md py-1.5 bg-surface-container rounded-lg font-label-uppercase text-label-uppercase uppercase text-primary font-bold hover:bg-surface-container-high transition-colors" type="button"
+            >
+              Today
+            </button>
+          </div>
+          
+          {/* Quick Meta Filters */}
+          <div className="flex items-center gap-space-md text-body-sm font-body-sm text-on-surface-variant flex-wrap">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+              <span>Drives & Events</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-error"></span>
+              <span>Deadlines</span>
+            </div>
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="py-space-3xl flex items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>
+        ) : error ? (
+          <div className="flex w-full min-h-[40vh] flex-col items-center justify-center space-y-4">
+            <span className="material-symbols-outlined text-4xl text-error">error</span>
+            <h2 className="text-xl text-error font-semibold">{error}</h2>
+            <button onClick={() => window.location.reload()} className="px-4 py-2 mt-4 bg-surface-container rounded-lg font-medium hover:bg-surface-container-high transition-colors">
+              Retry
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 xl:grid-cols-12 gap-gutter-lg items-start">
+            
+            {/* Primary Calendar Canvas (8 cols on XL) */}
+            <div className="xl:col-span-8 bg-surface-container-lowest rounded-2xl shadow-sm overflow-hidden flex flex-col">
+              
+              {viewMode === 'month' ? (
+              <div className="overflow-x-auto w-full">
+                <div className="min-w-[700px]">
+                  {/* Weekday Headers */}
+                  <div className="grid grid-cols-7 bg-surface-container-low text-center py-space-sm font-label-uppercase text-label-uppercase uppercase tracking-wider text-on-surface-variant">
+                    <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                  </div>
+                  
+                  {/* Calendar Days Grid */}
+                  <div className="grid grid-cols-7 gap-px bg-surface-container">
+                    {days.map((d, idx) => {
+                      const { drives, deadlines } = getEventsForDay(d.date);
+                      
+                      return (
+                        <div key={idx} className={`min-h-[110px] p-2 flex flex-col justify-between transition-colors ${d.isCurrentMonth ? 'bg-surface-container-lowest' : 'bg-surface-container-low opacity-40'} ${drives.length > 0 || deadlines.length > 0 ? 'hover:bg-surface-container-low cursor-pointer' : ''}`}>
+                          <span className={`font-title-sm text-title-sm ${drives.length > 0 ? 'text-primary font-bold' : deadlines.length > 0 ? 'text-error font-bold' : 'text-on-surface-variant'}`}>
+                            {d.day}
+                          </span>
+                          
+                          <div className="mt-1 flex flex-col gap-1 overflow-hidden">
+                            {drives.map(drive => (
+                              <div 
+                                key={`drive-${drive.id}`} 
+                                onClick={() => setSelectedPlacement(drive)}
+                                className="bg-primary-container text-on-primary rounded px-1.5 py-1 text-[10px] leading-tight font-medium shadow-sm truncate hover:bg-tertiary-container"
+                                title={`${drive.companyName} Drive`}
+                              >
+                                {drive.companyName}
+                              </div>
+                            ))}
+                            {deadlines.map(deadline => (
+                              <div 
+                                key={`dl-${deadline.id}`} 
+                                onClick={() => setSelectedPlacement(deadline)}
+                                className="bg-error-container text-on-error-container rounded px-1.5 py-1 text-[10px] leading-tight font-bold truncate hover:bg-error/20"
+                                title={`${deadline.companyName} Deadline`}
+                              >
+                                {deadline.companyName}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-space-xs text-secondary font-label-regular text-label-regular">
-                <span>Sort by:</span>
-                <span className="font-title-sm text-primary cursor-pointer flex items-center">
-                  Highest FIT Score <span className="material-symbols-outlined text-[16px]">arrow_drop_down</span>
-                </span>
+              ) : (
+                /* LIST VIEW */
+                <div className="p-space-md flex flex-col gap-2">
+                  {placements.length > 0 ? (
+                    placements.map(p => (
+                      <div key={p.id} onClick={() => setSelectedPlacement(p)} className="p-space-md rounded-xl bg-surface-container-low hover:bg-surface-container-high cursor-pointer transition-colors flex items-center justify-between">
+                        <div>
+                          <div className="font-title-md text-primary">{p.companyName}</div>
+                          <div className="font-body-sm text-on-surface-variant">{p.role}</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="font-title-sm text-primary">{p.driveDate ? `Drive: ${p.driveDate}` : 'No Drive Date'}</div>
+                          <div className="font-label-regular text-error">Deadline: {p.deadline}</div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center p-space-3xl text-secondary">No placements scheduled.</div>
+                  )}
+                </div>
+              )}
+              
+              {/* Calendar Status Footer */}
+              <div className="p-space-md bg-surface-container-low flex flex-wrap items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+                <div className="flex items-center gap-space-xs">
+                  <span className="material-symbols-outlined text-[18px] text-primary">sync</span>
+                  <span>Placement Engine Sync: All schedules up to date</span>
+                </div>
+                <div className="flex items-center gap-space-sm font-label-uppercase text-label-uppercase">
+                  <span>Eligible Drives: <strong className="text-primary">{placements.length}</strong></span>
+                </div>
               </div>
             </div>
             
-            {filteredDrives.length === 0 ? (
-              <div className="bg-surface-container-lowest rounded-xl p-space-xl text-center shadow-sm">
-                <span className="material-symbols-outlined text-[48px] text-outline mb-space-sm">inbox</span>
-                <h2 className="font-title-lg text-title-lg text-primary-container">No active matched roles</h2>
-                <p className="font-body-md text-body-md text-secondary mt-space-xxs">Check back later or adjust your filters.</p>
-              </div>
-            ) : (
-              filteredDrives.map(drive => (
-                <div key={drive.id} className="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm hover:shadow-md transition-shadow flex flex-col gap-space-md">
-                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-space-sm">
-                    <div className="flex items-start gap-space-md">
-                      <div className="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center font-headline-sm text-headline-sm text-primary shrink-0">
-                        {drive.companyName.substring(0, 2).toUpperCase()}
-                      </div>
-                      <div className="flex flex-col">
-                        <div className="flex flex-wrap items-center gap-space-xs">
-                          <span className="font-title-sm text-title-sm text-primary">{drive.companyName}</span>
-                          <span className="px-space-xs py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-uppercase text-label-uppercase">Eligible</span>
-                        </div>
-                        <h3 className="font-headline-sm text-headline-sm text-primary tracking-tight">{drive.role}</h3>
-                        <div className="flex flex-wrap items-center gap-x-space-sm text-secondary font-body-sm text-body-sm pt-space-xxs">
-                          <span className="font-title-sm text-title-sm text-primary">{drive.packageRange}</span>
-                          <span>•</span>
-                          <span className="flex items-center gap-1"><span className="material-symbols-outlined text-[16px]">location_on</span> Pan-India</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between pt-space-xs border-t border-surface-container-high mt-space-xs">
-                    <span className="font-label-regular text-label-regular text-secondary">Deadline: {drive.deadline}</span>
+            {/* Right Side Panel: Selected Drive Details */}
+            <div className="xl:col-span-4 flex flex-col gap-space-lg">
+              
+              {selectedPlacement ? (
+                <div className="bg-surface-container-lowest rounded-2xl shadow-sm p-space-xl flex flex-col relative overflow-hidden">
+                  {/* Header Banner with Status Badge */}
+                  <div className="flex items-start justify-between gap-space-sm mb-space-md">
                     <div className="flex items-center gap-space-sm">
-                      <Link to={`/placements/${drive.id}`} className="px-space-md py-space-xs rounded-lg bg-primary-container text-on-primary font-title-sm text-title-sm hover:bg-primary transition-all flex items-center gap-space-xxs shadow-sm">
-                        <span>View Details</span>
-                        <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-                      </Link>
+                      <div className="w-12 h-12 rounded-xl bg-primary-container text-on-primary flex items-center justify-center font-bold text-headline-sm shadow-sm">
+                        {getMonogram(selectedPlacement.companyName)}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h2 className="font-title-md text-title-md text-primary leading-tight">
+                            {selectedPlacement.companyName}
+                          </h2>
+                          <span className="material-symbols-outlined text-surface-tint text-[18px]" title="Verified Recruiter">verified</span>
+                        </div>
+                        <span className="font-label-regular text-label-regular text-on-surface-variant">Status: {selectedPlacement.status}</span>
+                      </div>
+                    </div>
+                    {/* Status Badge */}
+                    <div className="px-space-xs py-1 rounded-full bg-[#E8F5E9] text-[#1B5E20] font-label-uppercase text-label-uppercase uppercase flex items-center gap-1.5 shrink-0">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#1B5E20]"></span>
+                      <span>Active</span>
                     </div>
                   </div>
+                  
+                  {/* Position & CTC Tier */}
+                  <div className="mb-space-lg">
+                    <h3 className="font-headline-sm text-headline-sm text-primary tracking-tight">{selectedPlacement.role}</h3>
+                    <div className="mt-space-sm p-space-sm rounded-xl bg-surface-container-low flex items-center justify-between">
+                      <div>
+                        <span className="font-label-uppercase text-label-uppercase text-on-surface-variant uppercase">Cost To Company (CTC)</span>
+                        <div className="font-title-md text-title-md text-primary font-bold">
+                          {selectedPlacement.packageRange}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <span className="font-label-uppercase text-label-uppercase text-on-surface-variant uppercase">CGPA Cutoff</span>
+                        <div className="font-title-sm text-title-sm text-primary">
+                          {selectedPlacement.cgpaRequirement.toFixed(2)}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Drive Chronology Data Strip */}
+                  <div className="flex flex-col gap-space-sm py-space-sm mb-space-md border-y border-surface-container">
+                    <div className="flex items-center justify-between py-1">
+                      <span className="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1.5">
+                        <span className="material-symbols-outlined text-[18px]">event_upcoming</span>
+                        Main Drive Date
+                      </span>
+                      <span className="font-title-sm text-title-sm text-primary font-bold">
+                        {selectedPlacement.driveDate ? selectedPlacement.driveDate : 'To Be Decided'}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between py-1">
+                      <span className="font-body-sm text-body-sm text-error flex items-center gap-1.5">
+                        <span className="material-symbols-outlined text-[18px]">timer</span>
+                        Application Deadline
+                      </span>
+                      <span className="font-title-sm text-title-sm text-error font-bold">
+                        {selectedPlacement.deadline}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  {/* Eligible Branches */}
+                  <div className="mb-space-md">
+                    <label className="font-label-uppercase text-label-uppercase text-on-surface-variant uppercase block mb-space-xs">
+                      Eligible Academic Branches
+                    </label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {selectedPlacement.eligibleBranches.length > 0 ? (
+                        selectedPlacement.eligibleBranches.map((branch, idx) => (
+                          <span key={idx} className="px-2.5 py-1 rounded-lg bg-surface-container text-primary font-label-uppercase text-label-uppercase">
+                            {branch}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-body-sm text-on-surface-variant">All Branches</span>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Required Skills */}
+                  <div className="mb-space-lg">
+                    <label className="font-label-uppercase text-label-uppercase text-on-surface-variant uppercase block mb-space-xs">
+                      Required Competencies
+                    </label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {selectedPlacement.requiredSkills.length > 0 ? (
+                        selectedPlacement.requiredSkills.map((skill, idx) => (
+                          <span key={idx} className="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-body-sm text-body-sm font-medium">
+                            {skill}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-body-sm text-on-surface-variant">General Eligibility</span>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Student Actions Grid */}
+                  <div className="flex flex-col gap-space-xs mt-auto">
+                    <Link to={`/placements/${selectedPlacement.id}`} className="w-full bg-primary-container hover:bg-tertiary-container text-on-primary py-2.5 rounded-xl font-title-sm text-title-sm shadow-sm transition-all flex items-center justify-center gap-space-xs transform active:scale-[0.98]">
+                      <span className="material-symbols-outlined text-[18px]">visibility</span>
+                      <span>View Full Details & Apply</span>
+                    </Link>
+                  </div>
                 </div>
-              ))
-            )}
+              ) : (
+                <div className="bg-surface-container-lowest rounded-2xl shadow-sm p-space-xl flex flex-col items-center justify-center text-center h-full min-h-[400px]">
+                  <span className="material-symbols-outlined text-[48px] text-secondary opacity-50 mb-space-md">calendar_today</span>
+                  <h3 className="font-title-md text-title-md text-primary-container">No Drive Selected</h3>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 max-w-[250px]">
+                    Select a scheduled event or deadline from the calendar to view details.
+                  </p>
+                </div>
+              )}
+              
+            </div>
           </div>
-
-          {/* Sidebar Intelligence Rail (4 cols) */}
-          <div className="lg:col-span-4 flex flex-col gap-space-md">
-            {/* Cohort Standing Indicator Card */}
-            <div className="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col gap-space-md">
-              <div className="flex items-center justify-between">
-                <span className="font-label-uppercase text-label-uppercase text-secondary tracking-wider">Cohort Standing</span>
-                <span className="px-space-xs py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-uppercase text-label-uppercase">Verified Top Tier</span>
-              </div>
-              <div className="flex items-end justify-between">
-                <div>
-                  <span className="font-headline-lg text-headline-lg text-primary tracking-tight leading-none">Top 8%</span>
-                  <p className="font-body-sm text-body-sm text-secondary pt-1">Computer Engineering Class of 2026</p>
-                </div>
-                {/* Minimal Cohort Sparkline SVG */}
-                <div className="w-24 h-12">
-                  <svg className="w-full h-full text-primary-container overflow-visible" fill="none" viewBox="0 0 100 40">
-                    <path d="M0 35 Q 25 32, 50 18 T 100 5" stroke="currentColor" strokeLinecap="round" strokeWidth="2.5"></path>
-                    <circle cx="100" cy="5" fill="currentColor" r="4"></circle>
-                    <path d="M0 35 Q 25 32, 50 18 T 100 5 V 40 H 0 Z" fill="currentColor" fillOpacity="0.06"></path>
-                  </svg>
-                </div>
-              </div>
-              <div className="bg-surface-container-low p-space-sm rounded-lg flex items-center justify-between text-body-sm font-body-sm">
-                <span className="text-secondary">Eligible Drives</span>
-                <span className="font-title-sm text-title-sm text-primary">48 / 52 Institutional</span>
-              </div>
-            </div>
-
-
-            {/* In-Demand Skills Module */}
-            <div className="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col gap-space-md">
-              <div className="flex items-center justify-between">
-                <h4 className="font-title-sm text-title-sm text-primary">In-Demand Skills</h4>
-                <span className="font-label-uppercase text-label-uppercase text-secondary">CE 2026 Batch</span>
-              </div>
-              <div className="flex flex-col gap-space-md">
-                <div className="flex flex-col gap-1">
-                  <div className="flex justify-between items-center text-body-sm font-body-sm">
-                    <span className="font-title-sm text-title-sm text-primary">React & TypeScript</span>
-                    <span className="text-secondary font-label-regular text-label-regular">19 drives</span>
-                  </div>
-                  <div className="w-full bg-surface-container h-2 rounded-full overflow-hidden">
-                    <div className="bg-primary-container h-full w-[85%] rounded-full"></div>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <div className="flex justify-between items-center text-body-sm font-body-sm">
-                    <span className="font-title-sm text-title-sm text-primary">Spring Boot & Java Microservices</span>
-                    <span className="text-secondary font-label-regular text-label-regular">14 drives</span>
-                  </div>
-                  <div className="w-full bg-surface-container h-2 rounded-full overflow-hidden">
-                    <div className="bg-primary-container h-full w-[65%] rounded-full"></div>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <div className="flex justify-between items-center text-body-sm font-body-sm">
-                    <span className="font-title-sm text-title-sm text-primary">Docker, Kubernetes & CI/CD</span>
-                    <span className="text-secondary font-label-regular text-label-regular">11 drives</span>
-                  </div>
-                  <div className="w-full bg-surface-container h-2 rounded-full overflow-hidden">
-                    <div className="bg-primary-container h-full w-[50%] rounded-full"></div>
-                  </div>
-                </div>
-              </div>
-              <div className="pt-space-xs">
-                <a className="font-label-uppercase text-label-uppercase text-primary-container hover:text-primary flex items-center gap-1 transition-colors" href="#">
-                  <span>View Full Skill Breakdown Matrix</span>
-                  <span className="material-symbols-outlined text-[16px]">trending_flat</span>
-                </a>
-              </div>
-            </div>
-
-            {/* Career Office Bulletin Card */}
-            <div className="bg-surface-container-low p-space-md rounded-xl flex items-start gap-space-sm shadow-sm">
-              <span className="material-symbols-outlined text-[20px] text-primary-container shrink-0 mt-0.5">school</span>
-              <div className="flex flex-col">
-                <span className="font-title-sm text-title-sm text-primary">Notice from T&P Cell</span>
-                <p className="font-body-sm text-body-sm text-secondary pt-0.5">
-                  Resume updates for Round 2 drives freeze on 18 October, 23:59 IST. Ensure all hackathons and certifications are verified by your faculty advisor.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

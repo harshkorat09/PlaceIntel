@@ -23,7 +23,7 @@ export function StudentSettings() {
 
   return (
     <div className="flex flex-col w-full min-h-screen">
-      <div className="max-w-[1440px] w-full mx-auto px-space-xl py-space-xl">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-8">
         {/* Top Meta & Title Banner */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-2xl pb-space-lg border-b border-surface-container-high">
           <div className="space-y-space-xxs">

@@ -35,7 +35,7 @@ export function StudentAskPlaceIntel() {
 
   return (
     <div className="flex flex-col w-full min-h-screen relative">
-      <div className="px-margin-mobile md:px-margin-desktop py-space-xl max-w-[1440px] mx-auto w-full flex-1">
+      <div className="px-4 sm:px-6 lg:px-8 py-8 w-full flex-1">
         {/* Top Metadata Breadcrumb & Live Sync Badge */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-space-sm mb-space-lg">
           <div className="flex items-center gap-space-xs text-secondary font-label-uppercase text-label-uppercase">
@@ -418,7 +418,7 @@ export function StudentAskPlaceIntel() {
       
       {/* Query Composer Fixed Bottom Area */}
       <div className="fixed bottom-0 left-0 lg:left-72 right-0 z-30 p-space-md lg:p-space-xl bg-gradient-to-t from-background via-background to-transparent pointer-events-none flex justify-center">
-        <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-[0_-4px_24px_rgba(0,0,0,0.06)] border border-surface-variant transition-all pointer-events-auto w-full max-w-[1440px]">
+        <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-[0_-4px_24px_rgba(0,0,0,0.06)] border border-surface-variant transition-all pointer-events-auto w-full">
           {/* Input Form */}
           <form className="flex flex-col gap-space-xs" onSubmit={submitInquiry}>
             <div className="relative flex items-center">

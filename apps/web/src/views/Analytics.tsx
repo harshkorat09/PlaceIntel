@@ -1,181 +1,172 @@
 import { useState, useEffect } from 'react';
-import {
-  Download,
-  Building,
-  BarChart3,
-  Users,
-  TrendingUp,
-  GraduationCap
-} from 'lucide-react';
 import { analyticsService } from '../api/analyticsService';
 import type { AnalyticsData } from '../api/types';
 
-export default function Analytics({ role = 'officer' }: { role?: 'officer' | 'student' }) {
-  const isAdmin = role === 'officer';
-  const [accreditationYear, setAccreditationYear] = useState('2026');
+export default function Analytics() {
   const [data, setData] = useState<AnalyticsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const stats = await analyticsService.getDescriptiveAnalytics();
         setData(stats);
-      } catch (err) {
-        console.error(err);
+      } catch (err: any) {
+        setError(err.message || 'Failed to load analytics');
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
   }, []);
 
-  const handleDownloadReport = (type: 'NBA' | 'NAAC' | 'NIRF') => {
-    alert(`Compiling and downloading the ${type} Accreditation Excel template report for academic year ${accreditationYear}...`);
-  };
+  if (loading) {
+    return (
+      <div className="flex w-full min-h-screen items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <div className="flex w-full min-h-screen items-center justify-center flex-col gap-4">
+        <span className="material-symbols-outlined text-[48px] text-error">error</span>
+        <h2 className="font-headline-sm text-error">{error || 'Failed to load analytics'}</h2>
+      </div>
+    );
+  }
+
+  // Calculate some derived values from standard payload
+  const skillsList = Object.entries(data.skillDemand || {}).sort((a, b) => b[1] - a[1]);
+  const branchesList = Object.entries(data.branchDistribution || {}).sort((a, b) => b[1] - a[1]);
+  const maxSkillValue = skillsList.length > 0 ? skillsList[0][1] : 1;
+  const maxBranchValue = branchesList.length > 0 ? branchesList[0][1] : 1;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
-      {/* Header */}
-      <div className="page-header" style={{ marginBottom: 0 }}>
-        <div>
-          <h1 className="page-title">Placement Intelligence</h1>
-          <p className="page-subtitle">Track descriptive metrics for branches, skills, and package distributions.</p>
-        </div>
-        {isAdmin && (
-          <div style={{ display: 'flex', gap: 'var(--space-sm)' }}>
-            <select
-              className="filter-select"
-              value={accreditationYear}
-              onChange={(e) => setAccreditationYear(e.target.value)}
-              style={{ padding: '8px 12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}
-            >
-              <option value="2026">AY 2025-2026 (Current)</option>
-              <option value="2025">AY 2024-2025</option>
-              <option value="2024">AY 2023-2024</option>
-            </select>
-            <button className="btn btn-primary btn-sm" onClick={() => handleDownloadReport('NBA')} style={{ padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Download size={16} />
-              Export Report
-            </button>
+    <div className="flex flex-col w-full">
+      {/* Sub-Header & Administrative Controls */}
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-space-lg mb-space-2xl pb-space-lg bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm">
+        <div className="flex flex-col max-w-3xl">
+          <div className="flex items-center gap-space-xs font-label-uppercase text-label-uppercase text-on-surface-variant uppercase tracking-wider mb-space-xs">
+            <span>PlaceIntel Admin</span>
+            <span className="text-outline-variant">/</span>
+            <span className="text-primary font-semibold">Institutional Intelligence</span>
+            <span className="text-outline-variant">/</span>
+            <span className="text-primary-container font-semibold">Cohort Telemetry</span>
           </div>
-        )}
+          <h1 className="font-headline-lg text-headline-lg text-primary tracking-tight">Placement Analytics & Institutional Trends</h1>
+          <p className="font-body-md text-body-md text-on-surface-variant mt-space-xs leading-relaxed">
+            Longitudinal placement statistics, departmental clearance velocity, package dispersal topology, and industry skill demand.
+          </p>
+        </div>
+        
+        {/* Administrative Action Bar */}
+        <div className="flex flex-wrap items-center gap-space-sm shrink-0">
+          <div className="inline-flex items-center gap-space-xs px-space-sm py-2 rounded-lg bg-surface-container-low text-primary font-body-sm text-body-sm">
+            <span className="w-2 h-2 rounded-full bg-primary-container"></span>
+            <span className="font-medium">Live Server Sync</span>
+          </div>
+        </div>
       </div>
 
-      {/* KPI Counters Grid */}
-      <div className="applications-metrics-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 'var(--space-md)' }}>
-        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '24px' }}>
-          <div className="kpi-icon" style={{ backgroundColor: 'var(--primary-light)', color: 'var(--primary)', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Building size={24} />
+      {/* Row 1: High-Level Institutional KPIs */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-space-lg mb-space-2xl">
+        {/* KPI 1 */}
+        <div className="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="font-label-uppercase text-label-uppercase text-on-surface-variant uppercase tracking-wider">Total Companies</span>
+            <span className="p-1.5 rounded-lg bg-surface-container-low text-primary-container">
+              <span className="material-symbols-outlined text-[20px]">domain</span>
+            </span>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span style={{ fontSize: '28px', fontWeight: '700', color: 'var(--text-primary)', lineHeight: '1.2' }}>{data?.totalCompanies || 0}</span>
-            <span style={{ fontSize: '13px', color: 'var(--text-secondary)', fontWeight: '500' }}>Total Companies</span>
+          <div className="my-space-md">
+            <div className="flex items-baseline gap-space-xs">
+              <span className="font-headline-lg text-headline-lg text-primary tracking-tight">{data.totalCompanies}</span>
+              <span className="font-body-sm text-body-sm text-on-surface-variant font-medium">Recruiting Partners</span>
+            </div>
           </div>
         </div>
         
-        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '24px' }}>
-          <div className="kpi-icon" style={{ backgroundColor: 'var(--secondary-light)', color: 'var(--text-primary)', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Users size={24} />
+        {/* KPI 2 */}
+        <div className="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="font-label-uppercase text-label-uppercase text-on-surface-variant uppercase tracking-wider">Total Placements</span>
+            <span className="p-1.5 rounded-lg bg-secondary-fixed text-primary">
+              <span className="material-symbols-outlined text-[20px]">work</span>
+            </span>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span style={{ fontSize: '28px', fontWeight: '700', color: 'var(--text-primary)', lineHeight: '1.2' }}>{data?.totalPlacements || 0}</span>
-            <span style={{ fontSize: '13px', color: 'var(--text-secondary)', fontWeight: '500' }}>Total Placements</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Charts Section */}
-      <div className="analytics-grid-two" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
-        {/* Salary Ranges Histogram */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }}>
-            <BarChart3 size={18} style={{ color: 'var(--primary)' }} />
-            <span style={{ fontWeight: '600', fontSize: '15px' }}>Package Distribution</span>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '10px 0' }}>
-            {data?.packageDistribution && Object.entries(data.packageDistribution).map(([range, count]) => (
-              <div key={range} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                <span style={{ minWidth: '80px', fontSize: '13px', fontWeight: '500', color: 'var(--text-secondary)' }}>{range}</span>
-                <div style={{ flex: 1, height: '10px', backgroundColor: 'var(--border)', borderRadius: '5px', overflow: 'hidden' }}>
-                  <div style={{ width: `${Math.min(100, (count / 250) * 100)}%`, height: '100%', backgroundColor: 'var(--primary)', borderRadius: '5px' }}></div>
-                </div>
-                <span style={{ minWidth: '40px', fontSize: '13px', fontWeight: '600', color: 'var(--text-primary)', textAlign: 'right' }}>{count}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Skill Demand */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }}>
-            <BarChart3 size={18} style={{ color: 'var(--accent)' }} />
-            <span style={{ fontWeight: '600', fontSize: '15px' }}>Skill Demand (Frequency)</span>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '10px 0' }}>
-            {data?.skillDemand && Object.entries(data.skillDemand).map(([skill, count]) => (
-              <div key={skill} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                <span style={{ minWidth: '80px', fontSize: '13px', fontWeight: '500', color: 'var(--text-secondary)' }}>{skill}</span>
-                <div style={{ flex: 1, height: '10px', backgroundColor: 'var(--border)', borderRadius: '5px', overflow: 'hidden' }}>
-                  <div style={{ width: `${Math.min(100, (count / 100) * 100)}%`, height: '100%', backgroundColor: 'var(--accent)', borderRadius: '5px' }}></div>
-                </div>
-                <span style={{ minWidth: '40px', fontSize: '13px', fontWeight: '600', color: 'var(--text-primary)', textAlign: 'right' }}>{count}</span>
-              </div>
-            ))}
+          <div className="my-space-md">
+            <div className="flex items-baseline gap-space-xs">
+              <span className="font-headline-lg text-headline-lg text-primary tracking-tight">{data.totalPlacements}</span>
+              <span className="font-title-sm text-title-sm text-on-surface-variant">Scheduled Drives</span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Tables Section */}
-      <div className="analytics-grid-two" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)' }}>
-        {/* Branch Distribution */}
-        <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-          <div style={{ padding: '20px 24px', backgroundColor: 'var(--background)', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <GraduationCap size={18} style={{ color: 'var(--primary)' }} />
-            <span style={{ fontWeight: '600', fontSize: '15px' }}>Branch Distribution</span>
-          </div>
-          <div style={{ padding: '0' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-              <thead>
-                <tr style={{ backgroundColor: 'var(--secondary-light)' }}>
-                  <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '1px solid var(--border)' }}>Branch</th>
-                  <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '1px solid var(--border)', textAlign: 'right' }}>Placements</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data?.branchDistribution && Object.entries(data.branchDistribution).map(([branch, count]) => (
-                  <tr key={branch} style={{ borderBottom: '1px solid var(--border)' }}>
-                    <td style={{ padding: '16px 24px', fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)' }}>{branch}</td>
-                    <td style={{ padding: '16px 24px', fontSize: '14px', color: 'var(--text-secondary)', textAlign: 'right' }}>
-                      <span style={{ backgroundColor: 'var(--primary-light)', color: 'var(--primary)', padding: '4px 12px', borderRadius: '20px', fontWeight: '600' }}>{count}</span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+      {/* Row 2: Comprehensive 2-Column Analytical Topology */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-xl">
+        
+        {/* LEFT COLUMN (6 Cols) - Skill Demand */}
+        <div className="lg:col-span-6 flex flex-col gap-space-xl">
+          <div className="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm mb-space-lg">
+              <div>
+                <span className="font-label-uppercase text-label-uppercase text-on-surface-variant uppercase tracking-wider">Industry Alignment</span>
+                <h2 className="font-headline-sm text-headline-sm text-primary tracking-tight">Technical Competency Demand Mapping</h2>
+              </div>
+            </div>
+            
+            <div className="flex flex-col gap-space-md mt-space-md">
+              {skillsList.map(([skill, count], idx) => {
+                const percentage = Math.round((count / maxSkillValue) * 100);
+                return (
+                  <div key={idx} className="flex flex-col">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-title-sm text-title-sm text-primary-container">{skill}</span>
+                      <span className="font-title-sm text-title-sm text-primary">{count} Mentions</span>
+                    </div>
+                    <div className="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden flex">
+                      <div className="bg-primary h-full rounded-full transition-all" style={{ width: `${percentage}%` }}></div>
+                    </div>
+                  </div>
+                );
+              })}
+              {skillsList.length === 0 && <div className="text-secondary p-space-lg">No skills data available.</div>}
+            </div>
           </div>
         </div>
 
-        {/* Year-wise Trends */}
-        <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-          <div style={{ padding: '20px 24px', backgroundColor: 'var(--background)', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <TrendingUp size={18} style={{ color: 'var(--accent)' }} />
-            <span style={{ fontWeight: '600', fontSize: '15px' }}>Year-wise Average Package Trends</span>
-          </div>
-          <div style={{ padding: '0' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-              <thead>
-                <tr style={{ backgroundColor: 'var(--secondary-light)' }}>
-                  <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '1px solid var(--border)' }}>Academic Year</th>
-                  <th style={{ padding: '12px 24px', fontSize: '13px', fontWeight: '600', color: 'var(--text-secondary)', borderBottom: '1px solid var(--border)', textAlign: 'right' }}>Avg. Package (LPA)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data?.yearWiseTrends && Object.entries(data.yearWiseTrends).map(([year, avg]) => (
-                  <tr key={year} style={{ borderBottom: '1px solid var(--border)' }}>
-                    <td style={{ padding: '16px 24px', fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)' }}>{year}</td>
-                    <td style={{ padding: '16px 24px', fontSize: '14px', fontWeight: 600, color: 'var(--primary)', textAlign: 'right' }}>{avg} LPA</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* RIGHT COLUMN (6 Cols) - Branch Distribution */}
+        <div className="lg:col-span-6 flex flex-col gap-space-xl">
+          <div className="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm h-full flex flex-col relative overflow-hidden">
+            <div className="flex items-center justify-between mb-space-md relative z-10">
+              <div className="flex flex-col">
+                <span className="font-label-uppercase text-label-uppercase text-on-surface-variant uppercase tracking-wider">Demographics</span>
+                <h2 className="font-headline-sm text-headline-sm text-primary tracking-tight">Branch Eligibility Distribution</h2>
+              </div>
+            </div>
+            
+            <div className="flex flex-col gap-space-md mt-space-md">
+              {branchesList.map(([branch, count], idx) => {
+                const percentage = Math.round((count / maxBranchValue) * 100);
+                return (
+                  <div key={idx} className="flex flex-col">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-title-sm text-title-sm text-primary-container">{branch}</span>
+                      <span className="font-title-sm text-title-sm text-primary">{count} Drives</span>
+                    </div>
+                    <div className="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden flex">
+                      <div className="bg-tertiary h-full rounded-full transition-all" style={{ width: `${percentage}%` }}></div>
+                    </div>
+                  </div>
+                );
+              })}
+              {branchesList.length === 0 && <div className="text-secondary p-space-lg">No branch data available.</div>}
+            </div>
           </div>
         </div>
       </div>

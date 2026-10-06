@@ -1,74 +1,77 @@
-
-
-
-import type { FC } from 'react';
+import { useState, useEffect, type FC } from 'react';
+import { profileService } from '../api/profileService';
+import { placementService } from '../api/placementService';
+import type { StudentProfileData, Placement } from '../api/types';
+import { Link } from 'react-router-dom';
 
 interface StudentViewsProps {
   studentId: string;
 }
 
+export const StudentDashboard: FC<StudentViewsProps> = ({ studentId }) => {
+  const [profile, setProfile] = useState<StudentProfileData | null>(null);
+  const [placements, setPlacements] = useState<Placement[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const [profData, placeData] = await Promise.all([
+          profileService.getProfile(studentId),
+          placementService.getPlacements()
+        ]);
+        setProfile(profData);
+        setPlacements(placeData);
+      } catch (err: any) {
+        console.error("Failed to load dashboard data", err);
+        setError(err.message || "Failed to load dashboard data");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [studentId]);
 
-// Student Mock database matching credentials details
-const studentDatabase: Record<string, { name: string; cgpa: number; branch: string; institute: 'DEPSTAR' | 'CSPIT'; email: string; phone: string }> = {};
-
-export const getStudentData = (id: string) => {
-  const stored = localStorage.getItem('placeintel_student_credentials');
-  if (stored) {
-    const credsList = JSON.parse(stored);
-    const matched = credsList.find((c: any) => c.enrollmentNo.toUpperCase() === id.toUpperCase());
-    if (matched && matched.name) {
-      return {
-        name: matched.name,
-        cgpa: matched.cgpa || 0,
-        branch: matched.branch || 'CE',
-        institute: matched.institute || 'DEPSTAR',
-        email: matched.email,
-        phone: '+91 98989 00000', // Default phone
-        skills: []
-      };
-    }
+  if (loading) {
+    return (
+      <div className="flex w-full min-h-[60vh] items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
-  // Fallback for hardcoded test accounts if not in localStorage
-  const record = studentDatabase[id.toUpperCase()];
-  if (record) return { ...record, skills: [] };
+  if (error || !profile) {
+    return (
+      <div className="flex w-full min-h-[60vh] flex-col items-center justify-center space-y-4">
+        <span className="material-symbols-outlined text-4xl text-error">error</span>
+        <h2 className="text-xl text-error font-semibold">{error || "Unable to load profile data"}</h2>
+        <p className="text-secondary text-sm">Please try refreshing the page.</p>
+        <button onClick={() => window.location.reload()} className="px-4 py-2 mt-4 bg-surface-container rounded-lg font-medium hover:bg-surface-container-high transition-colors">
+          Retry
+        </button>
+      </div>
+    );
+  }
 
-  const isDepstar = id.toUpperCase().includes('D');
-  let branch = 'CSE';
-  if (id.toUpperCase().includes('CE')) branch = 'CE';
-  else if (id.toUpperCase().includes('IT')) branch = 'IT';
-
-  return {
-    name: 'New Student',
-    cgpa: 0,
-    branch: branch,
-    institute: (isDepstar ? 'DEPSTAR' : 'CSPIT') as 'DEPSTAR' | 'CSPIT',
-    email: `student.${id.toLowerCase()}@charusat.edu.in`,
-    phone: '+91 00000 00000',
-    skills: []
-  };
-};
-
-/* ============================================================================
-   1. STUDENT DASHBOARD
-   ============================================================================ */
-export const StudentDashboard: FC<StudentViewsProps> = ({ studentId }) => {
-  const student = getStudentData(studentId);
-  
-
+  // Sort deadlines ascending
+  const upcomingDeadlines = placements
+    .filter(p => p.deadline)
+    .sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime())
+    .slice(0, 3); // top 3 upcoming
 
   return (
     <div className="flex flex-col w-full">
-      <div className="p-space-lg lg:p-space-xl space-y-space-xl max-w-[1400px] mx-auto w-full">
+      <div className="px-4 sm:px-6 lg:px-8 py-8 space-y-space-xl w-full">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
           <div className="space-y-space-xxs">
             <div className="flex items-center gap-space-xs text-secondary">
               <span className="font-label-uppercase text-label-uppercase bg-secondary-fixed text-on-secondary-fixed px-space-xs py-space-xxs rounded-full">Session 2025–26</span>
               <span className="font-label-regular text-label-regular">•</span>
-              <span className="font-label-regular text-label-regular text-secondary">{student.branch} • Semester V</span>
+              <span className="font-label-regular text-label-regular text-secondary">{profile.branch || 'CE'} • Semester V</span>
             </div>
-            <h1 className="font-headline-lg text-headline-lg text-primary-container tracking-tight">Good morning, {student.name.split(' ')[0]}.</h1>
+            <h1 className="font-headline-lg text-headline-lg text-primary-container tracking-tight">Good morning, {profile.name.split(' ')[0]}.</h1>
             <p className="font-body-md text-body-md text-secondary">Placement Season 2025–26</p>
           </div>
           <div className="flex items-center gap-space-sm self-start md:self-auto">
@@ -76,14 +79,14 @@ export const StudentDashboard: FC<StudentViewsProps> = ({ studentId }) => {
               <span className="material-symbols-outlined text-outline text-[20px]">verified</span>
               <div>
                 <div className="font-label-uppercase text-label-uppercase text-secondary">Verified CGPA</div>
-                <div className="font-title-sm text-title-sm text-primary-container">{student.cgpa.toFixed(2)} / 10.0</div>
+                <div className="font-title-sm text-title-sm text-primary-container">{profile.cgpa.toFixed(2)} / 10.0</div>
               </div>
             </div>
             <div className="px-space-md py-space-xs rounded-xl bg-surface-container-lowest shadow-sm flex items-center gap-space-sm">
               <span className="material-symbols-outlined text-outline text-[20px]">military_tech</span>
               <div>
                 <div className="font-label-uppercase text-label-uppercase text-secondary">Cohort Rank</div>
-                <div className="font-title-sm text-title-sm text-primary-container">Top 4% ({student.branch} Dept)</div>
+                <div className="font-title-sm text-title-sm text-primary-container">Top 4% ({profile.branch || 'CE'} Dept)</div>
               </div>
             </div>
           </div>
@@ -126,12 +129,38 @@ export const StudentDashboard: FC<StudentViewsProps> = ({ studentId }) => {
             </div>
           </div>
         </div>
+        
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-xl">
           <div className="lg:col-span-8 space-y-space-xl">
-            <div className="bg-surface-container-lowest rounded-2xl p-space-xl text-center shadow-sm">
-              <span className="material-symbols-outlined text-[48px] text-outline mb-space-sm">inbox</span>
-              <h2 className="font-title-lg text-title-lg text-primary-container">No active placement tasks</h2>
-              <p className="font-body-md text-body-md text-secondary mt-space-xxs">Explore the job board to find placement opportunities.</p>
+            <div className="bg-surface-container-lowest rounded-2xl p-space-xl shadow-sm">
+              <div className="flex items-center justify-between mb-space-md">
+                <h2 className="font-title-lg text-title-lg text-primary-container">Recent Opportunities</h2>
+                <Link to="/placements" className="text-primary hover:underline text-title-sm">View All</Link>
+              </div>
+              {placements.length > 0 ? (
+                <div className="flex flex-col gap-space-md">
+                  {placements.slice(0, 3).map(p => (
+                    <Link key={p.id} to={`/placements/${p.id}`} className="block p-space-md bg-surface-container-low hover:bg-surface-container-high rounded-xl transition-colors">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <div className="font-title-md text-primary">{p.companyName}</div>
+                          <div className="font-body-sm text-secondary">{p.role}</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="font-title-sm text-primary">{p.packageRange}</div>
+                          <div className="font-label-regular text-on-surface-variant">Deadline: {p.deadline}</div>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-space-xl text-secondary">
+                  <span className="material-symbols-outlined text-[48px] text-outline mb-space-sm">inbox</span>
+                  <h2 className="font-title-lg text-title-lg text-primary-container">No active placement tasks</h2>
+                  <p className="font-body-md text-body-md text-secondary mt-space-xxs">Explore the job board to find placement opportunities.</p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -140,32 +169,24 @@ export const StudentDashboard: FC<StudentViewsProps> = ({ studentId }) => {
               <div className="flex items-center justify-between">
                 <span className="font-title-sm text-title-sm text-primary-container flex items-center gap-space-xs">
                   <span className="material-symbols-outlined text-[18px] text-outline">schedule</span>
-                  Institutional Deadlines
+                  Upcoming Deadlines
                 </span>
                 <span className="font-label-uppercase text-label-uppercase bg-secondary-fixed text-on-secondary-fixed px-space-xs py-space-xxs rounded">Critical</span>
               </div>
               <div className="space-y-space-sm divide-y divide-surface-container-high">
-                <div className="pt-space-xs first:pt-0 space-y-space-xxs">
-                  <div className="flex items-center justify-between">
-                    <span className="font-title-sm text-title-sm text-primary-container">TCS Digital Portal</span>
-                    <span className="font-label-uppercase text-label-uppercase text-error">Tomorrow</span>
-                  </div>
-                  <p className="font-body-sm text-body-sm text-secondary">Endorsement approval and code repos verification closes at 18:00 hrs.</p>
-                </div>
-                <div className="pt-space-sm space-y-space-xxs">
-                  <div className="flex items-center justify-between">
-                    <span className="font-title-sm text-title-sm text-primary-container">Crest Data Systems</span>
-                    <span className="font-label-uppercase text-label-uppercase text-secondary">08 Oct 2026</span>
-                  </div>
-                  <p className="font-body-sm text-body-sm text-secondary">Campus pre-assessment slot declaration and institutional mock trial.</p>
-                </div>
-                <div className="pt-space-sm space-y-space-xxs">
-                  <div className="flex items-center justify-between">
-                    <span className="font-title-sm text-title-sm text-primary-container">InfoChips Assessment</span>
-                    <span className="font-label-uppercase text-label-uppercase text-secondary">12 Oct 2026</span>
-                  </div>
-                  <p className="font-body-sm text-body-sm text-secondary">Embedded systems profile validation requirement.</p>
-                </div>
+                {upcomingDeadlines.length > 0 ? (
+                  upcomingDeadlines.map((p, idx) => (
+                    <div key={idx} className="pt-space-xs first:pt-0 space-y-space-xxs">
+                      <div className="flex items-center justify-between">
+                        <Link to={`/placements/${p.id}`} className="font-title-sm text-title-sm text-primary-container hover:underline">{p.companyName}</Link>
+                        <span className="font-label-uppercase text-label-uppercase text-error">{p.deadline}</span>
+                      </div>
+                      <p className="font-body-sm text-body-sm text-secondary">{p.role} applications closing soon.</p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="pt-space-xs text-secondary font-body-sm">No upcoming deadlines.</div>
+                )}
               </div>
             </div>
 
@@ -185,24 +206,10 @@ export const StudentDashboard: FC<StudentViewsProps> = ({ studentId }) => {
                 <p className="font-body-sm text-body-sm text-on-secondary-fixed-variant leading-relaxed">
                   Add 1 production SQL / Database Sharding project to verify backend competency. This will unlock <strong>3 more Tier-1 institutional recruitment tracks</strong>.
                 </p>
-                <a className="inline-flex items-center gap-1 font-title-sm text-title-sm text-primary-container pt-space-xxs hover:underline" href="#">
-                  <span>Upload Git Repository</span>
+                <Link to="/profile" className="inline-flex items-center gap-1 font-title-sm text-title-sm text-primary-container pt-space-xxs hover:underline">
+                  <span>Update Profile</span>
                   <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
-                </a>
-              </div>
-              <div className="space-y-space-xs">
-                <div className="flex items-center justify-between text-body-sm">
-                  <span className="text-secondary font-label-regular text-label-regular">Academic Transcript</span>
-                  <span className="font-label-uppercase text-label-uppercase text-on-secondary-container">Verified</span>
-                </div>
-                <div className="flex items-center justify-between text-body-sm">
-                  <span className="text-secondary font-label-regular text-label-regular">Placement NOC</span>
-                  <span className="font-label-uppercase text-label-uppercase text-on-secondary-container">Cleared</span>
-                </div>
-                <div className="flex items-center justify-between text-body-sm">
-                  <span className="text-secondary font-label-regular text-label-regular">Production Project Proof</span>
-                  <span className="font-label-uppercase text-label-uppercase text-secondary">Action Req</span>
-                </div>
+                </Link>
               </div>
             </div>
 
@@ -217,13 +224,13 @@ export const StudentDashboard: FC<StudentViewsProps> = ({ studentId }) => {
                 </div>
               </div>
               <p className="font-body-sm text-body-sm text-on-primary-container leading-relaxed">
-                Need historical question patterns for Microsoft Round 1 or average compensation for Computer Engineering cohorts?
+                Need historical question patterns for Round 1 or average compensation for Engineering cohorts?
               </p>
               <div className="pt-space-xs">
-                <button className="w-full py-space-sm rounded-xl bg-surface-container-lowest text-primary-container font-title-sm text-title-sm hover:bg-secondary-fixed transition-colors flex items-center justify-center gap-space-xs">
+                <Link to="/ask-placeintel" className="w-full py-space-sm rounded-xl bg-surface-container-lowest text-primary-container font-title-sm text-title-sm hover:bg-secondary-fixed transition-colors flex items-center justify-center gap-space-xs">
                   <span>Open Placement Intelligence</span>
                   <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -232,5 +239,3 @@ export const StudentDashboard: FC<StudentViewsProps> = ({ studentId }) => {
     </div>
   );
 }
-
-

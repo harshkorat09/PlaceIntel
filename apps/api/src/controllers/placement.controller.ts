@@ -1,4 +1,7 @@
 import type { Request, Response } from 'express';
+import fs from 'fs';
+import path from 'path';
+import crypto from 'crypto';
 import { prisma } from '../db.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { NotFoundError } from '../utils/errors.js';
@@ -33,9 +36,15 @@ export const getPlacements = asyncHandler(async (req: Request, res: Response) =>
   if (packageRange) {
     const [min, max] = String(packageRange).split('-').map(Number);
     if (min !== undefined && max !== undefined && !isNaN(min) && !isNaN(max)) {
-      where.ctc = { gte: min, lte: max };
+      where.OR = [
+        { minPackage: { gte: min, lte: max } },
+        { maxPackage: { gte: min, lte: max } }
+      ];
     } else if (min !== undefined && !isNaN(min)) {
-      where.ctc = { gte: min };
+      where.OR = [
+        { minPackage: { gte: min } },
+        { maxPackage: { gte: min } }
+      ];
     }
   }
   
@@ -54,21 +63,24 @@ export const getPlacements = asyncHandler(async (req: Request, res: Response) =>
     include: {
       company: true,
       skills: { include: { skill: true } },
-      branches: { include: { branch: true } }
+      branches: { include: { branch: true } },
+      attachments: true
     }
   });
   res.json({ success: true, data: placements });
 });
 
 export const createPlacement = asyncHandler(async (req: Request, res: Response) => {
-  const { companyId, position, ctc, deadline, cgpaCutoff, description, branchIds, skillIds, status } = req.body;
+  const { companyId, position, minPackage, maxPackage, deadline, driveDate, cgpaCutoff, description, branchIds, skillIds, status } = req.body;
   
   const placement = await prisma.placement.create({
     data: {
       companyId,
       position,
-      ctc,
+      minPackage,
+      maxPackage,
       deadline: new Date(deadline),
+      driveDate: driveDate ? new Date(driveDate) : null,
       cgpaCutoff,
       description,
       status: status || 'Upcoming',
@@ -94,6 +106,7 @@ export const updatePlacement = asyncHandler(async (req: Request, res: Response) 
   }
 
   if (data.deadline) data.deadline = new Date(data.deadline);
+  if (data.driveDate) data.driveDate = new Date(data.driveDate);
 
   // Note: Deep update of branch/skill M2M handled ideally in a transaction if passed.
   // Simplifying here for primitive updates as requested.
@@ -163,6 +176,7 @@ export const getPlacementById = asyncHandler(async (req: Request, res: Response)
       company: true,
       branches: { include: { branch: true } },
       skills: { include: { skill: true } },
+      attachments: true
     },
   });
   if (!placement) throw new NotFoundError('Placement not found');
@@ -202,7 +216,31 @@ export const uploadPlacementNotice = async (req: AuthRequest, res: Response) => 
       return res.status(400).json({ success: false, message: 'Uploaded file is empty.' });
     }
 
-    // Build native multipart form to forward to FastAPI
+    // 1. Save file locally
+    const uploadDir = path.join(process.cwd(), '..', '..', 'uploads');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    const fileHash = crypto.createHash('sha256').update(file.buffer).digest('hex');
+    const fileName = `${placementId}-${fileHash.substring(0, 8)}.pdf`;
+    const filePath = path.join(uploadDir, fileName);
+    
+    fs.writeFileSync(filePath, file.buffer);
+
+    // 2. Save Attachment to DB
+    const existingAttachment = await prisma.attachment.findUnique({ where: { fileHash } });
+    if (!existingAttachment) {
+      await prisma.attachment.create({
+        data: {
+          placementId,
+          filePath: `/uploads/${fileName}`,
+          fileType: 'application/pdf',
+          fileHash
+        }
+      });
+    }
+
+    // 3. Build native multipart form to forward to FastAPI
     const blob = new Blob([new Uint8Array(file.buffer)], { type: file.mimetype });
     const formData = new FormData();
     formData.append('file', blob, file.originalname);
@@ -245,7 +283,7 @@ export const uploadPlacementNotice = async (req: AuthRequest, res: Response) => 
 
     return res.status(200).json({
       success: true,
-      message: 'Placement notice ingested successfully.',
+      message: 'Placement notice uploaded and ingested successfully.',
       data: payload?.data ?? null,
     });
   } catch (error) {

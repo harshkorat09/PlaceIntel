@@ -3,7 +3,10 @@ export interface Placement {
   companyName: string;
   role: string;
   packageRange: string;
+  minPackage?: number;
+  maxPackage?: number;
   deadline: string;
+  driveDate?: string;
   cgpaRequirement: number;
   eligibleBranches: string[];
   requiredSkills: string[];

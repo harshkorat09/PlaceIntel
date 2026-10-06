@@ -6,28 +6,44 @@ interface ApiPlacement {
   id: number;
   companyId: number;
   position: string;
-  ctc: number;
+  minPackage?: number;
+  maxPackage?: number;
   deadline: string;
+  driveDate?: string;
   cgpaCutoff: number;
   description?: string;
   status: string;
   company?: { id: number; name: string };
   branches?: { branch: { id: number; name: string } }[];
   skills?: { skill: { id: number; name: string } }[];
+  attachments?: { filePath: string }[];
 }
 
 function mapPlacement(p: ApiPlacement): Placement {
+  let packageRange = 'Package not specified';
+  if (p.minPackage != null && p.maxPackage != null) {
+    packageRange = `₹${p.minPackage} LPA – ₹${p.maxPackage} LPA`;
+  } else if (p.minPackage != null) {
+    packageRange = `₹${p.minPackage} LPA+`;
+  } else if (p.maxPackage != null) {
+    packageRange = `Up to ₹${p.maxPackage} LPA`;
+  }
+
   return {
     id: String(p.id),
     companyName: p.company?.name ?? String(p.companyId),
     role: p.position,
-    packageRange: p.ctc ? `${p.ctc} LPA` : 'TBD',
+    packageRange,
+    minPackage: p.minPackage,
+    maxPackage: p.maxPackage,
     deadline: p.deadline ? new Date(p.deadline).toISOString().split('T')[0] : '',
+    driveDate: p.driveDate ? new Date(p.driveDate).toISOString().split('T')[0] : undefined,
     cgpaRequirement: p.cgpaCutoff,
     description: p.description ?? '',
     eligibleBranches: p.branches?.map(b => b.branch.name) ?? [],
     requiredSkills: p.skills?.map(s => s.skill.name) ?? [],
     status: p.status ?? 'Upcoming',
+    attachmentUrl: p.attachments && p.attachments.length > 0 ? `http://localhost:4000${p.attachments[0].filePath}` : undefined,
   };
 }
 
@@ -52,12 +68,19 @@ export const placementService = {
     return data ? mapPlacement(data as ApiPlacement) : null;
   },
 
+  async getFitScore(id: string): Promise<any> {
+    const data = await apiClient.get(`/placements/${id}/fit-score`);
+    return data;
+  },
+
   async createPlacement(
     data: {
       companyId: number;
       position: string;
-      ctc: number;
+      minPackage?: number | null;
+      maxPackage?: number | null;
       deadline: string;
+      driveDate?: string;
       cgpaCutoff: number;
       description?: string;
       branchIds: number[];
@@ -80,18 +103,22 @@ export const placementService = {
     return { placement };
   },
 
-  async updatePlacement(id: string, data: Partial<Placement>): Promise<Placement> {
-    const payload: any = {};
-    if (data.role) payload.position = data.role;
-    if (data.deadline) payload.deadline = data.deadline;
-    if (data.cgpaRequirement !== undefined) payload.cgpaCutoff = data.cgpaRequirement;
-    if (data.description) payload.description = data.description;
-    if (data.status) payload.status = data.status;
-    if (data.packageRange) {
-       const ctcMatch = data.packageRange.match(/(\d+)/);
-       if (ctcMatch) payload.ctc = parseInt(ctcMatch[1]);
+  async updatePlacement(
+    id: string,
+    data: {
+      position?: string;
+      minPackage?: number | null;
+      maxPackage?: number | null;
+      deadline?: string;
+      driveDate?: string;
+      cgpaCutoff?: number;
+      description?: string;
+      branchIds?: number[];
+      skillIds?: number[];
+      status?: string;
     }
-    const res = await apiClient.put(`/placements/${id}`, payload);
+  ): Promise<Placement> {
+    const res = await apiClient.put(`/placements/${id}`, data);
     return mapPlacement(res as ApiPlacement);
   },
 

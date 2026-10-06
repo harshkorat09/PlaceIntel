@@ -48,8 +48,10 @@ model Placement {
   id               Int               @id @default(autoincrement())
   companyId        Int
   position         String
-  ctc              Float
+  minPackage       Float?
+  maxPackage       Float?
   deadline         DateTime
+  driveDate        DateTime?
   cgpaCutoff       Float
   description      String?
   status           String            @default("Upcoming")

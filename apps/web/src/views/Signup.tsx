@@ -40,6 +40,12 @@ export default function Signup() {
       return;
     }
 
+    const parsedCgpa = parseFloat(formData.cgpa);
+    if (isNaN(parsedCgpa) || parsedCgpa < 0 || parsedCgpa > 10) {
+      setErrorMessage("CGPA must be a number between 0 and 10");
+      return;
+    }
+
     setIsLoading(true);
     try {
       // Assuming a signup endpoint exists in apiClient
@@ -58,8 +64,7 @@ export default function Signup() {
         login(res.token, res.user);
         navigate('/');
       } else {
-        // Mock success for UI demo if endpoint fails
-        navigate('/login');
+        setErrorMessage('Registration failed. Please check your details and try again.');
       }
     } catch (err: any) {
       console.error(err);

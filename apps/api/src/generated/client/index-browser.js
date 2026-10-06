@@ -155,8 +155,10 @@ exports.Prisma.PlacementScalarFieldEnum = {
   id: 'id',
   companyId: 'companyId',
   position: 'position',
-  ctc: 'ctc',
+  minPackage: 'minPackage',
+  maxPackage: 'maxPackage',
   deadline: 'deadline',
+  driveDate: 'driveDate',
   cgpaCutoff: 'cgpaCutoff',
   description: 'description',
   status: 'status',
@@ -209,6 +211,21 @@ exports.Prisma.PlacementChunkScalarFieldEnum = {
   chunkIndex: 'chunkIndex'
 };
 
+exports.Prisma.ChatSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ChatMessageScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  role: 'role',
+  content: 'content',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -254,7 +271,9 @@ exports.Prisma.ModelName = {
   PlacementSkill: 'PlacementSkill',
   PlacementBranch: 'PlacementBranch',
   Attachment: 'Attachment',
-  PlacementChunk: 'PlacementChunk'
+  PlacementChunk: 'PlacementChunk',
+  ChatSession: 'ChatSession',
+  ChatMessage: 'ChatMessage'
 };
 
 /**

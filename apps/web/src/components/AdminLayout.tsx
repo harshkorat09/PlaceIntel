@@ -2,37 +2,36 @@ import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { PlaceIntelNavbar, type NavItem } from './PlaceIntelNavbar';
 
-export function StudentLayout({ children }: { children: React.ReactNode }) {
+export function AdminLayout({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
-  
+
   // Real data only
-  const userName = user?.name || user?.email || 'Student';
-  const userRoll = user?.userId || '';
-  const userBranch = (user as any)?.branch || 'CE';
+  const userRole = user?.role === 'ADMIN' ? 'System Admin' : 'Placement Officer';
+  const userEmail = user?.email || 'Admin';
 
   const navItems: NavItem[] = [
     { label: 'Dashboard', path: '/', isEnd: true },
     { label: 'Placement Drives', path: '/placements' },
     { label: 'Companies', path: '/companies' },
     { label: 'Analytics', path: '/analytics' },
-    { label: 'Ask PlaceIntel', path: '/ask-placeintel', icon: 'psychology', isSpecial: true },
+    { label: 'Skills', path: '/skills' },
+    { label: 'Branches', path: '/branches' },
+    { label: 'Assistant', path: '/ai-assistant', icon: 'psychology', isSpecial: true },
   ];
-
-  const subIdentifier = userRoll && userBranch ? `${userRoll} • ${userBranch}` : userRoll;
 
   return (
     <div className="bg-background font-body-md text-on-surface antialiased min-h-screen flex flex-col w-full overflow-x-hidden relative">
       <PlaceIntelNavbar 
         navItems={navItems}
-        userRoleLabel="Candidate"
-        userRoleIcon="school"
-        userIdentifier={userName}
-        userSubIdentifier={String(subIdentifier)}
-        roleType="STUDENT"
+        userRoleLabel={userRole}
+        userRoleIcon="shield"
+        userIdentifier={userEmail}
+        userSubIdentifier={userRole}
+        roleType="ADMIN"
       />
       
       {/* Main Content Area */}
-      <main className="w-full pt-24 flex-grow flex flex-col bg-background relative z-0">
+      <main className="w-full pt-24 px-4 sm:px-6 lg:px-8 pb-8 flex-grow flex flex-col bg-background">
         {children}
       </main>
       
@@ -41,7 +40,7 @@ export function StudentLayout({ children }: { children: React.ReactNode }) {
         <div className="w-full flex flex-col sm:flex-row items-center justify-between text-secondary font-label-regular text-xs gap-2">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
-            <span>System Active &bull; Academic Session 2025-26</span>
+            <span>System Active &bull; Admin Operations</span>
           </div>
           <span>PlaceIntel Institutional Intelligence</span>
         </div>

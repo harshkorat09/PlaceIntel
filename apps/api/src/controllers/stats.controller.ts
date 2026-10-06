@@ -29,7 +29,7 @@ export const getStats = asyncHandler(async (_req: Request, res: Response) => {
 
   allPlacements.forEach(p => {
     // Package Distribution
-    const ctc = p.ctc || 0;
+    const ctc = p.maxPackage || p.minPackage || 0;
     if (ctc < 5) packageDistribution['< 5 LPA']++;
     else if (ctc <= 10) packageDistribution['5 - 10 LPA']++;
     else if (ctc <= 20) packageDistribution['10 - 20 LPA']++;
