@@ -38,29 +38,18 @@ export const placementService = {
       const params = new URLSearchParams();
       if (filters.branch) params.append('branch', filters.branch);
       if (filters.skills) params.append('skills', filters.skills);
-      // Wait, backend does not have a 'search' query parameter for company/role.
-      // But we can still support the others via API and maybe fallback search locally or update backend?
-      // Let's pass what we can.
+      if (filters.search) params.append('search', filters.search);
       const qs = params.toString();
       if (qs) url += `?${qs}`;
     }
     const data = await apiClient.get(url);
-    let results = (data as ApiPlacement[] || []).map(mapPlacement);
-    
-    // Fallback client-side filtering for 'search' since backend API doesn't have it natively in controller
-    if (filters?.search) {
-      const s = filters.search.toLowerCase();
-      results = results.filter(drive => 
-        drive.companyName.toLowerCase().includes(s) || drive.role.toLowerCase().includes(s)
-      );
-    }
+    const results = (data as ApiPlacement[] || []).map(mapPlacement);
     return results;
   },
 
   async getPlacementById(id: string): Promise<Placement | null> {
-    const data = await apiClient.get('/placements');
-    const p = (data as ApiPlacement[] || []).find((x) => String(x.id) === id);
-    return p ? mapPlacement(p) : null;
+    const data = await apiClient.get(`/placements/${id}`);
+    return data ? mapPlacement(data as ApiPlacement) : null;
   },
 
   async createPlacement(

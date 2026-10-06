@@ -24,10 +24,17 @@ import AdminPanel from './views/AdminPanel';
 import Auth from './views/Auth';
 import { StudentDashboard, getStudentData } from './views/StudentViews';
 import { StudentJobs } from './views/StudentJobs';
+import { StudentJobDetails } from './views/StudentJobDetails';
 import { StudentProfile } from './views/StudentProfile';
+import { StudentSettings } from './views/StudentSettings';
+import { StudentCompanies } from './views/StudentCompanies';
+import { StudentCompanyDetails } from './views/StudentCompanyDetails';
+import { StudentAskPlaceIntel } from './views/StudentAskPlaceIntel';
 
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
+
+import { StudentLayout } from './components/StudentLayout';
 
 function DashboardLayout() {
   const { user, logout } = useAuth();
@@ -38,6 +45,27 @@ function DashboardLayout() {
   const userInitials = student ? student.name.split(' ').map((n: string) => n[0]).join('') : 'AD';
   const userName = student ? student.name : 'Dr. Amit Das';
   const userEmail = user?.email || 'placement.dir@univ.edu';
+
+
+  if (user?.role === 'STUDENT') {
+    return (
+      <StudentLayout>
+        <Routes>
+          <Route path="/" element={<StudentDashboard studentId={String(user.userId)} />} />
+          <Route path="/placements" element={<StudentJobs studentId={String(user.userId)} />} />
+          <Route path="/placements/:id" element={<StudentJobDetails studentId={String(user.userId)} />} />
+          <Route path="/profile" element={<StudentProfile />} />
+          <Route path="/settings" element={<StudentSettings />} />
+          <Route path="/companies" element={<StudentCompanies />} />
+          <Route path="/companies/:id" element={<StudentCompanyDetails />} />
+          <Route path="/ask-placeintel" element={<StudentAskPlaceIntel />} />
+
+
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </StudentLayout>
+    );
+  }
 
   return (
     <div className="app-layout">
@@ -179,7 +207,7 @@ function DashboardLayout() {
               <Route path="/companies" element={<ProtectedRoute><Companies role={user?.role === 'ADMIN' ? 'officer' : 'student'} /></ProtectedRoute>} />
               <Route path="/analytics" element={<ProtectedRoute><Analytics role={user?.role === 'ADMIN' ? 'officer' : 'student'} /></ProtectedRoute>} />
               <Route path="/ai-assistant" element={<ProtectedRoute><AIAssistant /></ProtectedRoute>} />
-              <Route path="/settings" element={<ProtectedRoute>{user?.role === 'ADMIN' ? <Settings /> : <StudentProfile studentId={String(user?.userId)} />}</ProtectedRoute>} />
+              <Route path="/settings" element={<ProtectedRoute>{user?.role === 'ADMIN' ? <Settings /> : <StudentProfile />}</ProtectedRoute>} />
               
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
@@ -189,10 +217,15 @@ function DashboardLayout() {
   );
 }
 
+import Landing from './views/Landing';
+import Signup from './views/Signup';
+
 function AppContent() {
   return (
     <Routes>
+      <Route path="/welcome" element={<Landing />} />
       <Route path="/login" element={<Auth />} />
+      <Route path="/signup" element={<Signup />} />
       <Route path="/*" element={<DashboardLayout />} />
     </Routes>
   );

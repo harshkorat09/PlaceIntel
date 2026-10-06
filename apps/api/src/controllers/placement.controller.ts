@@ -6,10 +6,17 @@ import { calculateFitScore } from '../utils/fitScore.js';
 import type { AuthRequest } from '../middlewares/auth.middleware.js';
 
 export const getPlacements = asyncHandler(async (req: Request, res: Response) => {
-  const { skills, packageRange, branch, year, status } = req.query;
+  const { search, skills, packageRange, branch, year, status } = req.query;
   
   const where: any = {};
-  
+
+  if (search) {
+    where.OR = [
+      { company: { name: { contains: String(search), mode: 'insensitive' } } },
+      { position: { contains: String(search), mode: 'insensitive' } },
+    ];
+  }
+
   if (skills) {
     const skillList = Array.isArray(skills) ? skills : [skills];
     where.skills = {
@@ -145,6 +152,21 @@ export const getPlacementFitScore = asyncHandler(async (req: AuthRequest, res: R
     success: true, 
     data: fitResult
   });
+});
+
+export const getPlacementById = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const placementId = parseInt(id as string, 10);
+  const placement = await prisma.placement.findUnique({
+    where: { id: placementId },
+    include: {
+      company: true,
+      branches: { include: { branch: true } },
+      skills: { include: { skill: true } },
+    },
+  });
+  if (!placement) throw new NotFoundError('Placement not found');
+  res.json({ success: true, data: placement });
 });
 
 /**

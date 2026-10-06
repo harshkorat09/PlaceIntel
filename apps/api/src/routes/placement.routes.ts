@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { getPlacements, createPlacement, updatePlacement, deletePlacement, getPlacementFitScore, uploadPlacementNotice } from '../controllers/placement.controller.js';
+import { getPlacements, createPlacement, updatePlacement, deletePlacement, getPlacementFitScore, getPlacementById, uploadPlacementNotice } from '../controllers/placement.controller.js';
 import { authenticate, requireAdmin } from '../middlewares/auth.middleware.js';
 import { validate } from '../middlewares/validate.js';
 import { placementSchema, updatePlacementSchema, placementIdParamSchema } from '../validators/placement.validator.js';
@@ -26,6 +26,8 @@ router.post('/', authenticate, requireAdmin, validate(placementSchema), createPl
 router.put('/:id', authenticate, requireAdmin, validate(updatePlacementSchema), updatePlacement);
 router.delete('/:id', authenticate, requireAdmin, validate(placementIdParamSchema), deletePlacement);
 router.get('/:id/fit-score', authenticate, validate(placementIdParamSchema), getPlacementFitScore);
+
+router.get('/:id', authenticate, validate(placementIdParamSchema), getPlacementById);
 
 // Optional PDF notice upload — Admin only
 router.post('/:id/notice', authenticate, requireAdmin, upload.single('file'), uploadPlacementNotice);

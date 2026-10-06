@@ -1,12 +1,7 @@
-import { useState, useEffect } from 'react';
-import {
-  CheckCircle,
-  ArrowUpRight,
-  Sparkles,
-  Briefcase,
-  AlertCircle,
-  Activity
-} from 'lucide-react';
+
+
+
+import type { FC } from 'react';
 
 interface StudentViewsProps {
   studentId: string;
@@ -14,29 +9,8 @@ interface StudentViewsProps {
 
 
 
-interface Application {
-  id: number;
-  studentName: string;
-  rollNo: string;
-  email: string;
-  institute: 'DEPSTAR' | 'CSPIT';
-  branch: string;
-  cgpa: number;
-  driveCompany: string;
-  driveRole: string;
-  driveCutoff: number;
-  drivePackage: number;
-  status: 'Applied' | 'Interviewing' | 'Selected' | 'Rejected';
-  appliedDate: string;
-  timeline: { date: string; stage: string; note: string }[];
-}
-
 // Student Mock database matching credentials details
-const studentDatabase: Record<string, { name: string; cgpa: number; branch: string; institute: 'DEPSTAR' | 'CSPIT'; email: string; phone: string }> = {
-  '24DCSE045': { name: 'Aditya Vardhan', cgpa: 8.72, branch: 'CSE', institute: 'DEPSTAR', email: 'aditya.v@depstar.ac.in', phone: '+91 98989 12345' },
-  'D25CSE018': { name: 'Riddhi Shah', cgpa: 9.15, branch: 'CSE', institute: 'CSPIT', email: 'riddhi.s@cspit.ac.in', phone: '+91 99778 88665' },
-  '24DCE001': { name: 'Devang Patel', cgpa: 8.45, branch: 'CE', institute: 'DEPSTAR', email: 'devang@depstar.ac.in', phone: '+91 90909 88877' }
-};
+const studentDatabase: Record<string, { name: string; cgpa: number; branch: string; institute: 'DEPSTAR' | 'CSPIT'; email: string; phone: string }> = {};
 
 export const getStudentData = (id: string) => {
   const stored = localStorage.getItem('placeintel_student_credentials');
@@ -79,230 +53,182 @@ export const getStudentData = (id: string) => {
 /* ============================================================================
    1. STUDENT DASHBOARD
    ============================================================================ */
-export function StudentDashboard({ studentId }: StudentViewsProps) {
+export const StudentDashboard: FC<StudentViewsProps> = ({ studentId }) => {
   const student = getStudentData(studentId);
-  const [apps, setApps] = useState<Application[]>([]);
-  const [announcements, setAnnouncements] = useState<any[]>([]);
-  const [events, setEvents] = useState<any[]>([]);
+  
 
-  useEffect(() => {
-    const storedApps = localStorage.getItem('placeintel_student_applications');
-    if (storedApps) {
-      setApps(JSON.parse(storedApps));
-    }
-
-    const storedNotifs = localStorage.getItem('placeintel_announcements');
-    if (storedNotifs) {
-      const parsed = JSON.parse(storedNotifs);
-      setAnnouncements(parsed.filter((n: any) => n.category === 'broadcast').slice(0, 3));
-    }
-
-    const storedEvents = localStorage.getItem('placeintel_calendar_events');
-    if (storedEvents) {
-      setEvents(JSON.parse(storedEvents).slice(0, 3));
-    }
-  }, []);
-
-  const myApps = apps.filter(a => a.rollNo.toUpperCase() === studentId.toUpperCase());
-  const isPlaced = myApps.some(a => a.status === 'Selected');
-  const activeOffers = myApps.filter(a => a.status === 'Selected');
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
-
-      {/* Header banner */}
-      <div className="page-header" style={{ marginBottom: 0 }}>
-        <div>
-          <h1 className="page-title">Welcome back, {student.name}</h1>
-          <p className="page-subtitle">Inspect active corporate selections statistics, package distributions, and recruitment velocity calendars.</p>
-        </div>
-      </div>
-
-      {/* Stats Row */}
-      <div className="applications-metrics-grid">
-
-        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
-          <div className="kpi-icon" style={{ backgroundColor: 'var(--primary-light)', color: 'var(--primary)' }}>
-            <Activity size={20} />
-          </div>
-          <div>
-            <span className="kpi-value">{myApps.length}</span>
-            <span className="kpi-label">Active Job Applications</span>
-          </div>
-        </div>
-
-        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
-          <div className="kpi-icon" style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)', color: 'var(--accent)' }}>
-            <CheckCircle size={20} />
-          </div>
-          <div>
-            <span className="kpi-value">{isPlaced ? 'Placed' : 'In Progress'}</span>
-            <span className="kpi-label">My Placement Status</span>
-          </div>
-        </div>
-
-        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
-          <div className="kpi-icon" style={{ backgroundColor: 'var(--warning-light)', color: 'var(--warning)' }}>
-            <ArrowUpRight size={20} />
-          </div>
-          <div>
-            <span className="kpi-value">
-              {activeOffers.length > 0 ? `₹${Math.max(...activeOffers.map(o => o.drivePackage)).toFixed(1)} LPA` : '₹12.4 LPA'}
-            </span>
-            <span className="kpi-label">{activeOffers.length > 0 ? 'My Active Offer Package' : 'CHARUSAT Avg Package'}</span>
-          </div>
-        </div>
-
-        <div className="card" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
-          <div className="kpi-icon" style={{ backgroundColor: 'var(--secondary-light)', color: 'var(--text-secondary)' }}>
-            <Sparkles size={20} />
-          </div>
-          <div>
-            <span className="kpi-value">75.0%</span>
-            <span className="kpi-label">Season Placement Rate</span>
-          </div>
-        </div>
-
-      </div>
-
-      <div className="dashboard-grid">
-
-        {/* Spline Area velocity curve */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
-          <div className="card-title">
-            <span>University Hiring Velocity (AY 2025-2026)</span>
-            <span className="badge badge-info">Cumulative Offers</span>
-          </div>
-
-          <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: 'var(--space-md)' }}>
-            Visualizing monthly student selections cumulative growth curve since season launch.
-          </p>
-
-          <div className="chart-container" style={{ position: 'relative', width: '100%', height: '240px' }}>
-            <svg viewBox="0 0 500 240" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
-              <line x1="0" y1="200" x2="500" y2="200" stroke="var(--border)" strokeWidth="1" strokeDasharray="3" />
-              <line x1="0" y1="140" x2="500" y2="140" stroke="var(--border)" strokeWidth="1" strokeDasharray="3" />
-              <line x1="0" y1="80" x2="500" y2="80" stroke="var(--border)" strokeWidth="1" strokeDasharray="3" />
-              <line x1="0" y1="20" x2="500" y2="20" stroke="var(--border)" strokeWidth="1" strokeDasharray="3" />
-
-              <defs>
-                <linearGradient id="studentAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.18" />
-                  <stop offset="100%" stopColor="var(--primary)" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-
-              <path d="M 0 200 Q 100 180 150 120 T 300 60 T 450 30 T 500 20 L 500 200 Z" fill="url(#studentAreaGrad)" />
-              <path d="M 0 200 Q 100 180 150 120 T 300 60 T 450 30 T 500 20" fill="none" stroke="var(--primary)" strokeWidth="3" />
-
-              <circle cx="150" cy="120" r="5" fill="var(--primary)" />
-              <text x="140" y="105" fontSize="9px" fontWeight="600" fill="var(--text-primary)">180 Offers (Oct)</text>
-
-              <circle cx="300" cy="60" r="5" fill="var(--primary)" />
-              <text x="290" y="45" fontSize="9px" fontWeight="600" fill="var(--text-primary)">390 Offers (Jan)</text>
-
-              <circle cx="500" cy="20" r="5" fill="var(--primary)" />
-              <text x="440" y="15" fontSize="9px" fontWeight="600" fill="var(--primary)">631 Offers (Active)</text>
-
-              <text x="0" y="220" fontSize="9px" fill="var(--text-tertiary)">July</text>
-              <text x="150" y="220" fontSize="9px" fill="var(--text-tertiary)">Oct</text>
-              <text x="300" y="220" fontSize="9px" fill="var(--text-tertiary)">Jan</text>
-              <text x="500" y="220" fontSize="9px" fill="var(--text-tertiary)">June</text>
-            </svg>
-          </div>
-        </div>
-
-        {/* Right card - Applied companies tracker pipeline */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-          <div className="card-title">
-            <span>My Applications Pipeline Status</span>
-          </div>
-
-          {myApps.length === 0 ? (
-            <div style={{ textAlign: 'center', margin: 'auto', padding: 'var(--space-md)' }}>
-              <Briefcase size={36} style={{ color: 'var(--text-tertiary)', marginBottom: '8px' }} />
-              <h3 style={{ fontSize: '14px', color: 'var(--text-primary)' }}>No active applications</h3>
-              <p style={{ fontSize: '11.5px', color: 'var(--text-secondary)', marginTop: '4px' }}>Explore the "Job Openings" tab to apply to active drives.</p>
+    <div className="flex flex-col w-full">
+      <div className="p-space-lg lg:p-space-xl space-y-space-xl max-w-[1400px] mx-auto w-full">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+          <div className="space-y-space-xxs">
+            <div className="flex items-center gap-space-xs text-secondary">
+              <span className="font-label-uppercase text-label-uppercase bg-secondary-fixed text-on-secondary-fixed px-space-xs py-space-xxs rounded-full">Session 2025–26</span>
+              <span className="font-label-regular text-label-regular">•</span>
+              <span className="font-label-regular text-label-regular text-secondary">{student.branch} • Semester V</span>
             </div>
-          ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)', overflowY: 'auto', maxHeight: '280px' }}>
-              {myApps.map(app => (
-                <div key={app.id} style={{ border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                    <strong style={{ fontSize: '13px', color: 'var(--text-primary)' }}>{app.driveCompany}</strong>
-                    <span className={`badge ${app.status === 'Selected' ? 'badge-success' : app.status === 'Rejected' ? 'badge-danger' : 'badge-info'}`}>
-                      {app.status}
-                    </span>
-                  </div>
-                  <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Position Target: {app.driveRole}</span>
-
-                  {/* Minified pipeline tracker indicator bar */}
-                  <div style={{ display: 'flex', height: '4px', backgroundColor: 'var(--border)', borderRadius: 'var(--radius-full)', overflow: 'hidden', marginTop: '4px' }}>
-                    <div style={{ width: '25%', backgroundColor: 'var(--accent)' }}></div>
-                    <div style={{ width: '25%', backgroundColor: app.status !== 'Applied' ? 'var(--accent)' : 'var(--border)' }}></div>
-                    <div style={{ width: '25%', backgroundColor: (app.status === 'Interviewing' || app.status === 'Selected') ? 'var(--accent)' : 'var(--border)' }}></div>
-                    <div style={{ width: '25%', backgroundColor: app.status === 'Selected' ? 'var(--accent)' : 'var(--border)' }}></div>
-                  </div>
-                </div>
-              ))}
+            <h1 className="font-headline-lg text-headline-lg text-primary-container tracking-tight">Good morning, {student.name.split(' ')[0]}.</h1>
+            <p className="font-body-md text-body-md text-secondary">Placement Season 2025–26</p>
+          </div>
+          <div className="flex items-center gap-space-sm self-start md:self-auto">
+            <div className="px-space-md py-space-xs rounded-xl bg-surface-container-lowest shadow-sm flex items-center gap-space-sm">
+              <span className="material-symbols-outlined text-outline text-[20px]">verified</span>
+              <div>
+                <div className="font-label-uppercase text-label-uppercase text-secondary">Verified CGPA</div>
+                <div className="font-title-sm text-title-sm text-primary-container">{student.cgpa.toFixed(2)} / 10.0</div>
+              </div>
             </div>
-          )}
-
+            <div className="px-space-md py-space-xs rounded-xl bg-surface-container-lowest shadow-sm flex items-center gap-space-sm">
+              <span className="material-symbols-outlined text-outline text-[20px]">military_tech</span>
+              <div>
+                <div className="font-label-uppercase text-label-uppercase text-secondary">Cohort Rank</div>
+                <div className="font-title-sm text-title-sm text-primary-container">Top 4% ({student.branch} Dept)</div>
+              </div>
+            </div>
+          </div>
         </div>
 
-      </div>
-
-      <div className="dashboard-grid">
-
-        {/* Recent Announcements */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-          <div className="card-title" style={{ display: 'flex', gap: '8px', alignItems: 'center', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
-            <AlertCircle size={16} style={{ color: 'var(--primary)' }} />
-            <span>Recent Placement Cell Notices</span>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {announcements.length === 0 ? (
-              <span style={{ fontSize: '12px', color: 'var(--text-tertiary)', fontStyle: 'italic' }}>No recent notices.</span>
-            ) : (
-              announcements.map(ann => (
-                <div key={ann.id} style={{ padding: '8px', borderLeft: '3px solid var(--primary)', backgroundColor: 'var(--background)', borderRadius: '0 var(--radius-sm) var(--radius-sm) 0' }}>
-                  <div style={{ fontSize: '12px', fontWeight: '600', color: 'var(--text-primary)' }}>{ann.title}</div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '4px' }}>{ann.timestamp}</div>
+        <div className="relative overflow-hidden rounded-2xl bg-primary-container text-on-primary p-space-lg lg:p-space-xl shadow-md">
+          <div className="absolute -right-16 -top-24 w-96 h-96 rounded-full bg-tertiary-container opacity-40 pointer-events-none"></div>
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-space-lg lg:gap-space-xl items-center">
+            <div className="lg:col-span-8 space-y-space-md">
+              <div className="flex flex-wrap items-center gap-space-xs">
+                <span className="font-label-uppercase text-label-uppercase bg-secondary-container text-on-secondary-container px-space-xs py-space-xxs rounded-full">System Check</span>
+              </div>
+              <div>
+                <p className="font-label-uppercase text-label-uppercase text-on-primary-container tracking-wider">Next Strategic Milestone</p>
+                <h2 className="font-headline-md text-headline-md text-surface-container-lowest mt-space-xxs">Keep your profile updated</h2>
+                <p className="font-body-md text-body-md text-on-primary-container mt-space-xs max-w-2xl">
+                  Opportunities will appear here once the placement session begins.
+                </p>
+              </div>
+            </div>
+            <div className="lg:col-span-4 bg-tertiary-container/80 rounded-xl p-space-lg space-y-space-md">
+              <div className="flex items-center justify-between">
+                <span className="font-label-uppercase text-label-uppercase text-on-primary-container">Profile Readiness</span>
+                <span className="font-title-sm text-title-sm text-secondary-fixed">87% Active</span>
+              </div>
+              <div className="w-full bg-primary h-2 rounded-full overflow-hidden">
+                <div className="bg-secondary-fixed h-full rounded-full" style={{ width: '87%' }}></div>
+              </div>
+              <p className="font-body-sm text-body-sm text-on-primary-container">Strong technical profile • 1 pending document for institutional verification.</p>
+              <div className="pt-space-xs flex items-center justify-between">
+                <div>
+                  <div className="font-label-uppercase text-label-uppercase text-on-primary-container">Primary Target Role</div>
+                  <div className="font-title-sm text-title-sm text-surface-container-lowest">Software Engineer</div>
                 </div>
-              ))
-            )}
-          </div>
-        </div>
-
-        {/* Upcoming Events */}
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-          <div className="card-title" style={{ display: 'flex', gap: '8px', alignItems: 'center', borderBottom: '1px solid var(--border)', paddingBottom: '8px' }}>
-            <Briefcase size={16} style={{ color: 'var(--accent)' }} />
-            <span>Upcoming Calendar Events</span>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {events.length === 0 ? (
-              <span style={{ fontSize: '12px', color: 'var(--text-tertiary)', fontStyle: 'italic' }}>No upcoming events scheduled.</span>
-            ) : (
-              events.map(ev => (
-                <div key={ev.id} style={{ display: 'flex', gap: '12px', alignItems: 'center', padding: '8px', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
-                  <div style={{ backgroundColor: 'var(--accent-light)', color: 'var(--accent)', padding: '6px 10px', borderRadius: 'var(--radius-sm)', textAlign: 'center', minWidth: '45px' }}>
-                    <div style={{ fontSize: '10px', fontWeight: '700', textTransform: 'uppercase' }}>{ev.type}</div>
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '12px', fontWeight: '600', color: 'var(--text-primary)' }}>{ev.title}</div>
-                    <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Day {ev.day} at {ev.time}</div>
-                  </div>
+                <div className="text-right">
+                  <div className="font-label-uppercase text-label-uppercase text-on-primary-container">Target FIT Score</div>
+                  <div className="font-headline-sm text-headline-sm text-secondary-fixed">94<span className="text-label-regular text-on-primary-container">/100</span></div>
                 </div>
-              ))
-            )}
+              </div>
+            </div>
           </div>
         </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-xl">
+          <div className="lg:col-span-8 space-y-space-xl">
+            <div className="bg-surface-container-lowest rounded-2xl p-space-xl text-center shadow-sm">
+              <span className="material-symbols-outlined text-[48px] text-outline mb-space-sm">inbox</span>
+              <h2 className="font-title-lg text-title-lg text-primary-container">No active placement tasks</h2>
+              <p className="font-body-md text-body-md text-secondary mt-space-xxs">Explore the job board to find placement opportunities.</p>
+            </div>
+          </div>
 
+          <div className="lg:col-span-4 space-y-space-lg">
+            <div className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm space-y-space-md">
+              <div className="flex items-center justify-between">
+                <span className="font-title-sm text-title-sm text-primary-container flex items-center gap-space-xs">
+                  <span className="material-symbols-outlined text-[18px] text-outline">schedule</span>
+                  Institutional Deadlines
+                </span>
+                <span className="font-label-uppercase text-label-uppercase bg-secondary-fixed text-on-secondary-fixed px-space-xs py-space-xxs rounded">Critical</span>
+              </div>
+              <div className="space-y-space-sm divide-y divide-surface-container-high">
+                <div className="pt-space-xs first:pt-0 space-y-space-xxs">
+                  <div className="flex items-center justify-between">
+                    <span className="font-title-sm text-title-sm text-primary-container">TCS Digital Portal</span>
+                    <span className="font-label-uppercase text-label-uppercase text-error">Tomorrow</span>
+                  </div>
+                  <p className="font-body-sm text-body-sm text-secondary">Endorsement approval and code repos verification closes at 18:00 hrs.</p>
+                </div>
+                <div className="pt-space-sm space-y-space-xxs">
+                  <div className="flex items-center justify-between">
+                    <span className="font-title-sm text-title-sm text-primary-container">Crest Data Systems</span>
+                    <span className="font-label-uppercase text-label-uppercase text-secondary">08 Oct 2026</span>
+                  </div>
+                  <p className="font-body-sm text-body-sm text-secondary">Campus pre-assessment slot declaration and institutional mock trial.</p>
+                </div>
+                <div className="pt-space-sm space-y-space-xxs">
+                  <div className="flex items-center justify-between">
+                    <span className="font-title-sm text-title-sm text-primary-container">InfoChips Assessment</span>
+                    <span className="font-label-uppercase text-label-uppercase text-secondary">12 Oct 2026</span>
+                  </div>
+                  <p className="font-body-sm text-body-sm text-secondary">Embedded systems profile validation requirement.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm space-y-space-md">
+              <div className="flex items-center justify-between">
+                <span className="font-title-sm text-title-sm text-primary-container flex items-center gap-space-xs">
+                  <span className="material-symbols-outlined text-[18px] text-outline">tune</span>
+                  Placement Optimization
+                </span>
+                <span className="font-label-regular text-label-regular text-secondary">+13% Potential</span>
+              </div>
+              <div className="p-space-md rounded-xl bg-secondary-fixed text-on-secondary-fixed space-y-space-xs">
+                <div className="flex items-center gap-space-xs">
+                  <span className="material-symbols-outlined text-[18px]">lightbulb</span>
+                  <span className="font-title-sm text-title-sm">Profile Recommendation</span>
+                </div>
+                <p className="font-body-sm text-body-sm text-on-secondary-fixed-variant leading-relaxed">
+                  Add 1 production SQL / Database Sharding project to verify backend competency. This will unlock <strong>3 more Tier-1 institutional recruitment tracks</strong>.
+                </p>
+                <a className="inline-flex items-center gap-1 font-title-sm text-title-sm text-primary-container pt-space-xxs hover:underline" href="#">
+                  <span>Upload Git Repository</span>
+                  <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                </a>
+              </div>
+              <div className="space-y-space-xs">
+                <div className="flex items-center justify-between text-body-sm">
+                  <span className="text-secondary font-label-regular text-label-regular">Academic Transcript</span>
+                  <span className="font-label-uppercase text-label-uppercase text-on-secondary-container">Verified</span>
+                </div>
+                <div className="flex items-center justify-between text-body-sm">
+                  <span className="text-secondary font-label-regular text-label-regular">Placement NOC</span>
+                  <span className="font-label-uppercase text-label-uppercase text-on-secondary-container">Cleared</span>
+                </div>
+                <div className="flex items-center justify-between text-body-sm">
+                  <span className="text-secondary font-label-regular text-label-regular">Production Project Proof</span>
+                  <span className="font-label-uppercase text-label-uppercase text-secondary">Action Req</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-primary-container text-on-primary rounded-2xl p-space-lg shadow-md space-y-space-sm relative overflow-hidden">
+              <div className="flex items-center gap-space-xs">
+                <div className="w-8 h-8 rounded-lg bg-surface-container-lowest text-primary-container flex items-center justify-center shrink-0">
+                  <span className="material-symbols-outlined text-[18px]">psychology</span>
+                </div>
+                <div>
+                  <h3 className="font-title-sm text-title-sm text-surface-container-lowest">Ask PlaceIntel</h3>
+                  <p className="font-label-regular text-label-regular text-on-primary-container">Institutional Placement Intelligence</p>
+                </div>
+              </div>
+              <p className="font-body-sm text-body-sm text-on-primary-container leading-relaxed">
+                Need historical question patterns for Microsoft Round 1 or average compensation for Computer Engineering cohorts?
+              </p>
+              <div className="pt-space-xs">
+                <button className="w-full py-space-sm rounded-xl bg-surface-container-lowest text-primary-container font-title-sm text-title-sm hover:bg-secondary-fixed transition-colors flex items-center justify-center gap-space-xs">
+                  <span>Open Placement Intelligence</span>
+                  <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
     </div>
   );
 }

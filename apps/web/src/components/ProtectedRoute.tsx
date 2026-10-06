@@ -21,7 +21,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requir
   }
 
   if (!user) {
-    // Redirect to login but save the attempted URL
+    // Redirect to landing if they try to access root directly, otherwise login
+    if (location.pathname === '/') {
+      return <Navigate to="/welcome" replace />;
+    }
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
