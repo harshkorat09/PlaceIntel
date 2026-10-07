@@ -8,6 +8,20 @@ export const getCompanies = asyncHandler(async (_req: Request, res: Response) =>
   res.json({ success: true, data: companies });
 });
 
+export const getCompanyById = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const company = await prisma.company.findUnique({
+    where: { id: parseInt(id as string) },
+    include: {
+      placements: true,
+    }
+  });
+  if (!company) {
+    throw new NotFoundError('Company not found');
+  }
+  res.json({ success: true, data: company });
+});
+
 export const createCompany = asyncHandler(async (req: Request, res: Response) => {
   const data = req.body;
   const company = await prisma.company.create({
@@ -39,6 +53,14 @@ export const deleteCompany = asyncHandler(async (req: Request, res: Response) =>
   const existingCompany = await prisma.company.findUnique({ where: { id: parseInt(id as string) } });
   if (!existingCompany) {
     throw new NotFoundError('Company not found');
+  }
+
+  const placementCount = await prisma.placement.count({ where: { companyId: parseInt(id as string) } });
+  if (placementCount > 0) {
+    return res.status(400).json({ 
+      success: false, 
+      error: { message: `Company cannot be deleted because it is referenced by ${placementCount} placement(s). Please remove or reassign these placements first.` } 
+    });
   }
 
   await prisma.company.delete({

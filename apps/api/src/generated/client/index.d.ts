@@ -3472,28 +3472,23 @@ export namespace Prisma {
 
   export type CompanyAvgAggregateOutputType = {
     id: number | null
-    hiresDepstar: number | null
-    hiresCspit: number | null
-    avgPackage: number | null
+    foundedYear: number | null
   }
 
   export type CompanySumAggregateOutputType = {
     id: number | null
-    hiresDepstar: number | null
-    hiresCspit: number | null
-    avgPackage: number | null
+    foundedYear: number | null
   }
 
   export type CompanyMinAggregateOutputType = {
     id: number | null
     name: string | null
     sector: string | null
-    hiresDepstar: number | null
-    hiresCspit: number | null
-    status: string | null
-    avgPackage: number | null
-    notes: string | null
     website: string | null
+    description: string | null
+    location: string | null
+    size: string | null
+    foundedYear: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3502,12 +3497,11 @@ export namespace Prisma {
     id: number | null
     name: string | null
     sector: string | null
-    hiresDepstar: number | null
-    hiresCspit: number | null
-    status: string | null
-    avgPackage: number | null
-    notes: string | null
     website: string | null
+    description: string | null
+    location: string | null
+    size: string | null
+    foundedYear: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3516,14 +3510,11 @@ export namespace Prisma {
     id: number
     name: number
     sector: number
-    hiresDepstar: number
-    hiresCspit: number
-    status: number
-    avgPackage: number
-    notes: number
     website: number
-    hrContacts: number
-    visits: number
+    description: number
+    location: number
+    size: number
+    foundedYear: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -3532,28 +3523,23 @@ export namespace Prisma {
 
   export type CompanyAvgAggregateInputType = {
     id?: true
-    hiresDepstar?: true
-    hiresCspit?: true
-    avgPackage?: true
+    foundedYear?: true
   }
 
   export type CompanySumAggregateInputType = {
     id?: true
-    hiresDepstar?: true
-    hiresCspit?: true
-    avgPackage?: true
+    foundedYear?: true
   }
 
   export type CompanyMinAggregateInputType = {
     id?: true
     name?: true
     sector?: true
-    hiresDepstar?: true
-    hiresCspit?: true
-    status?: true
-    avgPackage?: true
-    notes?: true
     website?: true
+    description?: true
+    location?: true
+    size?: true
+    foundedYear?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3562,12 +3548,11 @@ export namespace Prisma {
     id?: true
     name?: true
     sector?: true
-    hiresDepstar?: true
-    hiresCspit?: true
-    status?: true
-    avgPackage?: true
-    notes?: true
     website?: true
+    description?: true
+    location?: true
+    size?: true
+    foundedYear?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3576,14 +3561,11 @@ export namespace Prisma {
     id?: true
     name?: true
     sector?: true
-    hiresDepstar?: true
-    hiresCspit?: true
-    status?: true
-    avgPackage?: true
-    notes?: true
     website?: true
-    hrContacts?: true
-    visits?: true
+    description?: true
+    location?: true
+    size?: true
+    foundedYear?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -3679,14 +3661,11 @@ export namespace Prisma {
     id: number
     name: string
     sector: string
-    hiresDepstar: number
-    hiresCspit: number
-    status: string
-    avgPackage: number
-    notes: string | null
     website: string | null
-    hrContacts: JsonValue | null
-    visits: JsonValue | null
+    description: string | null
+    location: string | null
+    size: string | null
+    foundedYear: number | null
     createdAt: Date
     updatedAt: Date
     _count: CompanyCountAggregateOutputType | null
@@ -3714,14 +3693,11 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     sector?: boolean
-    hiresDepstar?: boolean
-    hiresCspit?: boolean
-    status?: boolean
-    avgPackage?: boolean
-    notes?: boolean
     website?: boolean
-    hrContacts?: boolean
-    visits?: boolean
+    description?: boolean
+    location?: boolean
+    size?: boolean
+    foundedYear?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     placements?: boolean | Company$placementsArgs<ExtArgs>
@@ -3732,14 +3708,11 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     sector?: boolean
-    hiresDepstar?: boolean
-    hiresCspit?: boolean
-    status?: boolean
-    avgPackage?: boolean
-    notes?: boolean
     website?: boolean
-    hrContacts?: boolean
-    visits?: boolean
+    description?: boolean
+    location?: boolean
+    size?: boolean
+    foundedYear?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["company"]>
@@ -3748,14 +3721,11 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     sector?: boolean
-    hiresDepstar?: boolean
-    hiresCspit?: boolean
-    status?: boolean
-    avgPackage?: boolean
-    notes?: boolean
     website?: boolean
-    hrContacts?: boolean
-    visits?: boolean
+    description?: boolean
+    location?: boolean
+    size?: boolean
+    foundedYear?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["company"]>
@@ -3764,19 +3734,16 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     sector?: boolean
-    hiresDepstar?: boolean
-    hiresCspit?: boolean
-    status?: boolean
-    avgPackage?: boolean
-    notes?: boolean
     website?: boolean
-    hrContacts?: boolean
-    visits?: boolean
+    description?: boolean
+    location?: boolean
+    size?: boolean
+    foundedYear?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "sector" | "hiresDepstar" | "hiresCspit" | "status" | "avgPackage" | "notes" | "website" | "hrContacts" | "visits" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
+  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "sector" | "website" | "description" | "location" | "size" | "foundedYear" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
   export type CompanyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     placements?: boolean | Company$placementsArgs<ExtArgs>
     _count?: boolean | CompanyCountOutputTypeDefaultArgs<ExtArgs>
@@ -3793,14 +3760,11 @@ export namespace Prisma {
       id: number
       name: string
       sector: string
-      hiresDepstar: number
-      hiresCspit: number
-      status: string
-      avgPackage: number
-      notes: string | null
       website: string | null
-      hrContacts: Prisma.JsonValue | null
-      visits: Prisma.JsonValue | null
+      description: string | null
+      location: string | null
+      size: string | null
+      foundedYear: number | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["company"]>
@@ -4230,14 +4194,11 @@ export namespace Prisma {
     readonly id: FieldRef<"Company", 'Int'>
     readonly name: FieldRef<"Company", 'String'>
     readonly sector: FieldRef<"Company", 'String'>
-    readonly hiresDepstar: FieldRef<"Company", 'Int'>
-    readonly hiresCspit: FieldRef<"Company", 'Int'>
-    readonly status: FieldRef<"Company", 'String'>
-    readonly avgPackage: FieldRef<"Company", 'Float'>
-    readonly notes: FieldRef<"Company", 'String'>
     readonly website: FieldRef<"Company", 'String'>
-    readonly hrContacts: FieldRef<"Company", 'Json'>
-    readonly visits: FieldRef<"Company", 'Json'>
+    readonly description: FieldRef<"Company", 'String'>
+    readonly location: FieldRef<"Company", 'String'>
+    readonly size: FieldRef<"Company", 'String'>
+    readonly foundedYear: FieldRef<"Company", 'Int'>
     readonly createdAt: FieldRef<"Company", 'DateTime'>
     readonly updatedAt: FieldRef<"Company", 'DateTime'>
   }
@@ -4693,9 +4654,6 @@ export namespace Prisma {
     minPackage: number | null
     maxPackage: number | null
     cgpaCutoff: number | null
-    appliedCount: number | null
-    shortlistedCount: number | null
-    offeredCount: number | null
   }
 
   export type PlacementSumAggregateOutputType = {
@@ -4704,9 +4662,6 @@ export namespace Prisma {
     minPackage: number | null
     maxPackage: number | null
     cgpaCutoff: number | null
-    appliedCount: number | null
-    shortlistedCount: number | null
-    offeredCount: number | null
   }
 
   export type PlacementMinAggregateOutputType = {
@@ -4720,10 +4675,6 @@ export namespace Prisma {
     cgpaCutoff: number | null
     description: string | null
     status: string | null
-    activeRound: string | null
-    appliedCount: number | null
-    shortlistedCount: number | null
-    offeredCount: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4739,10 +4690,6 @@ export namespace Prisma {
     cgpaCutoff: number | null
     description: string | null
     status: string | null
-    activeRound: string | null
-    appliedCount: number | null
-    shortlistedCount: number | null
-    offeredCount: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4758,10 +4705,6 @@ export namespace Prisma {
     cgpaCutoff: number
     description: number
     status: number
-    activeRound: number
-    appliedCount: number
-    shortlistedCount: number
-    offeredCount: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4774,9 +4717,6 @@ export namespace Prisma {
     minPackage?: true
     maxPackage?: true
     cgpaCutoff?: true
-    appliedCount?: true
-    shortlistedCount?: true
-    offeredCount?: true
   }
 
   export type PlacementSumAggregateInputType = {
@@ -4785,9 +4725,6 @@ export namespace Prisma {
     minPackage?: true
     maxPackage?: true
     cgpaCutoff?: true
-    appliedCount?: true
-    shortlistedCount?: true
-    offeredCount?: true
   }
 
   export type PlacementMinAggregateInputType = {
@@ -4801,10 +4738,6 @@ export namespace Prisma {
     cgpaCutoff?: true
     description?: true
     status?: true
-    activeRound?: true
-    appliedCount?: true
-    shortlistedCount?: true
-    offeredCount?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4820,10 +4753,6 @@ export namespace Prisma {
     cgpaCutoff?: true
     description?: true
     status?: true
-    activeRound?: true
-    appliedCount?: true
-    shortlistedCount?: true
-    offeredCount?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4839,10 +4768,6 @@ export namespace Prisma {
     cgpaCutoff?: true
     description?: true
     status?: true
-    activeRound?: true
-    appliedCount?: true
-    shortlistedCount?: true
-    offeredCount?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4945,10 +4870,6 @@ export namespace Prisma {
     cgpaCutoff: number
     description: string | null
     status: string
-    activeRound: string
-    appliedCount: number
-    shortlistedCount: number
-    offeredCount: number
     createdAt: Date
     updatedAt: Date
     _count: PlacementCountAggregateOutputType | null
@@ -4983,10 +4904,6 @@ export namespace Prisma {
     cgpaCutoff?: boolean
     description?: boolean
     status?: boolean
-    activeRound?: boolean
-    appliedCount?: boolean
-    shortlistedCount?: boolean
-    offeredCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     attachments?: boolean | Placement$attachmentsArgs<ExtArgs>
@@ -5007,10 +4924,6 @@ export namespace Prisma {
     cgpaCutoff?: boolean
     description?: boolean
     status?: boolean
-    activeRound?: boolean
-    appliedCount?: boolean
-    shortlistedCount?: boolean
-    offeredCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     company?: boolean | CompanyDefaultArgs<ExtArgs>
@@ -5027,10 +4940,6 @@ export namespace Prisma {
     cgpaCutoff?: boolean
     description?: boolean
     status?: boolean
-    activeRound?: boolean
-    appliedCount?: boolean
-    shortlistedCount?: boolean
-    offeredCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     company?: boolean | CompanyDefaultArgs<ExtArgs>
@@ -5047,15 +4956,11 @@ export namespace Prisma {
     cgpaCutoff?: boolean
     description?: boolean
     status?: boolean
-    activeRound?: boolean
-    appliedCount?: boolean
-    shortlistedCount?: boolean
-    offeredCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PlacementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "companyId" | "position" | "minPackage" | "maxPackage" | "deadline" | "driveDate" | "cgpaCutoff" | "description" | "status" | "activeRound" | "appliedCount" | "shortlistedCount" | "offeredCount" | "createdAt" | "updatedAt", ExtArgs["result"]["placement"]>
+  export type PlacementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "companyId" | "position" | "minPackage" | "maxPackage" | "deadline" | "driveDate" | "cgpaCutoff" | "description" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["placement"]>
   export type PlacementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     attachments?: boolean | Placement$attachmentsArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
@@ -5089,10 +4994,6 @@ export namespace Prisma {
       cgpaCutoff: number
       description: string | null
       status: string
-      activeRound: string
-      appliedCount: number
-      shortlistedCount: number
-      offeredCount: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["placement"]>
@@ -5532,10 +5433,6 @@ export namespace Prisma {
     readonly cgpaCutoff: FieldRef<"Placement", 'Float'>
     readonly description: FieldRef<"Placement", 'String'>
     readonly status: FieldRef<"Placement", 'String'>
-    readonly activeRound: FieldRef<"Placement", 'String'>
-    readonly appliedCount: FieldRef<"Placement", 'Int'>
-    readonly shortlistedCount: FieldRef<"Placement", 'Int'>
-    readonly offeredCount: FieldRef<"Placement", 'Int'>
     readonly createdAt: FieldRef<"Placement", 'DateTime'>
     readonly updatedAt: FieldRef<"Placement", 'DateTime'>
   }
@@ -6052,16 +5949,22 @@ export namespace Prisma {
   export type BranchMinAggregateOutputType = {
     id: number | null
     name: string | null
+    code: string | null
+    degree: string | null
   }
 
   export type BranchMaxAggregateOutputType = {
     id: number | null
     name: string | null
+    code: string | null
+    degree: string | null
   }
 
   export type BranchCountAggregateOutputType = {
     id: number
     name: number
+    code: number
+    degree: number
     _all: number
   }
 
@@ -6077,16 +5980,22 @@ export namespace Prisma {
   export type BranchMinAggregateInputType = {
     id?: true
     name?: true
+    code?: true
+    degree?: true
   }
 
   export type BranchMaxAggregateInputType = {
     id?: true
     name?: true
+    code?: true
+    degree?: true
   }
 
   export type BranchCountAggregateInputType = {
     id?: true
     name?: true
+    code?: true
+    degree?: true
     _all?: true
   }
 
@@ -6179,6 +6088,8 @@ export namespace Prisma {
   export type BranchGroupByOutputType = {
     id: number
     name: string
+    code: string
+    degree: string
     _count: BranchCountAggregateOutputType | null
     _avg: BranchAvgAggregateOutputType | null
     _sum: BranchSumAggregateOutputType | null
@@ -6203,6 +6114,8 @@ export namespace Prisma {
   export type BranchSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    code?: boolean
+    degree?: boolean
     placements?: boolean | Branch$placementsArgs<ExtArgs>
     users?: boolean | Branch$usersArgs<ExtArgs>
     _count?: boolean | BranchCountOutputTypeDefaultArgs<ExtArgs>
@@ -6211,19 +6124,25 @@ export namespace Prisma {
   export type BranchSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    code?: boolean
+    degree?: boolean
   }, ExtArgs["result"]["branch"]>
 
   export type BranchSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    code?: boolean
+    degree?: boolean
   }, ExtArgs["result"]["branch"]>
 
   export type BranchSelectScalar = {
     id?: boolean
     name?: boolean
+    code?: boolean
+    degree?: boolean
   }
 
-  export type BranchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name", ExtArgs["result"]["branch"]>
+  export type BranchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "code" | "degree", ExtArgs["result"]["branch"]>
   export type BranchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     placements?: boolean | Branch$placementsArgs<ExtArgs>
     users?: boolean | Branch$usersArgs<ExtArgs>
@@ -6241,6 +6160,8 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       name: string
+      code: string
+      degree: string
     }, ExtArgs["result"]["branch"]>
     composites: {}
   }
@@ -6668,6 +6589,8 @@ export namespace Prisma {
   interface BranchFieldRefs {
     readonly id: FieldRef<"Branch", 'Int'>
     readonly name: FieldRef<"Branch", 'String'>
+    readonly code: FieldRef<"Branch", 'String'>
+    readonly degree: FieldRef<"Branch", 'String'>
   }
     
 
@@ -15930,14 +15853,11 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     sector: 'sector',
-    hiresDepstar: 'hiresDepstar',
-    hiresCspit: 'hiresCspit',
-    status: 'status',
-    avgPackage: 'avgPackage',
-    notes: 'notes',
     website: 'website',
-    hrContacts: 'hrContacts',
-    visits: 'visits',
+    description: 'description',
+    location: 'location',
+    size: 'size',
+    foundedYear: 'foundedYear',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -15956,10 +15876,6 @@ export namespace Prisma {
     cgpaCutoff: 'cgpaCutoff',
     description: 'description',
     status: 'status',
-    activeRound: 'activeRound',
-    appliedCount: 'appliedCount',
-    shortlistedCount: 'shortlistedCount',
-    offeredCount: 'offeredCount',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -15969,7 +15885,9 @@ export namespace Prisma {
 
   export const BranchScalarFieldEnum: {
     id: 'id',
-    name: 'name'
+    name: 'name',
+    code: 'code',
+    degree: 'degree'
   };
 
   export type BranchScalarFieldEnum = (typeof BranchScalarFieldEnum)[keyof typeof BranchScalarFieldEnum]
@@ -16058,14 +15976,6 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-  export const NullableJsonNullValueInput: {
-    DbNull: typeof DbNull,
-    JsonNull: typeof JsonNull
-  };
-
-  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
-
-
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
@@ -16080,15 +15990,6 @@ export namespace Prisma {
   };
 
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
-  export const JsonNullValueFilter: {
-    DbNull: typeof DbNull,
-    JsonNull: typeof JsonNull,
-    AnyNull: typeof AnyNull
-  };
-
-  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   /**
@@ -16177,20 +16078,6 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Json'
-   */
-  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-  /**
-   * Reference to a field of type 'QueryMode'
-   */
-  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
   /**
    * Deep Input Types
@@ -16302,14 +16189,11 @@ export namespace Prisma {
     id?: IntFilter<"Company"> | number
     name?: StringFilter<"Company"> | string
     sector?: StringFilter<"Company"> | string
-    hiresDepstar?: IntFilter<"Company"> | number
-    hiresCspit?: IntFilter<"Company"> | number
-    status?: StringFilter<"Company"> | string
-    avgPackage?: FloatFilter<"Company"> | number
-    notes?: StringNullableFilter<"Company"> | string | null
     website?: StringNullableFilter<"Company"> | string | null
-    hrContacts?: JsonNullableFilter<"Company">
-    visits?: JsonNullableFilter<"Company">
+    description?: StringNullableFilter<"Company"> | string | null
+    location?: StringNullableFilter<"Company"> | string | null
+    size?: StringNullableFilter<"Company"> | string | null
+    foundedYear?: IntNullableFilter<"Company"> | number | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     placements?: PlacementListRelationFilter
@@ -16319,14 +16203,11 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     sector?: SortOrder
-    hiresDepstar?: SortOrder
-    hiresCspit?: SortOrder
-    status?: SortOrder
-    avgPackage?: SortOrder
-    notes?: SortOrderInput | SortOrder
     website?: SortOrderInput | SortOrder
-    hrContacts?: SortOrderInput | SortOrder
-    visits?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    location?: SortOrderInput | SortOrder
+    size?: SortOrderInput | SortOrder
+    foundedYear?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     placements?: PlacementOrderByRelationAggregateInput
@@ -16339,14 +16220,11 @@ export namespace Prisma {
     OR?: CompanyWhereInput[]
     NOT?: CompanyWhereInput | CompanyWhereInput[]
     sector?: StringFilter<"Company"> | string
-    hiresDepstar?: IntFilter<"Company"> | number
-    hiresCspit?: IntFilter<"Company"> | number
-    status?: StringFilter<"Company"> | string
-    avgPackage?: FloatFilter<"Company"> | number
-    notes?: StringNullableFilter<"Company"> | string | null
     website?: StringNullableFilter<"Company"> | string | null
-    hrContacts?: JsonNullableFilter<"Company">
-    visits?: JsonNullableFilter<"Company">
+    description?: StringNullableFilter<"Company"> | string | null
+    location?: StringNullableFilter<"Company"> | string | null
+    size?: StringNullableFilter<"Company"> | string | null
+    foundedYear?: IntNullableFilter<"Company"> | number | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     placements?: PlacementListRelationFilter
@@ -16356,14 +16234,11 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     sector?: SortOrder
-    hiresDepstar?: SortOrder
-    hiresCspit?: SortOrder
-    status?: SortOrder
-    avgPackage?: SortOrder
-    notes?: SortOrderInput | SortOrder
     website?: SortOrderInput | SortOrder
-    hrContacts?: SortOrderInput | SortOrder
-    visits?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    location?: SortOrderInput | SortOrder
+    size?: SortOrderInput | SortOrder
+    foundedYear?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CompanyCountOrderByAggregateInput
@@ -16380,14 +16255,11 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Company"> | number
     name?: StringWithAggregatesFilter<"Company"> | string
     sector?: StringWithAggregatesFilter<"Company"> | string
-    hiresDepstar?: IntWithAggregatesFilter<"Company"> | number
-    hiresCspit?: IntWithAggregatesFilter<"Company"> | number
-    status?: StringWithAggregatesFilter<"Company"> | string
-    avgPackage?: FloatWithAggregatesFilter<"Company"> | number
-    notes?: StringNullableWithAggregatesFilter<"Company"> | string | null
     website?: StringNullableWithAggregatesFilter<"Company"> | string | null
-    hrContacts?: JsonNullableWithAggregatesFilter<"Company">
-    visits?: JsonNullableWithAggregatesFilter<"Company">
+    description?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    location?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    size?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    foundedYear?: IntNullableWithAggregatesFilter<"Company"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
   }
@@ -16406,10 +16278,6 @@ export namespace Prisma {
     cgpaCutoff?: FloatFilter<"Placement"> | number
     description?: StringNullableFilter<"Placement"> | string | null
     status?: StringFilter<"Placement"> | string
-    activeRound?: StringFilter<"Placement"> | string
-    appliedCount?: IntFilter<"Placement"> | number
-    shortlistedCount?: IntFilter<"Placement"> | number
-    offeredCount?: IntFilter<"Placement"> | number
     createdAt?: DateTimeFilter<"Placement"> | Date | string
     updatedAt?: DateTimeFilter<"Placement"> | Date | string
     attachments?: AttachmentListRelationFilter
@@ -16429,10 +16297,6 @@ export namespace Prisma {
     cgpaCutoff?: SortOrder
     description?: SortOrderInput | SortOrder
     status?: SortOrder
-    activeRound?: SortOrder
-    appliedCount?: SortOrder
-    shortlistedCount?: SortOrder
-    offeredCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     attachments?: AttachmentOrderByRelationAggregateInput
@@ -16455,10 +16319,6 @@ export namespace Prisma {
     cgpaCutoff?: FloatFilter<"Placement"> | number
     description?: StringNullableFilter<"Placement"> | string | null
     status?: StringFilter<"Placement"> | string
-    activeRound?: StringFilter<"Placement"> | string
-    appliedCount?: IntFilter<"Placement"> | number
-    shortlistedCount?: IntFilter<"Placement"> | number
-    offeredCount?: IntFilter<"Placement"> | number
     createdAt?: DateTimeFilter<"Placement"> | Date | string
     updatedAt?: DateTimeFilter<"Placement"> | Date | string
     attachments?: AttachmentListRelationFilter
@@ -16478,10 +16338,6 @@ export namespace Prisma {
     cgpaCutoff?: SortOrder
     description?: SortOrderInput | SortOrder
     status?: SortOrder
-    activeRound?: SortOrder
-    appliedCount?: SortOrder
-    shortlistedCount?: SortOrder
-    offeredCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PlacementCountOrderByAggregateInput
@@ -16505,10 +16361,6 @@ export namespace Prisma {
     cgpaCutoff?: FloatWithAggregatesFilter<"Placement"> | number
     description?: StringNullableWithAggregatesFilter<"Placement"> | string | null
     status?: StringWithAggregatesFilter<"Placement"> | string
-    activeRound?: StringWithAggregatesFilter<"Placement"> | string
-    appliedCount?: IntWithAggregatesFilter<"Placement"> | number
-    shortlistedCount?: IntWithAggregatesFilter<"Placement"> | number
-    offeredCount?: IntWithAggregatesFilter<"Placement"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Placement"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Placement"> | Date | string
   }
@@ -16519,6 +16371,8 @@ export namespace Prisma {
     NOT?: BranchWhereInput | BranchWhereInput[]
     id?: IntFilter<"Branch"> | number
     name?: StringFilter<"Branch"> | string
+    code?: StringFilter<"Branch"> | string
+    degree?: StringFilter<"Branch"> | string
     placements?: PlacementBranchListRelationFilter
     users?: UserListRelationFilter
   }
@@ -16526,6 +16380,8 @@ export namespace Prisma {
   export type BranchOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    code?: SortOrder
+    degree?: SortOrder
     placements?: PlacementBranchOrderByRelationAggregateInput
     users?: UserOrderByRelationAggregateInput
   }
@@ -16536,6 +16392,8 @@ export namespace Prisma {
     AND?: BranchWhereInput | BranchWhereInput[]
     OR?: BranchWhereInput[]
     NOT?: BranchWhereInput | BranchWhereInput[]
+    code?: StringFilter<"Branch"> | string
+    degree?: StringFilter<"Branch"> | string
     placements?: PlacementBranchListRelationFilter
     users?: UserListRelationFilter
   }, "id" | "name">
@@ -16543,6 +16401,8 @@ export namespace Prisma {
   export type BranchOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    code?: SortOrder
+    degree?: SortOrder
     _count?: BranchCountOrderByAggregateInput
     _avg?: BranchAvgOrderByAggregateInput
     _max?: BranchMaxOrderByAggregateInput
@@ -16556,6 +16416,8 @@ export namespace Prisma {
     NOT?: BranchScalarWhereWithAggregatesInput | BranchScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Branch"> | number
     name?: StringWithAggregatesFilter<"Branch"> | string
+    code?: StringWithAggregatesFilter<"Branch"> | string
+    degree?: StringWithAggregatesFilter<"Branch"> | string
   }
 
   export type SkillWhereInput = {
@@ -17082,14 +16944,11 @@ export namespace Prisma {
   export type CompanyCreateInput = {
     name: string
     sector: string
-    hiresDepstar?: number
-    hiresCspit?: number
-    status?: string
-    avgPackage: number
-    notes?: string | null
     website?: string | null
-    hrContacts?: NullableJsonNullValueInput | InputJsonValue
-    visits?: NullableJsonNullValueInput | InputJsonValue
+    description?: string | null
+    location?: string | null
+    size?: string | null
+    foundedYear?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     placements?: PlacementCreateNestedManyWithoutCompanyInput
@@ -17099,14 +16958,11 @@ export namespace Prisma {
     id?: number
     name: string
     sector: string
-    hiresDepstar?: number
-    hiresCspit?: number
-    status?: string
-    avgPackage: number
-    notes?: string | null
     website?: string | null
-    hrContacts?: NullableJsonNullValueInput | InputJsonValue
-    visits?: NullableJsonNullValueInput | InputJsonValue
+    description?: string | null
+    location?: string | null
+    size?: string | null
+    foundedYear?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
     placements?: PlacementUncheckedCreateNestedManyWithoutCompanyInput
@@ -17115,14 +16971,11 @@ export namespace Prisma {
   export type CompanyUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     sector?: StringFieldUpdateOperationsInput | string
-    hiresDepstar?: IntFieldUpdateOperationsInput | number
-    hiresCspit?: IntFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
-    avgPackage?: FloatFieldUpdateOperationsInput | number
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
-    hrContacts?: NullableJsonNullValueInput | InputJsonValue
-    visits?: NullableJsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableStringFieldUpdateOperationsInput | string | null
+    foundedYear?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     placements?: PlacementUpdateManyWithoutCompanyNestedInput
@@ -17132,14 +16985,11 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     sector?: StringFieldUpdateOperationsInput | string
-    hiresDepstar?: IntFieldUpdateOperationsInput | number
-    hiresCspit?: IntFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
-    avgPackage?: FloatFieldUpdateOperationsInput | number
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
-    hrContacts?: NullableJsonNullValueInput | InputJsonValue
-    visits?: NullableJsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableStringFieldUpdateOperationsInput | string | null
+    foundedYear?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     placements?: PlacementUncheckedUpdateManyWithoutCompanyNestedInput
@@ -17149,14 +16999,11 @@ export namespace Prisma {
     id?: number
     name: string
     sector: string
-    hiresDepstar?: number
-    hiresCspit?: number
-    status?: string
-    avgPackage: number
-    notes?: string | null
     website?: string | null
-    hrContacts?: NullableJsonNullValueInput | InputJsonValue
-    visits?: NullableJsonNullValueInput | InputJsonValue
+    description?: string | null
+    location?: string | null
+    size?: string | null
+    foundedYear?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17164,14 +17011,11 @@ export namespace Prisma {
   export type CompanyUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     sector?: StringFieldUpdateOperationsInput | string
-    hiresDepstar?: IntFieldUpdateOperationsInput | number
-    hiresCspit?: IntFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
-    avgPackage?: FloatFieldUpdateOperationsInput | number
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
-    hrContacts?: NullableJsonNullValueInput | InputJsonValue
-    visits?: NullableJsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableStringFieldUpdateOperationsInput | string | null
+    foundedYear?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17180,14 +17024,11 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     sector?: StringFieldUpdateOperationsInput | string
-    hiresDepstar?: IntFieldUpdateOperationsInput | number
-    hiresCspit?: IntFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
-    avgPackage?: FloatFieldUpdateOperationsInput | number
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
-    hrContacts?: NullableJsonNullValueInput | InputJsonValue
-    visits?: NullableJsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableStringFieldUpdateOperationsInput | string | null
+    foundedYear?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17201,10 +17042,6 @@ export namespace Prisma {
     cgpaCutoff: number
     description?: string | null
     status?: string
-    activeRound?: string
-    appliedCount?: number
-    shortlistedCount?: number
-    offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     attachments?: AttachmentCreateNestedManyWithoutPlacementInput
@@ -17224,10 +17061,6 @@ export namespace Prisma {
     cgpaCutoff: number
     description?: string | null
     status?: string
-    activeRound?: string
-    appliedCount?: number
-    shortlistedCount?: number
-    offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     attachments?: AttachmentUncheckedCreateNestedManyWithoutPlacementInput
@@ -17244,10 +17077,6 @@ export namespace Prisma {
     cgpaCutoff?: FloatFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    activeRound?: StringFieldUpdateOperationsInput | string
-    appliedCount?: IntFieldUpdateOperationsInput | number
-    shortlistedCount?: IntFieldUpdateOperationsInput | number
-    offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: AttachmentUpdateManyWithoutPlacementNestedInput
@@ -17267,10 +17096,6 @@ export namespace Prisma {
     cgpaCutoff?: FloatFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    activeRound?: StringFieldUpdateOperationsInput | string
-    appliedCount?: IntFieldUpdateOperationsInput | number
-    shortlistedCount?: IntFieldUpdateOperationsInput | number
-    offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: AttachmentUncheckedUpdateManyWithoutPlacementNestedInput
@@ -17289,10 +17114,6 @@ export namespace Prisma {
     cgpaCutoff: number
     description?: string | null
     status?: string
-    activeRound?: string
-    appliedCount?: number
-    shortlistedCount?: number
-    offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17306,10 +17127,6 @@ export namespace Prisma {
     cgpaCutoff?: FloatFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    activeRound?: StringFieldUpdateOperationsInput | string
-    appliedCount?: IntFieldUpdateOperationsInput | number
-    shortlistedCount?: IntFieldUpdateOperationsInput | number
-    offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17325,16 +17142,14 @@ export namespace Prisma {
     cgpaCutoff?: FloatFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    activeRound?: StringFieldUpdateOperationsInput | string
-    appliedCount?: IntFieldUpdateOperationsInput | number
-    shortlistedCount?: IntFieldUpdateOperationsInput | number
-    offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BranchCreateInput = {
     name: string
+    code?: string
+    degree?: string
     placements?: PlacementBranchCreateNestedManyWithoutBranchInput
     users?: UserCreateNestedManyWithoutBranchInput
   }
@@ -17342,12 +17157,16 @@ export namespace Prisma {
   export type BranchUncheckedCreateInput = {
     id?: number
     name: string
+    code?: string
+    degree?: string
     placements?: PlacementBranchUncheckedCreateNestedManyWithoutBranchInput
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    degree?: StringFieldUpdateOperationsInput | string
     placements?: PlacementBranchUpdateManyWithoutBranchNestedInput
     users?: UserUpdateManyWithoutBranchNestedInput
   }
@@ -17355,6 +17174,8 @@ export namespace Prisma {
   export type BranchUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    degree?: StringFieldUpdateOperationsInput | string
     placements?: PlacementBranchUncheckedUpdateManyWithoutBranchNestedInput
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
   }
@@ -17362,15 +17183,21 @@ export namespace Prisma {
   export type BranchCreateManyInput = {
     id?: number
     name: string
+    code?: string
+    degree?: string
   }
 
   export type BranchUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    degree?: StringFieldUpdateOperationsInput | string
   }
 
   export type BranchUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    degree?: StringFieldUpdateOperationsInput | string
   }
 
   export type SkillCreateInput = {
@@ -18017,40 +17844,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type FloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
-  }
-  export type JsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
   export type PlacementListRelationFilter = {
     every?: PlacementWhereInput
     some?: PlacementWhereInput
@@ -18065,35 +17858,29 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     sector?: SortOrder
-    hiresDepstar?: SortOrder
-    hiresCspit?: SortOrder
-    status?: SortOrder
-    avgPackage?: SortOrder
-    notes?: SortOrder
     website?: SortOrder
-    hrContacts?: SortOrder
-    visits?: SortOrder
+    description?: SortOrder
+    location?: SortOrder
+    size?: SortOrder
+    foundedYear?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type CompanyAvgOrderByAggregateInput = {
     id?: SortOrder
-    hiresDepstar?: SortOrder
-    hiresCspit?: SortOrder
-    avgPackage?: SortOrder
+    foundedYear?: SortOrder
   }
 
   export type CompanyMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     sector?: SortOrder
-    hiresDepstar?: SortOrder
-    hiresCspit?: SortOrder
-    status?: SortOrder
-    avgPackage?: SortOrder
-    notes?: SortOrder
     website?: SortOrder
+    description?: SortOrder
+    location?: SortOrder
+    size?: SortOrder
+    foundedYear?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18102,63 +17889,18 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     sector?: SortOrder
-    hiresDepstar?: SortOrder
-    hiresCspit?: SortOrder
-    status?: SortOrder
-    avgPackage?: SortOrder
-    notes?: SortOrder
     website?: SortOrder
+    description?: SortOrder
+    location?: SortOrder
+    size?: SortOrder
+    foundedYear?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type CompanySumOrderByAggregateInput = {
     id?: SortOrder
-    hiresDepstar?: SortOrder
-    hiresCspit?: SortOrder
-    avgPackage?: SortOrder
-  }
-
-  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
-  }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
+    foundedYear?: SortOrder
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -18170,6 +17912,17 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type AttachmentListRelationFilter = {
@@ -18218,10 +17971,6 @@ export namespace Prisma {
     cgpaCutoff?: SortOrder
     description?: SortOrder
     status?: SortOrder
-    activeRound?: SortOrder
-    appliedCount?: SortOrder
-    shortlistedCount?: SortOrder
-    offeredCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18232,9 +17981,6 @@ export namespace Prisma {
     minPackage?: SortOrder
     maxPackage?: SortOrder
     cgpaCutoff?: SortOrder
-    appliedCount?: SortOrder
-    shortlistedCount?: SortOrder
-    offeredCount?: SortOrder
   }
 
   export type PlacementMaxOrderByAggregateInput = {
@@ -18248,10 +17994,6 @@ export namespace Prisma {
     cgpaCutoff?: SortOrder
     description?: SortOrder
     status?: SortOrder
-    activeRound?: SortOrder
-    appliedCount?: SortOrder
-    shortlistedCount?: SortOrder
-    offeredCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18267,10 +18009,6 @@ export namespace Prisma {
     cgpaCutoff?: SortOrder
     description?: SortOrder
     status?: SortOrder
-    activeRound?: SortOrder
-    appliedCount?: SortOrder
-    shortlistedCount?: SortOrder
-    offeredCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18281,9 +18019,6 @@ export namespace Prisma {
     minPackage?: SortOrder
     maxPackage?: SortOrder
     cgpaCutoff?: SortOrder
-    appliedCount?: SortOrder
-    shortlistedCount?: SortOrder
-    offeredCount?: SortOrder
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -18300,6 +18035,22 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
   export type UserListRelationFilter = {
     every?: UserWhereInput
     some?: UserWhereInput
@@ -18313,6 +18064,8 @@ export namespace Prisma {
   export type BranchCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    code?: SortOrder
+    degree?: SortOrder
   }
 
   export type BranchAvgOrderByAggregateInput = {
@@ -18322,11 +18075,15 @@ export namespace Prisma {
   export type BranchMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    code?: SortOrder
+    degree?: SortOrder
   }
 
   export type BranchMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    code?: SortOrder
+    degree?: SortOrder
   }
 
   export type BranchSumOrderByAggregateInput = {
@@ -18791,14 +18548,6 @@ export namespace Prisma {
     connect?: PlacementWhereUniqueInput | PlacementWhereUniqueInput[]
   }
 
-  export type FloatFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type PlacementUpdateManyWithoutCompanyNestedInput = {
     create?: XOR<PlacementCreateWithoutCompanyInput, PlacementUncheckedCreateWithoutCompanyInput> | PlacementCreateWithoutCompanyInput[] | PlacementUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: PlacementCreateOrConnectWithoutCompanyInput | PlacementCreateOrConnectWithoutCompanyInput[]
@@ -18877,6 +18626,14 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type AttachmentUpdateManyWithoutPlacementNestedInput = {
@@ -19576,45 +19333,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
-  }
-  export type NestedJsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -19640,6 +19358,22 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
   export type StudentSkillCreateWithoutUserInput = {
     skill: SkillCreateNestedOneWithoutStudentsInput
   }
@@ -19660,12 +19394,16 @@ export namespace Prisma {
 
   export type BranchCreateWithoutUsersInput = {
     name: string
+    code?: string
+    degree?: string
     placements?: PlacementBranchCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutUsersInput = {
     id?: number
     name: string
+    code?: string
+    degree?: string
     placements?: PlacementBranchUncheckedCreateNestedManyWithoutBranchInput
   }
 
@@ -19734,12 +19472,16 @@ export namespace Prisma {
 
   export type BranchUpdateWithoutUsersInput = {
     name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    degree?: StringFieldUpdateOperationsInput | string
     placements?: PlacementBranchUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutUsersInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    degree?: StringFieldUpdateOperationsInput | string
     placements?: PlacementBranchUncheckedUpdateManyWithoutBranchNestedInput
   }
 
@@ -19778,10 +19520,6 @@ export namespace Prisma {
     cgpaCutoff: number
     description?: string | null
     status?: string
-    activeRound?: string
-    appliedCount?: number
-    shortlistedCount?: number
-    offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     attachments?: AttachmentCreateNestedManyWithoutPlacementInput
@@ -19799,10 +19537,6 @@ export namespace Prisma {
     cgpaCutoff: number
     description?: string | null
     status?: string
-    activeRound?: string
-    appliedCount?: number
-    shortlistedCount?: number
-    offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     attachments?: AttachmentUncheckedCreateNestedManyWithoutPlacementInput
@@ -19850,10 +19584,6 @@ export namespace Prisma {
     cgpaCutoff?: FloatFilter<"Placement"> | number
     description?: StringNullableFilter<"Placement"> | string | null
     status?: StringFilter<"Placement"> | string
-    activeRound?: StringFilter<"Placement"> | string
-    appliedCount?: IntFilter<"Placement"> | number
-    shortlistedCount?: IntFilter<"Placement"> | number
-    offeredCount?: IntFilter<"Placement"> | number
     createdAt?: DateTimeFilter<"Placement"> | Date | string
     updatedAt?: DateTimeFilter<"Placement"> | Date | string
   }
@@ -19886,14 +19616,11 @@ export namespace Prisma {
   export type CompanyCreateWithoutPlacementsInput = {
     name: string
     sector: string
-    hiresDepstar?: number
-    hiresCspit?: number
-    status?: string
-    avgPackage: number
-    notes?: string | null
     website?: string | null
-    hrContacts?: NullableJsonNullValueInput | InputJsonValue
-    visits?: NullableJsonNullValueInput | InputJsonValue
+    description?: string | null
+    location?: string | null
+    size?: string | null
+    foundedYear?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19902,14 +19629,11 @@ export namespace Prisma {
     id?: number
     name: string
     sector: string
-    hiresDepstar?: number
-    hiresCspit?: number
-    status?: string
-    avgPackage: number
-    notes?: string | null
     website?: string | null
-    hrContacts?: NullableJsonNullValueInput | InputJsonValue
-    visits?: NullableJsonNullValueInput | InputJsonValue
+    description?: string | null
+    location?: string | null
+    size?: string | null
+    foundedYear?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19996,14 +19720,11 @@ export namespace Prisma {
   export type CompanyUpdateWithoutPlacementsInput = {
     name?: StringFieldUpdateOperationsInput | string
     sector?: StringFieldUpdateOperationsInput | string
-    hiresDepstar?: IntFieldUpdateOperationsInput | number
-    hiresCspit?: IntFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
-    avgPackage?: FloatFieldUpdateOperationsInput | number
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
-    hrContacts?: NullableJsonNullValueInput | InputJsonValue
-    visits?: NullableJsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableStringFieldUpdateOperationsInput | string | null
+    foundedYear?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20012,14 +19733,11 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     sector?: StringFieldUpdateOperationsInput | string
-    hiresDepstar?: IntFieldUpdateOperationsInput | number
-    hiresCspit?: IntFieldUpdateOperationsInput | number
-    status?: StringFieldUpdateOperationsInput | string
-    avgPackage?: FloatFieldUpdateOperationsInput | number
-    notes?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
-    hrContacts?: NullableJsonNullValueInput | InputJsonValue
-    visits?: NullableJsonNullValueInput | InputJsonValue
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    size?: NullableStringFieldUpdateOperationsInput | string | null
+    foundedYear?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20374,10 +20092,6 @@ export namespace Prisma {
     cgpaCutoff: number
     description?: string | null
     status?: string
-    activeRound?: string
-    appliedCount?: number
-    shortlistedCount?: number
-    offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     attachments?: AttachmentCreateNestedManyWithoutPlacementInput
@@ -20396,10 +20110,6 @@ export namespace Prisma {
     cgpaCutoff: number
     description?: string | null
     status?: string
-    activeRound?: string
-    appliedCount?: number
-    shortlistedCount?: number
-    offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     attachments?: AttachmentUncheckedCreateNestedManyWithoutPlacementInput
@@ -20447,10 +20157,6 @@ export namespace Prisma {
     cgpaCutoff?: FloatFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    activeRound?: StringFieldUpdateOperationsInput | string
-    appliedCount?: IntFieldUpdateOperationsInput | number
-    shortlistedCount?: IntFieldUpdateOperationsInput | number
-    offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: AttachmentUpdateManyWithoutPlacementNestedInput
@@ -20469,10 +20175,6 @@ export namespace Prisma {
     cgpaCutoff?: FloatFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    activeRound?: StringFieldUpdateOperationsInput | string
-    appliedCount?: IntFieldUpdateOperationsInput | number
-    shortlistedCount?: IntFieldUpdateOperationsInput | number
-    offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: AttachmentUncheckedUpdateManyWithoutPlacementNestedInput
@@ -20503,12 +20205,16 @@ export namespace Prisma {
 
   export type BranchCreateWithoutPlacementsInput = {
     name: string
+    code?: string
+    degree?: string
     users?: UserCreateNestedManyWithoutBranchInput
   }
 
   export type BranchUncheckedCreateWithoutPlacementsInput = {
     id?: number
     name: string
+    code?: string
+    degree?: string
     users?: UserUncheckedCreateNestedManyWithoutBranchInput
   }
 
@@ -20526,10 +20232,6 @@ export namespace Prisma {
     cgpaCutoff: number
     description?: string | null
     status?: string
-    activeRound?: string
-    appliedCount?: number
-    shortlistedCount?: number
-    offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     attachments?: AttachmentCreateNestedManyWithoutPlacementInput
@@ -20548,10 +20250,6 @@ export namespace Prisma {
     cgpaCutoff: number
     description?: string | null
     status?: string
-    activeRound?: string
-    appliedCount?: number
-    shortlistedCount?: number
-    offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     attachments?: AttachmentUncheckedCreateNestedManyWithoutPlacementInput
@@ -20576,12 +20274,16 @@ export namespace Prisma {
 
   export type BranchUpdateWithoutPlacementsInput = {
     name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    degree?: StringFieldUpdateOperationsInput | string
     users?: UserUpdateManyWithoutBranchNestedInput
   }
 
   export type BranchUncheckedUpdateWithoutPlacementsInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    degree?: StringFieldUpdateOperationsInput | string
     users?: UserUncheckedUpdateManyWithoutBranchNestedInput
   }
 
@@ -20605,10 +20307,6 @@ export namespace Prisma {
     cgpaCutoff?: FloatFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    activeRound?: StringFieldUpdateOperationsInput | string
-    appliedCount?: IntFieldUpdateOperationsInput | number
-    shortlistedCount?: IntFieldUpdateOperationsInput | number
-    offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: AttachmentUpdateManyWithoutPlacementNestedInput
@@ -20627,10 +20325,6 @@ export namespace Prisma {
     cgpaCutoff?: FloatFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    activeRound?: StringFieldUpdateOperationsInput | string
-    appliedCount?: IntFieldUpdateOperationsInput | number
-    shortlistedCount?: IntFieldUpdateOperationsInput | number
-    offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: AttachmentUncheckedUpdateManyWithoutPlacementNestedInput
@@ -20646,10 +20340,6 @@ export namespace Prisma {
     cgpaCutoff: number
     description?: string | null
     status?: string
-    activeRound?: string
-    appliedCount?: number
-    shortlistedCount?: number
-    offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     company: CompanyCreateNestedOneWithoutPlacementsInput
@@ -20668,10 +20358,6 @@ export namespace Prisma {
     cgpaCutoff: number
     description?: string | null
     status?: string
-    activeRound?: string
-    appliedCount?: number
-    shortlistedCount?: number
-    offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     branches?: PlacementBranchUncheckedCreateNestedManyWithoutPlacementInput
@@ -20726,10 +20412,6 @@ export namespace Prisma {
     cgpaCutoff?: FloatFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    activeRound?: StringFieldUpdateOperationsInput | string
-    appliedCount?: IntFieldUpdateOperationsInput | number
-    shortlistedCount?: IntFieldUpdateOperationsInput | number
-    offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     company?: CompanyUpdateOneRequiredWithoutPlacementsNestedInput
@@ -20748,10 +20430,6 @@ export namespace Prisma {
     cgpaCutoff?: FloatFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    activeRound?: StringFieldUpdateOperationsInput | string
-    appliedCount?: IntFieldUpdateOperationsInput | number
-    shortlistedCount?: IntFieldUpdateOperationsInput | number
-    offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     branches?: PlacementBranchUncheckedUpdateManyWithoutPlacementNestedInput
@@ -21052,10 +20730,6 @@ export namespace Prisma {
     cgpaCutoff: number
     description?: string | null
     status?: string
-    activeRound?: string
-    appliedCount?: number
-    shortlistedCount?: number
-    offeredCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -21069,10 +20743,6 @@ export namespace Prisma {
     cgpaCutoff?: FloatFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    activeRound?: StringFieldUpdateOperationsInput | string
-    appliedCount?: IntFieldUpdateOperationsInput | number
-    shortlistedCount?: IntFieldUpdateOperationsInput | number
-    offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: AttachmentUpdateManyWithoutPlacementNestedInput
@@ -21090,10 +20760,6 @@ export namespace Prisma {
     cgpaCutoff?: FloatFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    activeRound?: StringFieldUpdateOperationsInput | string
-    appliedCount?: IntFieldUpdateOperationsInput | number
-    shortlistedCount?: IntFieldUpdateOperationsInput | number
-    offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: AttachmentUncheckedUpdateManyWithoutPlacementNestedInput
@@ -21111,10 +20777,6 @@ export namespace Prisma {
     cgpaCutoff?: FloatFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
-    activeRound?: StringFieldUpdateOperationsInput | string
-    appliedCount?: IntFieldUpdateOperationsInput | number
-    shortlistedCount?: IntFieldUpdateOperationsInput | number
-    offeredCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

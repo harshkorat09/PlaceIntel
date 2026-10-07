@@ -12,6 +12,11 @@ export default function Companies() {
   
   const [newCompanyName, setNewCompanyName] = useState('');
   const [newCompanyIndustry, setNewCompanyIndustry] = useState('');
+  const [newCompanyWebsite, setNewCompanyWebsite] = useState('');
+  const [newCompanyDescription, setNewCompanyDescription] = useState('');
+  const [newCompanyLocation, setNewCompanyLocation] = useState('');
+  const [newCompanySize, setNewCompanySize] = useState('');
+  const [newCompanyFoundedYear, setNewCompanyFoundedYear] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
   const [editCompanyId, setEditCompanyId] = useState<string | null>(null);
 
@@ -35,32 +40,51 @@ export default function Companies() {
     e.preventDefault();
     setFormError(null);
     try {
+      const payload: any = {
+        name: newCompanyName,
+        sector: newCompanyIndustry || 'Technology',
+        website: newCompanyWebsite || undefined,
+        description: newCompanyDescription || undefined,
+        location: newCompanyLocation || undefined,
+        size: newCompanySize || undefined,
+        foundedYear: newCompanyFoundedYear ? parseInt(newCompanyFoundedYear) : undefined
+      };
+      
       if (editCompanyId) {
-        await companyService.updateCompany(editCompanyId, {
-          name: newCompanyName,
-          sector: newCompanyIndustry || 'Technology'
-        });
+        await companyService.updateCompany(editCompanyId, payload);
       } else {
-        await companyService.createCompany({
-          name: newCompanyName,
-          sector: newCompanyIndustry || 'Technology',
-          hiresDepstar: 0,
-          hiresCspit: 0,
-          status: 'Active',
-          avgPackage: 0,
-          notes: '',
-          website: ''
-        });
+        await companyService.createCompany(payload);
       }
       setIsAddModalOpen(false);
-      setNewCompanyName('');
-      setNewCompanyIndustry('');
-      setEditCompanyId(null);
+      resetForm();
       fetchCompanies();
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      setFormError('Failed to add company. Please try again.');
+      setFormError(err.message || 'Failed to save company.');
     }
+  };
+  
+  const resetForm = () => {
+    setNewCompanyName('');
+    setNewCompanyIndustry('');
+    setNewCompanyWebsite('');
+    setNewCompanyDescription('');
+    setNewCompanyLocation('');
+    setNewCompanySize('');
+    setNewCompanyFoundedYear('');
+    setEditCompanyId(null);
+  };
+
+  const handleEditOpen = (company: any) => {
+    setEditCompanyId(company.id);
+    setNewCompanyName(company.name);
+    setNewCompanyIndustry(company.sector || '');
+    setNewCompanyWebsite(company.website || '');
+    setNewCompanyDescription(company.description || '');
+    setNewCompanyLocation(company.location || '');
+    setNewCompanySize(company.size || '');
+    setNewCompanyFoundedYear(company.foundedYear ? String(company.foundedYear) : '');
+    setIsAddModalOpen(true);
   };
 
   const handleDeleteCompany = async () => {
@@ -70,9 +94,9 @@ export default function Companies() {
       await companyService.deleteCompany(deleteModalCompany.id);
       setDeleteModalCompany(null);
       fetchCompanies();
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      setFormError('Failed to delete company. Please try again.');
+      setFormError(err.message || 'Failed to delete company.');
     }
   };
 
@@ -102,9 +126,7 @@ export default function Companies() {
             className="group flex items-center gap-2.5 px-4 py-2.5 rounded-lg bg-primary-container text-on-primary hover:bg-primary transition-all shadow-sm" 
             type="button"
             onClick={() => {
-              setEditCompanyId(null);
-              setNewCompanyName('');
-              setNewCompanyIndustry('');
+              resetForm();
               setIsAddModalOpen(true);
             }}
           >
@@ -127,7 +149,7 @@ export default function Companies() {
               <thead>
                 <tr className="bg-surface-container-low text-on-surface-variant">
                   <th className="py-3.5 px-6 font-label-uppercase text-label-uppercase uppercase tracking-wider">Enterprise & Domain</th>
-                  <th className="py-3.5 px-4 font-label-uppercase text-label-uppercase uppercase tracking-wider">Tier Band</th>
+                  <th className="py-3.5 px-4 font-label-uppercase text-label-uppercase uppercase tracking-wider">Location</th>
                   <th className="py-3.5 px-6 font-label-uppercase text-label-uppercase uppercase tracking-wider text-right">Actions</th>
                 </tr>
               </thead>
@@ -146,19 +168,13 @@ export default function Companies() {
                       </div>
                     </td>
                     <td className="py-4 px-4 align-middle">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-uppercase text-label-uppercase uppercase font-bold">
-                        <span className="w-1.5 h-1.5 rounded-full bg-on-secondary-fixed"></span>
-                        Core Product Tier
+                      <span className="inline-flex items-center text-body-sm">
+                        {company.location || 'Not Specified'}
                       </span>
                     </td>
                     <td className="py-4 px-6 align-middle text-right">
                       <div className="flex items-center justify-end gap-1.5">
-                        <button className="p-1.5 rounded-md text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors" onClick={() => {
-                          setEditCompanyId(company.id);
-                          setNewCompanyName(company.name);
-                          setNewCompanyIndustry(company.sector || '');
-                          setIsAddModalOpen(true);
-                        }} title="Edit listing" type="button">
+                        <button className="p-1.5 rounded-md text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors" onClick={() => handleEditOpen(company)} title="Edit listing" type="button">
                           <span className="material-symbols-outlined text-[18px]">edit</span>
                         </button>
                         <button className="p-1.5 rounded-md text-on-surface-variant hover:text-error hover:bg-error-container/40 transition-colors" onClick={() => setDeleteModalCompany(company)} title="Delete listing" type="button">
@@ -180,9 +196,9 @@ export default function Companies() {
       )}
 
       {/* MODAL 1: Add New Company Dialog */}
-      <div className={`fixed inset-0 z-50 flex items-center justify-center bg-primary/40 backdrop-blur-sm transition-opacity duration-200 ${isAddModalOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-        <div className={`bg-surface-container-lowest rounded-2xl w-full max-w-md mx-4 shadow-2xl overflow-hidden transform transition-transform duration-200 flex flex-col ${isAddModalOpen ? 'scale-100' : 'scale-95'}`}>
-          <div className="p-6 bg-surface-container-low flex items-center justify-between">
+      <div className={`fixed inset-0 z-50 flex items-center justify-center bg-primary/40 backdrop-blur-sm transition-opacity duration-200 ${isAddModalOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'} p-4 overflow-y-auto`}>
+        <div className={`bg-surface-container-lowest rounded-2xl w-full max-w-2xl mx-auto my-8 shadow-2xl overflow-hidden transform transition-transform duration-200 flex flex-col ${isAddModalOpen ? 'scale-100' : 'scale-95'}`}>
+          <div className="p-6 bg-surface-container-low flex items-center justify-between border-b border-surface-container-high">
             <div className="flex flex-col">
               <span className="font-label-uppercase text-label-uppercase text-on-surface-variant uppercase tracking-wider">Corporate Accreditation</span>
               <h2 className="font-headline-sm text-headline-sm text-primary font-bold">
@@ -193,46 +209,115 @@ export default function Companies() {
               <span className="material-symbols-outlined text-[20px]">close</span>
             </button>
           </div>
-          <form className="p-6 flex flex-col gap-4" onSubmit={handleAddCompany}>
-            {formError && (
-              <div className="p-3 rounded-lg bg-error-container text-on-error-container font-body-sm flex items-center gap-2">
-                <span className="material-symbols-outlined text-[18px]">error</span>
-                {formError}
+          <div className="overflow-y-auto max-h-[60vh]">
+            <form className="p-6 flex flex-col gap-6" id="companyForm" onSubmit={handleAddCompany}>
+              {formError && (
+                <div className="p-3 rounded-lg bg-error-container text-on-error-container font-body-sm flex items-center gap-2">
+                  <span className="material-symbols-outlined text-[18px]">error</span>
+                  {formError}
+                </div>
+              )}
+              
+              <div className="flex flex-col gap-4 border-b border-surface-container pb-6">
+                <h3 className="font-title-md text-primary">Basic Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-label-regular text-label-regular text-on-surface font-medium" htmlFor="companyName">Legal Company Name *</label>
+                    <input 
+                      className="h-11 px-3.5 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary-container/20 transition-all border border-surface-container" 
+                      id="companyName" 
+                      placeholder="e.g. Cisco Systems India" 
+                      required 
+                      type="text"
+                      value={newCompanyName}
+                      onChange={e => setNewCompanyName(e.target.value)}
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-label-regular text-label-regular text-on-surface font-medium" htmlFor="industrySector">Industry Sector</label>
+                    <input 
+                      className="h-11 px-3.5 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary-container/20 transition-all border border-surface-container" 
+                      id="industrySector" 
+                      placeholder="e.g. Cybersecurity, Fintech" 
+                      type="text"
+                      value={newCompanyIndustry}
+                      onChange={e => setNewCompanyIndustry(e.target.value)}
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5 md:col-span-2">
+                    <label className="font-label-regular text-label-regular text-on-surface font-medium" htmlFor="website">Website URL</label>
+                    <input 
+                      className="h-11 px-3.5 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary-container/20 transition-all border border-surface-container" 
+                      id="website" 
+                      placeholder="https://..." 
+                      type="url"
+                      value={newCompanyWebsite}
+                      onChange={e => setNewCompanyWebsite(e.target.value)}
+                    />
+                  </div>
+                </div>
               </div>
-            )}
-            <div className="flex flex-col gap-1.5">
-              <label className="font-label-regular text-label-regular text-on-surface font-medium" htmlFor="companyName">Legal Company Name *</label>
-              <input 
-                className="h-11 px-3.5 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary-container/20 transition-all border border-surface-container" 
-                id="companyName" 
-                placeholder="e.g. Cisco Systems India" 
-                required 
-                type="text"
-                value={newCompanyName}
-                onChange={e => setNewCompanyName(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label className="font-label-regular text-label-regular text-on-surface font-medium" htmlFor="industrySector">Industry Sector</label>
-              <input 
-                className="h-11 px-3.5 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary-container/20 transition-all border border-surface-container" 
-                id="industrySector" 
-                placeholder="e.g. Cybersecurity, Fintech" 
-                type="text"
-                value={newCompanyIndustry}
-                onChange={e => setNewCompanyIndustry(e.target.value)}
-              />
-            </div>
-            
-            <div className="pt-4 flex items-center justify-end gap-3">
-              <button className="px-4 py-2.5 rounded-lg text-on-surface hover:bg-surface-container font-title-sm text-title-sm transition-colors" onClick={() => setIsAddModalOpen(false)} type="button">
-                Cancel
-              </button>
-              <button className="px-5 py-2.5 rounded-lg bg-primary-container text-on-primary hover:bg-primary font-title-sm text-title-sm font-semibold transition-all" type="submit">
-                {editCompanyId ? 'Save Changes' : 'Confirm & Register'}
-              </button>
-            </div>
-          </form>
+              
+              <div className="flex flex-col gap-4">
+                <h3 className="font-title-md text-primary">Company Profile</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex flex-col gap-1.5 md:col-span-2">
+                    <label className="font-label-regular text-label-regular text-on-surface font-medium" htmlFor="description">Description / About</label>
+                    <textarea 
+                      className="p-3.5 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary-container/20 transition-all border border-surface-container min-h-[100px]" 
+                      id="description" 
+                      placeholder="Brief overview of the company..." 
+                      value={newCompanyDescription}
+                      onChange={e => setNewCompanyDescription(e.target.value)}
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-label-regular text-label-regular text-on-surface font-medium" htmlFor="location">Headquarters / Location</label>
+                    <input 
+                      className="h-11 px-3.5 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary-container/20 transition-all border border-surface-container" 
+                      id="location" 
+                      placeholder="e.g. San Jose, CA" 
+                      type="text"
+                      value={newCompanyLocation}
+                      onChange={e => setNewCompanyLocation(e.target.value)}
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-label-regular text-label-regular text-on-surface font-medium" htmlFor="size">Company Size</label>
+                    <input 
+                      className="h-11 px-3.5 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary-container/20 transition-all border border-surface-container" 
+                      id="size" 
+                      placeholder="e.g. 10,000+ employees" 
+                      type="text"
+                      value={newCompanySize}
+                      onChange={e => setNewCompanySize(e.target.value)}
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-label-regular text-label-regular text-on-surface font-medium" htmlFor="foundedYear">Founded Year</label>
+                    <input 
+                      className="h-11 px-3.5 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary-container/20 transition-all border border-surface-container" 
+                      id="foundedYear" 
+                      placeholder="e.g. 1984" 
+                      type="number"
+                      min="1800"
+                      max={new Date().getFullYear()}
+                      value={newCompanyFoundedYear}
+                      onChange={e => setNewCompanyFoundedYear(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div className="p-6 bg-surface-container-low border-t border-surface-container-high flex items-center justify-end gap-3">
+            <button className="px-4 py-2.5 rounded-lg text-on-surface hover:bg-surface-container font-title-sm text-title-sm transition-colors" onClick={() => setIsAddModalOpen(false)} type="button">
+              Cancel
+            </button>
+            <button form="companyForm" className="px-5 py-2.5 rounded-lg bg-primary-container text-on-primary hover:bg-primary font-title-sm text-title-sm font-semibold transition-all" type="submit">
+              {editCompanyId ? 'Save Changes' : 'Confirm & Register'}
+            </button>
+          </div>
         </div>
       </div>
 

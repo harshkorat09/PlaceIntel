@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { placementService } from '../api/placementService';
+import { apiClient } from '../api/client';
 import type { Placement } from '../api/types';
 
 export function StudentJobs() {
@@ -12,24 +13,80 @@ export function StudentJobs() {
   const [currentDate, setCurrentDate] = useState(new Date(2026, 9, 1)); // Fixed to Oct 2026 to match original design, or use new Date()
   const [viewMode, setViewMode] = useState<'month' | 'week' | 'list'>('month');
 
+  // Filter State
+  const [branches, setBranches] = useState<any[]>([]);
+  const [skills, setSkills] = useState<any[]>([]);
+  const [search, setSearch] = useState('');
+  const [selectedBranch, setSelectedBranch] = useState('');
+  const [selectedSkill, setSelectedSkill] = useState('');
+  const [packageRange, setPackageRange] = useState('');
+  const [filterYear, setFilterYear] = useState('');
+
   useEffect(() => {
-    const fetchPlacements = async () => {
+    const fetchMeta = async () => {
       try {
-        setLoading(true);
-        const data = await placementService.getPlacements();
-        setPlacements(data);
-        if (data.length > 0) {
-          setSelectedPlacement(data[0]);
-        }
-      } catch (err: any) {
-        console.error("Failed to fetch placements:", err);
-        setError("Unable to load placement drives. Please try again.");
-      } finally {
-        setLoading(false);
+        const [branchRes, skillRes] = await Promise.all([
+          apiClient.get('/branches'),
+          apiClient.get('/skills')
+        ]);
+        setBranches(branchRes as any[]);
+        setSkills(skillRes as any[]);
+      } catch (err) {
+        console.error('Failed to load filter metadata', err);
       }
     };
+    fetchMeta();
+  }, []);
+
+  const fetchPlacements = async () => {
+    try {
+      setLoading(true);
+      const filters: any = {};
+      if (search.trim()) filters.search = search.trim();
+      if (selectedBranch) filters.branch = selectedBranch;
+      if (selectedSkill) filters.skills = selectedSkill;
+      if (packageRange) filters.packageRange = packageRange;
+      if (filterYear) filters.year = filterYear;
+      
+      const data = await placementService.getPlacements(filters);
+      setPlacements(data);
+      if (data.length > 0) {
+        setSelectedPlacement(data[0]);
+      } else {
+        setSelectedPlacement(null);
+      }
+    } catch (err: any) {
+      console.error("Failed to fetch placements:", err);
+      setError("Unable to load placement drives. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchPlacements();
   }, []);
+
+  const handleApplyFilters = () => {
+    fetchPlacements();
+  };
+
+  const handleClearFilters = () => {
+    setSearch('');
+    setSelectedBranch('');
+    setSelectedSkill('');
+    setPackageRange('');
+    setFilterYear('');
+    const fetchEmpty = async () => {
+      setLoading(true);
+      const data = await placementService.getPlacements({});
+      setPlacements(data);
+      if (data.length > 0) setSelectedPlacement(data[0]);
+      else setSelectedPlacement(null);
+      setLoading(false);
+    }
+    fetchEmpty();
+  };
 
   // Generate Calendar Days (Simplified for the current month)
   const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
@@ -101,6 +158,63 @@ export function StudentJobs() {
             </div>
           </div>
         </div>
+
+        {/* INTERACTIVE FILTER ENGINE */}
+        <section className="flex flex-col gap-space-md bg-surface-container-lowest p-space-lg rounded-xl shadow-sm mb-space-lg">
+          <div className="flex flex-col sm:flex-row flex-wrap items-center gap-space-sm w-full">
+            <div className="flex-1 min-w-[200px]">
+              <label className="font-label-uppercase text-label-uppercase text-secondary block mb-space-xxs">Search</label>
+              <input
+                type="text"
+                placeholder="Role or company..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full h-10 px-space-md bg-surface-container-low rounded-lg font-body-sm text-on-surface focus:outline-none"
+              />
+            </div>
+            <div className="w-full sm:w-auto">
+              <label className="font-label-uppercase text-label-uppercase text-secondary block mb-space-xxs">Skill Requirement</label>
+              <select value={selectedSkill} onChange={(e) => setSelectedSkill(e.target.value)} className="w-full sm:w-auto h-10 px-space-md bg-surface-container-low rounded-lg font-body-sm text-on-surface focus:outline-none cursor-pointer">
+                <option value="">All Skills</option>
+                {skills.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
+              </select>
+            </div>
+            <div className="w-full sm:w-auto">
+              <label className="font-label-uppercase text-label-uppercase text-secondary block mb-space-xxs">Branch</label>
+              <select value={selectedBranch} onChange={(e) => setSelectedBranch(e.target.value)} className="w-full sm:w-auto h-10 px-space-md bg-surface-container-low rounded-lg font-body-sm text-on-surface focus:outline-none cursor-pointer">
+                <option value="">All Branches</option>
+                {branches.map(b => <option key={b.id} value={b.name}>{b.name}</option>)}
+              </select>
+            </div>
+            <div className="w-full sm:w-auto">
+              <label className="font-label-uppercase text-label-uppercase text-secondary block mb-space-xxs">Package (LPA)</label>
+              <select value={packageRange} onChange={(e) => setPackageRange(e.target.value)} className="w-full sm:w-auto h-10 px-space-md bg-surface-container-low rounded-lg font-body-sm text-on-surface focus:outline-none cursor-pointer">
+                <option value="">Any Package</option>
+                <option value="0-5">&lt; 5 LPA</option>
+                <option value="5-10">5 - 10 LPA</option>
+                <option value="10-15">10 - 15 LPA</option>
+                <option value="15-999">15+ LPA</option>
+              </select>
+            </div>
+            <div className="w-full sm:w-auto">
+              <label className="font-label-uppercase text-label-uppercase text-secondary block mb-space-xxs">Year</label>
+              <select value={filterYear} onChange={(e) => setFilterYear(e.target.value)} className="w-full sm:w-auto h-10 px-space-md bg-surface-container-low rounded-lg font-body-sm text-on-surface focus:outline-none cursor-pointer">
+                <option value="">All Years</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+              </select>
+            </div>
+          </div>
+          <div className="flex items-center justify-end gap-space-sm pt-space-xs">
+            <button onClick={handleClearFilters} className="px-space-md py-1.5 rounded-lg font-title-sm text-secondary hover:bg-surface-container-low transition-colors" type="button">
+              Clear Filters
+            </button>
+            <button onClick={handleApplyFilters} className="px-space-md py-1.5 bg-primary-container text-on-primary rounded-lg font-title-sm shadow-sm hover:bg-primary transition-colors" type="button">
+              Apply Filters
+            </button>
+          </div>
+        </section>
 
         {/* Calendar Sub-Controller Bar */}
         <div className="bg-surface-container-lowest rounded-2xl p-space-md mb-space-lg flex flex-wrap items-center justify-between gap-space-md shadow-sm">
@@ -225,7 +339,7 @@ export function StudentJobs() {
                       </div>
                     ))
                   ) : (
-                    <div className="text-center p-space-3xl text-secondary">No placements scheduled.</div>
+                    <div className="text-center p-space-3xl text-secondary">No placements match your current filters.</div>
                   )}
                 </div>
               )}

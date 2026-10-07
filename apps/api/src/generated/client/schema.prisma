@@ -28,48 +28,43 @@ model User {
 }
 
 model Company {
-  id           Int         @id @default(autoincrement())
-  name         String      @unique
-  sector       String
-  hiresDepstar Int         @default(0)
-  hiresCspit   Int         @default(0)
-  status       String      @default("Active Recruiter")
-  avgPackage   Float
-  notes        String?
-  website      String?
-  hrContacts   Json?
-  visits       Json?
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  placements   Placement[]
+  id          Int         @id @default(autoincrement())
+  name        String      @unique
+  sector      String
+  website     String?
+  description String?
+  location    String?
+  size        String?
+  foundedYear Int?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  placements  Placement[]
 }
 
 model Placement {
-  id               Int               @id @default(autoincrement())
-  companyId        Int
-  position         String
-  minPackage       Float?
-  maxPackage       Float?
-  deadline         DateTime
-  driveDate        DateTime?
-  cgpaCutoff       Float
-  description      String?
-  status           String            @default("Upcoming")
-  activeRound      String            @default("Pre-Placement Talk")
-  appliedCount     Int               @default(0)
-  shortlistedCount Int               @default(0)
-  offeredCount     Int               @default(0)
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  attachments      Attachment[]
-  company          Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  branches         PlacementBranch[]
-  skills           PlacementSkill[]
+  id          Int               @id @default(autoincrement())
+  companyId   Int
+  position    String
+  minPackage  Float?
+  maxPackage  Float?
+  deadline    DateTime
+  driveDate   DateTime?
+  cgpaCutoff  Float
+  description String?
+  status      String            @default("Upcoming")
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  attachments Attachment[]
+  company     Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  branches    PlacementBranch[]
+  skills      PlacementSkill[]
 }
 
 model Branch {
   id         Int               @id @default(autoincrement())
   name       String            @unique
+  code       String            @default("UNK")
+  degree     String            @default("B.Tech")
   placements PlacementBranch[]
   users      User[]
 }

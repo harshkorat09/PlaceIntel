@@ -47,7 +47,7 @@ export function StudentCompanyDetails() {
         <div className="flex items-center gap-space-sm hidden sm:flex">
           <span className="inline-flex items-center gap-1.5 px-space-xs py-space-xxs rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-uppercase text-label-uppercase">
             <span className="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
-            {company.status === 'Active' ? 'Tier-1 Institutional Recruiter' : 'Accredited Partner'}
+            Institutional Recruiter
           </span>
           <span className="font-label-regular text-label-regular text-secondary">CHARUSAT Verified Dossier</span>
         </div>
@@ -67,10 +67,6 @@ export function StudentCompanyDetails() {
                   <h1 className="font-headline-lg text-headline-lg text-primary-container tracking-tight">
                     {company.name}
                   </h1>
-                  <span className="inline-flex items-center gap-1.5 px-space-xs py-space-xxs rounded-full bg-surface-container font-label-uppercase text-label-uppercase text-primary-container">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
-                    Drive Status: {company.status}
-                  </span>
                 </div>
                 <p className="font-body-md text-body-md text-secondary">
                   {company.sector}
@@ -103,57 +99,91 @@ export function StudentCompanyDetails() {
           </div>
         </div>
 
-        {/* 3-Column Metrics Snapshot */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
-          {/* Card 1 */}
-          <div className="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
-            <div className="flex items-center justify-between text-secondary">
-              <span className="font-label-uppercase text-label-uppercase tracking-wider">Historical Hires</span>
-              <span className="material-symbols-outlined text-outline">assignment_turned_in</span>
-            </div>
-            <div className="mt-space-md">
-              <div className="flex items-baseline gap-space-xs">
-                <span className="font-headline-lg text-headline-lg text-primary-container">{company.hiresDepstar + company.hiresCspit}</span>
-                <span className="font-title-sm text-title-sm text-secondary">Total Hires</span>
-              </div>
-              <p className="font-body-sm text-body-sm text-secondary mt-space-xxs">
-                Total recruits from recent academic sessions.
-              </p>
-            </div>
+        {/* Placement Opportunities Section */}
+        <div className="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm border border-surface-container flex flex-col gap-space-lg">
+          <div className="flex items-center gap-space-sm border-b border-surface-container pb-space-sm">
+            <span className="material-symbols-outlined text-primary-container text-[24px]">work</span>
+            <h2 className="font-title-lg text-title-lg text-primary">Placement Opportunities</h2>
+          </div>
+          <div className="flex flex-col gap-space-md">
+            {company.placements && company.placements.length > 0 ? (
+              company.placements.map((placement: any) => (
+                <Link to={`/placements/${placement.id}`} key={placement.id} className="bg-surface-container-low p-space-md rounded-lg flex flex-col md:flex-row md:items-center justify-between gap-space-md hover:bg-surface-container-high transition-colors">
+                  <div>
+                    <h4 className="font-title-md text-primary">{placement.position || placement.role}</h4>
+                    <p className="font-body-sm text-secondary">
+                      Package: {placement.minPackage || '?'} - {placement.maxPackage || '?'} LPA | CGPA Cutoff: {placement.cgpaCutoff}
+                    </p>
+                  </div>
+                  <div className="text-left md:text-right">
+                    <p className="font-body-sm text-on-surface">Drive Date: {placement.driveDate || 'TBD'}</p>
+                    <p className="font-label-regular text-error">Deadline: {placement.deadline}</p>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <p className="text-secondary font-body-md">No placement drives found for this company.</p>
+            )}
+          </div>
+        </div>
+
+        {/* Company Dossier Section */}
+        <div className="bg-surface-container-lowest rounded-xl p-space-xl shadow-sm border border-surface-container flex flex-col gap-space-lg">
+          <div className="flex items-center gap-space-sm border-b border-surface-container pb-space-sm">
+            <span className="material-symbols-outlined text-primary-container text-[24px]">corporate_fare</span>
+            <h2 className="font-title-lg text-title-lg text-primary">Company Dossier</h2>
           </div>
           
-          {/* Card 2 */}
-          <div className="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
-            <div className="flex items-center justify-between text-secondary">
-              <span className="font-label-uppercase text-label-uppercase tracking-wider">Institutional Representation</span>
-              <span className="material-symbols-outlined text-outline">groups</span>
-            </div>
-            <div className="mt-space-md">
-              <div className="flex items-baseline gap-space-xs">
-                <span className="font-headline-lg text-headline-lg text-primary-container">{company.hiresDepstar}</span>
-                <span className="font-title-sm text-title-sm text-secondary">DEPSTAR</span>
-              </div>
-              <div className="flex items-baseline gap-space-xs mt-1">
-                <span className="font-headline-lg text-headline-lg text-primary-container">{company.hiresCspit}</span>
-                <span className="font-title-sm text-title-sm text-secondary">CSPIT</span>
-              </div>
-            </div>
-          </div>
-          
-          {/* Card 3 */}
-          <div className="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between">
-            <div className="flex items-center justify-between text-secondary">
-              <span className="font-label-uppercase text-label-uppercase tracking-wider">Remuneration Benchmark</span>
-              <span className="material-symbols-outlined text-outline">monetization_on</span>
-            </div>
-            <div className="mt-space-md">
-              <div className="flex items-baseline gap-space-xs">
-                <span className="font-headline-lg text-headline-lg text-primary-container">₹{company.avgPackage}</span>
-                <span className="font-title-sm text-title-sm text-secondary">LPA Mean</span>
-              </div>
-              <p className="font-body-sm text-body-sm text-secondary mt-space-xxs">
-                Base compensation baseline for undergraduate placements.
+          <div className="flex flex-col lg:flex-row gap-space-xl">
+            <div className="flex-1 flex flex-col gap-space-md">
+              <h3 className="font-label-uppercase text-label-uppercase text-secondary tracking-wider">About the Enterprise</h3>
+              <p className="font-body-md text-body-md text-on-surface whitespace-pre-wrap leading-relaxed">
+                {company.description || 'No corporate description provided for this recruiting partner.'}
               </p>
+            </div>
+            
+            <div className="lg:w-1/3 flex flex-col gap-space-md p-space-lg bg-surface-container-low rounded-lg">
+              <h3 className="font-label-uppercase text-label-uppercase text-secondary tracking-wider">Corporate Metadata</h3>
+              
+              <div className="flex flex-col gap-space-sm">
+                <div className="flex items-start gap-space-sm">
+                  <span className="material-symbols-outlined text-secondary text-[20px] mt-0.5">location_on</span>
+                  <div className="flex flex-col">
+                    <span className="font-label-regular text-label-regular text-secondary">Headquarters</span>
+                    <span className="font-body-sm text-body-sm text-on-surface">{company.location || 'Not Specified'}</span>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-space-sm">
+                  <span className="material-symbols-outlined text-secondary text-[20px] mt-0.5">group</span>
+                  <div className="flex flex-col">
+                    <span className="font-label-regular text-label-regular text-secondary">Global Workforce Size</span>
+                    <span className="font-body-sm text-body-sm text-on-surface">{company.size || 'Not Specified'}</span>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-space-sm">
+                  <span className="material-symbols-outlined text-secondary text-[20px] mt-0.5">event</span>
+                  <div className="flex flex-col">
+                    <span className="font-label-regular text-label-regular text-secondary">Founded Year</span>
+                    <span className="font-body-sm text-body-sm text-on-surface">{company.foundedYear || 'Not Specified'}</span>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-space-sm">
+                  <span className="material-symbols-outlined text-secondary text-[20px] mt-0.5">language</span>
+                  <div className="flex flex-col">
+                    <span className="font-label-regular text-label-regular text-secondary">Official Website</span>
+                    {company.website ? (
+                      <a href={company.website} target="_blank" rel="noopener noreferrer" className="font-body-sm text-body-sm text-primary hover:underline break-all">
+                        {company.website}
+                      </a>
+                    ) : (
+                      <span className="font-body-sm text-body-sm text-on-surface">Not Specified</span>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

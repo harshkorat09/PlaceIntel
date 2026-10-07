@@ -11,51 +11,87 @@ import type { AuthRequest } from '../middlewares/auth.middleware.js';
 export const getPlacements = asyncHandler(async (req: Request, res: Response) => {
   const { search, skills, packageRange, branch, year, status } = req.query;
   
-  const where: any = {};
+  const where: any = { AND: [] };
 
   if (search) {
-    where.OR = [
-      { company: { name: { contains: String(search), mode: 'insensitive' } } },
-      { position: { contains: String(search), mode: 'insensitive' } },
-    ];
+    where.AND.push({
+      OR: [
+        { company: { name: { contains: String(search), mode: 'insensitive' } } },
+        { position: { contains: String(search), mode: 'insensitive' } },
+      ]
+    });
   }
 
   if (skills) {
     const skillList = Array.isArray(skills) ? skills : [skills];
-    where.skills = {
-      some: { skill: { name: { in: skillList.map(String), mode: 'insensitive' } } }
-    };
+    where.AND.push({
+      skills: {
+        some: { skill: { name: { in: skillList.map(String), mode: 'insensitive' } } }
+      }
+    });
   }
   
   if (branch) {
-    where.branches = {
-      some: { branch: { name: { equals: String(branch), mode: 'insensitive' } } }
-    };
+    where.AND.push({
+      branches: {
+        some: { branch: { name: { equals: String(branch), mode: 'insensitive' } } }
+      }
+    });
   }
   
   if (packageRange) {
     const [min, max] = String(packageRange).split('-').map(Number);
     if (min !== undefined && max !== undefined && !isNaN(min) && !isNaN(max)) {
-      where.OR = [
-        { minPackage: { gte: min, lte: max } },
-        { maxPackage: { gte: min, lte: max } }
-      ];
+      where.AND.push({
+        OR: [
+          {
+            AND: [
+              { minPackage: { lte: max } },
+              { maxPackage: { gte: min } }
+            ]
+          },
+          {
+            AND: [
+              { maxPackage: null },
+              { minPackage: { lte: max } }
+            ]
+          }
+        ]
+      });
     } else if (min !== undefined && !isNaN(min)) {
-      where.OR = [
-        { minPackage: { gte: min } },
-        { maxPackage: { gte: min } }
-      ];
+      where.AND.push({
+        OR: [
+          { maxPackage: { gte: min } },
+          { maxPackage: null }
+        ]
+      });
     }
   }
   
   if (year) {
     const yearStart = new Date(`${year}-01-01`);
     const yearEnd = new Date(`${year}-12-31`);
-    where.deadline = { gte: yearStart, lte: yearEnd };
+    where.AND.push({
+      OR: [
+        { driveDate: { gte: yearStart, lte: yearEnd } },
+        {
+          AND: [
+            { driveDate: null },
+            { deadline: { gte: yearStart, lte: yearEnd } }
+          ]
+        }
+      ]
+    });
   }
 
   if (status) {
-    where.status = { equals: String(status), mode: 'insensitive' };
+    where.AND.push({
+      status: { equals: String(status), mode: 'insensitive' }
+    });
+  }
+
+  if (where.AND.length === 0) {
+    delete where.AND;
   }
 
   const placements = await prisma.placement.findMany({

@@ -109,23 +109,10 @@ export const StudentDashboard: FC<StudentViewsProps> = ({ studentId }) => {
             </div>
             <div className="lg:col-span-4 bg-tertiary-container/80 rounded-xl p-space-lg space-y-space-md">
               <div className="flex items-center justify-between">
-                <span className="font-label-uppercase text-label-uppercase text-on-primary-container">Profile Readiness</span>
-                <span className="font-title-sm text-title-sm text-secondary-fixed">87% Active</span>
+                <span className="font-label-uppercase text-label-uppercase text-on-primary-container">System Status</span>
+                <span className="font-title-sm text-title-sm text-secondary-fixed">Online</span>
               </div>
-              <div className="w-full bg-primary h-2 rounded-full overflow-hidden">
-                <div className="bg-secondary-fixed h-full rounded-full" style={{ width: '87%' }}></div>
-              </div>
-              <p className="font-body-sm text-body-sm text-on-primary-container">Strong technical profile • 1 pending document for institutional verification.</p>
-              <div className="pt-space-xs flex items-center justify-between">
-                <div>
-                  <div className="font-label-uppercase text-label-uppercase text-on-primary-container">Primary Target Role</div>
-                  <div className="font-title-sm text-title-sm text-surface-container-lowest">Software Engineer</div>
-                </div>
-                <div className="text-right">
-                  <div className="font-label-uppercase text-label-uppercase text-on-primary-container">Target FIT Score</div>
-                  <div className="font-headline-sm text-headline-sm text-secondary-fixed">94<span className="text-label-regular text-on-primary-container">/100</span></div>
-                </div>
-              </div>
+              <p className="font-body-sm text-body-sm text-on-primary-container mt-space-sm">All core recruitment systems are synchronized and available.</p>
             </div>
           </div>
         </div>
@@ -190,28 +177,7 @@ export const StudentDashboard: FC<StudentViewsProps> = ({ studentId }) => {
               </div>
             </div>
 
-            <div className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm space-y-space-md">
-              <div className="flex items-center justify-between">
-                <span className="font-title-sm text-title-sm text-primary-container flex items-center gap-space-xs">
-                  <span className="material-symbols-outlined text-[18px] text-outline">tune</span>
-                  Placement Optimization
-                </span>
-                <span className="font-label-regular text-label-regular text-secondary">+13% Potential</span>
-              </div>
-              <div className="p-space-md rounded-xl bg-secondary-fixed text-on-secondary-fixed space-y-space-xs">
-                <div className="flex items-center gap-space-xs">
-                  <span className="material-symbols-outlined text-[18px]">lightbulb</span>
-                  <span className="font-title-sm text-title-sm">Profile Recommendation</span>
-                </div>
-                <p className="font-body-sm text-body-sm text-on-secondary-fixed-variant leading-relaxed">
-                  Add 1 production SQL / Database Sharding project to verify backend competency. This will unlock <strong>3 more Tier-1 institutional recruitment tracks</strong>.
-                </p>
-                <Link to="/profile" className="inline-flex items-center gap-1 font-title-sm text-title-sm text-primary-container pt-space-xxs hover:underline">
-                  <span>Update Profile</span>
-                  <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
-                </Link>
-              </div>
-            </div>
+
 
             <div className="bg-primary-container text-on-primary rounded-2xl p-space-lg shadow-md space-y-space-sm relative overflow-hidden">
               <div className="flex items-center gap-space-xs">

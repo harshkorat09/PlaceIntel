@@ -20,14 +20,12 @@ export interface Company {
   id: string;
   name: string;
   sector: string;
-  hiresDepstar: number;
-  hiresCspit: number;
-  status: string;
-  avgPackage: number;
-  notes: string;
   website: string;
-  hrContacts?: { name: string; role: string; email: string; phone: string }[];
-  visits?: { event: string; details: string; date: string }[];
+  description?: string;
+  location?: string;
+  size?: string;
+  foundedYear?: number;
+  placements?: any[];
 }
 
 export interface StudentProfileData {
@@ -46,4 +44,7 @@ export interface AnalyticsData {
   skillDemand: Record<string, number>;
   branchDistribution: Record<string, number>;
   yearWiseTrends: Record<string, number>;
+  yearWisePlacementCounts: Record<string, number>;
+  companyParticipation: Record<string, number>;
+  upcomingDrives: any[];
 }

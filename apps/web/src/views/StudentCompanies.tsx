@@ -6,9 +6,6 @@ import type { Company } from '../api/types';
 export function StudentCompanies() {
   const [searchQuery, setSearchQuery] = useState('');
   const [industryFilter, setIndustryFilter] = useState('all');
-  const [packageFilter, setPackageFilter] = useState('all');
-  const [sortOrder, setSortOrder] = useState('package');
-  const [activeLifecycle, setActiveLifecycle] = useState('Active Recruiter');
 
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,12 +29,7 @@ export function StudentCompanies() {
 
   // Derived styling helpers
   const getMonogram = (name: string) => name.substring(0, 2).toUpperCase();
-  const getStatusStyle = (status: string) => {
-    if (status.includes('Active')) return { bg: 'bg-[#E8F5E9]', text: 'text-[#1B5E20]', dot: 'bg-[#1B5E20]' };
-    if (status.includes('Upcoming') || status.includes('Scheduled')) return { bg: 'bg-[#FFF8E1]', text: 'text-[#8C5800]', dot: 'bg-[#8C5800]' };
-    if (status.includes('Concluded')) return { bg: 'bg-[#EDE7F6]', text: 'text-[#4A148C]', dot: 'bg-[#4A148C]' };
-    return { bg: 'bg-[#E0F2FE]', text: 'text-[#0369A1]', dot: 'bg-[#0369A1]' };
-  };
+
 
   // Filtering Logic
   const filteredCompanies = companies.filter(company => {
@@ -48,19 +40,7 @@ export function StudentCompanies() {
     // Naive industry mapping based on sector text since we don't have industryId
     const matchesIndustry = industryFilter === 'all' || company.sector.toLowerCase().includes(industryFilter.toLowerCase());
     
-    let matchesPackage = true;
-    if (packageFilter !== 'all') {
-      matchesPackage = company.avgPackage >= parseInt(packageFilter);
-    }
-    
-    return matchesSearch && matchesIndustry && matchesPackage && 
-           (activeLifecycle === 'Active Recruiter' ? company.status.includes('Active') : 
-            activeLifecycle === 'Upcoming Drives' ? company.status.includes('Upcoming') : 
-            activeLifecycle === 'Concluded' ? company.status.includes('Concluded') : true);
-  }).sort((a, b) => {
-    if (sortOrder === 'package') return b.avgPackage - a.avgPackage;
-    if (sortOrder === 'hired') return (b.hiresDepstar + b.hiresCspit) - (a.hiresDepstar + a.hiresCspit);
-    return 0;
+    return matchesSearch && matchesIndustry;
   });
 
   useEffect(() => {
@@ -109,39 +89,12 @@ export function StudentCompanies() {
           </div>
           
           {/* AGGREGATE SUMMARY STRIP */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-space-sm bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-sm bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
             <div className="flex flex-col px-space-sm py-space-xxs">
               <span className="font-label-uppercase text-label-uppercase text-secondary">ACTIVE DIRECTORY</span>
               <div className="flex items-baseline gap-space-xs mt-space-xxs">
                 <span className="font-headline-md text-headline-md text-primary-container">{companies.length}</span>
                 <span className="font-label-regular text-label-regular text-secondary">Partners</span>
-              </div>
-            </div>
-            <div className="flex flex-col px-space-sm py-space-xxs">
-              <span className="font-label-uppercase text-label-uppercase text-secondary">DEPT. PLACEMENTS</span>
-              <div className="flex items-baseline gap-space-xs mt-space-xxs">
-                <span className="font-headline-md text-headline-md text-primary-container">
-                  {companies.reduce((sum, c) => sum + c.hiresDepstar, 0)}
-                </span>
-                <span className="font-label-regular text-label-regular text-secondary">DEPSTAR</span>
-              </div>
-            </div>
-            <div className="flex flex-col px-space-sm py-space-xxs">
-              <span className="font-label-uppercase text-label-uppercase text-secondary">AVERAGE DRIVE PACKAGE</span>
-              <div className="flex items-baseline gap-space-xs mt-space-xxs">
-                <span className="font-headline-md text-headline-md text-primary-container">
-                  ₹{companies.length ? (companies.reduce((sum, c) => sum + c.avgPackage, 0) / companies.length).toFixed(1) : 0}
-                </span>
-                <span className="font-label-regular text-label-regular text-secondary">LPA Median</span>
-              </div>
-            </div>
-            <div className="flex flex-col px-space-sm py-space-xxs">
-              <span className="font-label-uppercase text-label-uppercase text-secondary">DEPT. PLACEMENTS</span>
-              <div className="flex items-baseline gap-space-xs mt-space-xxs">
-                <span className="font-headline-md text-headline-md text-primary-container">
-                  {companies.reduce((sum, c) => sum + c.hiresCspit, 0)}
-                </span>
-                <span className="font-label-regular text-label-regular text-secondary">CSPIT</span>
               </div>
             </div>
           </div>
@@ -161,72 +114,12 @@ export function StudentCompanies() {
                     className="appearance-none h-10 pl-space-md pr-9 bg-surface-container-low rounded-lg font-title-sm text-title-sm text-primary-container focus:outline-none cursor-pointer"
                   >
                     <option value="all">All Industries</option>
-                    <option value="cloud">Cloud & Infrastructure</option>
-                    <option value="cyber">Cybersecurity</option>
-                    <option value="enterprise">Enterprise Software</option>
-                    <option value="fintech">FinTech</option>
+                    {Array.from(new Set(companies.map(c => c.sector).filter(Boolean))).sort().map(sector => (
+                      <option key={sector} value={sector}>{sector}</option>
+                    ))}
                   </select>
                   <span className="material-symbols-outlined absolute right-space-xs text-secondary text-[18px] pointer-events-none">expand_more</span>
                 </div>
-              </div>
-              
-              {/* Minimum CTC Filter */}
-              <div className="relative">
-                <label className="font-label-uppercase text-label-uppercase text-secondary block mb-space-xxs">Minimum Package</label>
-                <div className="relative flex items-center">
-                  <select 
-                    value={packageFilter}
-                    onChange={(e) => setPackageFilter(e.target.value)}
-                    className="appearance-none h-10 pl-space-md pr-9 bg-surface-container-low rounded-lg font-title-sm text-title-sm text-primary-container focus:outline-none cursor-pointer"
-                  >
-                    <option value="all">Any CTC</option>
-                    <option value="8">&gt; ₹8 LPA</option>
-                    <option value="15">&gt; ₹15 LPA</option>
-                    <option value="25">&gt; ₹25 LPA</option>
-                  </select>
-                  <span className="material-symbols-outlined absolute right-space-xs text-secondary text-[18px] pointer-events-none">expand_more</span>
-                </div>
-              </div>
-              
-              {/* Sort Order */}
-              <div className="relative">
-                <label className="font-label-uppercase text-label-uppercase text-secondary block mb-space-xxs">Ranking Criteria</label>
-                <div className="relative flex items-center">
-                  <select 
-                    value={sortOrder}
-                    onChange={(e) => setSortOrder(e.target.value)}
-                    className="appearance-none h-10 pl-space-md pr-9 bg-surface-container-low rounded-lg font-title-sm text-title-sm text-primary-container focus:outline-none cursor-pointer"
-                  >
-                    <option value="package">Package: High to Low</option>
-                    <option value="hired">Historical Hires</option>
-                  </select>
-                  <span className="material-symbols-outlined absolute right-space-xs text-secondary text-[18px] pointer-events-none">sort</span>
-                </div>
-              </div>
-            </div>
-            
-            {/* Hiring Status Pills */}
-            <div className="flex flex-col items-start lg:items-end">
-              <label className="font-label-uppercase text-label-uppercase text-secondary mb-space-xxs">Drive Lifecycle</label>
-              <div className="flex items-center gap-space-xxs bg-surface-container-low p-1 rounded-lg">
-                <button 
-                  onClick={() => setActiveLifecycle('Active Recruiter')}
-                  className={`px-space-sm py-1.5 rounded-lg font-title-sm text-title-sm transition-all ${activeLifecycle === 'Active Recruiter' ? 'bg-surface-container-lowest text-primary-container shadow-xs' : 'text-secondary hover:text-primary-container hover:bg-surface-container-lowest/50'}`}
-                >
-                  Actively Hiring
-                </button>
-                <button 
-                  onClick={() => setActiveLifecycle('Upcoming Drives')}
-                  className={`px-space-sm py-1.5 rounded-lg font-title-sm text-title-sm transition-all ${activeLifecycle === 'Upcoming Drives' ? 'bg-surface-container-lowest text-primary-container shadow-xs' : 'text-secondary hover:text-primary-container hover:bg-surface-container-lowest/50'}`}
-                >
-                  Upcoming Drives
-                </button>
-                <button 
-                  onClick={() => setActiveLifecycle('Concluded')}
-                  className={`px-space-sm py-1.5 rounded-lg font-title-sm text-title-sm transition-all ${activeLifecycle === 'Concluded' ? 'bg-surface-container-lowest text-primary-container shadow-xs' : 'text-secondary hover:text-primary-container hover:bg-surface-container-lowest/50'}`}
-                >
-                  Concluded
-                </button>
               </div>
             </div>
           </div>
@@ -249,8 +142,6 @@ export function StudentCompanies() {
         {!loading && !error && (
           <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-space-lg">
             {filteredCompanies.map((company) => {
-              const styles = getStatusStyle(company.status);
-
               return (
                 <article key={company.id} className="flex flex-col justify-between bg-surface-container-lowest rounded-2xl p-space-xl shadow-sm hover:shadow-md transition-all duration-200">
                   <div>
@@ -265,10 +156,6 @@ export function StudentCompanies() {
                           <span className="font-body-sm text-body-sm text-secondary">{company.sector}</span>
                         </div>
                       </div>
-                      <span className={`inline-flex items-center gap-1.5 px-space-xs py-1 rounded-full ${styles.bg} ${styles.text} font-label-uppercase text-label-uppercase shrink-0`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${styles.dot}`}></span>
-                        {company.status}
-                      </span>
                     </div>
                     
                     {/* Urgency Ribbon */}
@@ -279,28 +166,12 @@ export function StudentCompanies() {
                       </span>
                     </div>
                     
-                    {/* Key Metrics Modular Strip */}
-                    <div className="grid grid-cols-3 gap-space-xs bg-surface-container-low p-space-sm rounded-xl mb-space-lg text-center">
-                      <div className="flex flex-col">
-                        <span className="font-label-uppercase text-label-uppercase text-secondary">DEPSTAR</span>
-                        <span className="font-title-sm text-title-sm text-primary-container mt-0.5">{company.hiresDepstar} Hired</span>
-                      </div>
-                      <div className="flex flex-col border-x border-surface-container-high">
-                        <span className="font-label-uppercase text-label-uppercase text-secondary">CSPIT</span>
-                        <span className="font-title-sm text-title-sm text-primary-container mt-0.5">{company.hiresCspit} Hired</span>
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="font-label-uppercase text-label-uppercase text-secondary">AVERAGE</span>
-                        <span className="font-title-sm text-title-sm text-primary-container mt-0.5">₹{company.avgPackage} LPA</span>
-                      </div>
-                    </div>
                     
-                    {/* Notes section instead of mock target cadres */}
-                    {company.notes && (
+                    {company.description && (
                       <div className="mb-space-lg">
-                        <span className="font-label-uppercase text-label-uppercase text-secondary block mb-space-xxs">NOTES</span>
+                        <span className="font-label-uppercase text-label-uppercase text-secondary block mb-space-xxs">ABOUT</span>
                         <div className="font-body-sm text-body-sm text-on-surface line-clamp-2">
-                          {company.notes}
+                          {company.description}
                         </div>
                       </div>
                     )}
@@ -327,21 +198,16 @@ export function StudentCompanies() {
           </section>
         )}
 
-        {/* ARCHIVAL RECRUITMENT INTELLIGENCE & CALLOUT */}
+        {/* ARCHIVAL RECRUITMENT INTELLIGENCE */}
         <section className="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm flex flex-col md:flex-row items-center justify-between gap-space-lg">
           <div className="flex items-center gap-space-md max-w-xl">
             <div className="w-12 h-12 rounded-xl bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed shrink-0">
               <span className="material-symbols-outlined text-[24px]">analytics</span>
             </div>
             <div className="flex flex-col">
-              <h4 className="font-title-md text-title-md text-primary-container">Institutional Fit Engine v2.5 Active</h4>
-              <p className="font-body-sm text-body-sm text-secondary mt-0.5">FIT Scores reflect real-time weighting across your semester CGPA, verified GitHub architecture repositories, coding benchmarks, and completed department mock drives.</p>
+              <h4 className="font-title-md text-title-md text-primary-container">Institutional Placements</h4>
+              <p className="font-body-sm text-body-sm text-secondary mt-0.5">PlaceIntel tracks company data based on historically verified placement drivers and active institutional ties.</p>
             </div>
-          </div>
-          <div className="flex items-center gap-space-sm shrink-0">
-            <button className="px-space-md py-2.5 rounded-lg bg-surface-container-high hover:bg-surface-dim font-title-sm text-title-sm text-primary-container transition-colors" type="button">
-              Download Historical Intake PDF
-            </button>
           </div>
         </section>
       </div>

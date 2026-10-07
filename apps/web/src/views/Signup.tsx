@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { apiClient } from '../api/client';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Signup() {
+  const [branches, setBranches] = useState<any[]>([]);
+  useEffect(() => {
+    apiClient.get('/branches').then(res => setBranches(res.data)).catch(console.error);
+  }, []);
+
   const [formData, setFormData] = useState({
     fullname: '',
     email: '',
@@ -296,11 +301,10 @@ export default function Signup() {
                             onChange={handleInputChange}
                             disabled={isLoading}
                           >
-                            <option>B.Tech Computer Engineering</option>
-                            <option>B.Tech Information Technology</option>
-                            <option>B.Tech Artificial Intelligence & Data Science</option>
-                            <option>B.Tech Electronics & Communication</option>
-                            <option>M.Tech Computer Science</option>
+                            {branches.map(b => (
+                              <option key={b.id} value={b.name}>{b.degree} {b.name}</option>
+                            ))}
+                            {branches.length === 0 && <option>B.Tech Computer Engineering</option>}
                           </select>
                         </div>
                       </div>

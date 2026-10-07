@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Plus, 
   Upload, 
@@ -19,6 +19,19 @@ interface ActivityLog {
 
 export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState<'single' | 'batch'>('single');
+  const [branches, setBranches] = useState<any[]>([]);
+  
+  useEffect(() => {
+    const fetchBranches = async () => {
+      try {
+        const response = await apiClient.get('/branches');
+        setBranches(response.data);
+      } catch (err) {
+        console.error('Failed to load branches', err);
+      }
+    };
+    fetchBranches();
+  }, []);
   
   // Single Student State
   const [studentName, setStudentName] = useState('');
@@ -267,9 +280,10 @@ export default function AdminPanel() {
                     value={branchId}
                     onChange={(e) => setBranchId(e.target.value)}
                   >
-                    <option value="1">1 (CE)</option>
-                    <option value="2">2 (IT)</option>
-                    <option value="3">3 (CSE)</option>
+                    {branches.map((b: any) => (
+                      <option key={b.id} value={b.id}>{b.id} ({b.code})</option>
+                    ))}
+                    {branches.length === 0 && <option value="1">1 (CE)</option>}
                   </select>
                 </div>
                 <div className="form-group">

@@ -39,134 +39,176 @@ export default function Analytics() {
     );
   }
 
-  // Calculate some derived values from standard payload
+  // Derived calculations
   const skillsList = Object.entries(data.skillDemand || {}).sort((a, b) => b[1] - a[1]);
   const branchesList = Object.entries(data.branchDistribution || {}).sort((a, b) => b[1] - a[1]);
+  const companyPartList = Object.entries(data.companyParticipation || {}).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const packageList = Object.entries(data.packageDistribution || {});
+  const yearList = Object.entries(data.yearWisePlacementCounts || {}).sort((a, b) => a[0].localeCompare(b[0]));
+
   const maxSkillValue = skillsList.length > 0 ? skillsList[0][1] : 1;
   const maxBranchValue = branchesList.length > 0 ? branchesList[0][1] : 1;
+  const maxCompanyValue = companyPartList.length > 0 ? companyPartList[0][1] : 1;
+  const maxPackageValue = packageList.reduce((max, [_, val]) => Math.max(max, val), 1);
+  const maxYearValue = yearList.reduce((max, [_, val]) => Math.max(max, val), 1);
 
   return (
-    <div className="flex flex-col w-full">
-      {/* Sub-Header & Administrative Controls */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-space-lg mb-space-2xl pb-space-lg bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm">
-        <div className="flex flex-col max-w-3xl">
+    <div className="flex flex-col w-full pb-space-3xl">
+      {/* Header */}
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-space-lg mb-space-xl bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm">
+        <div className="flex flex-col">
           <div className="flex items-center gap-space-xs font-label-uppercase text-label-uppercase text-on-surface-variant uppercase tracking-wider mb-space-xs">
-            <span>PlaceIntel Admin</span>
+            <span>PlaceIntel</span>
             <span className="text-outline-variant">/</span>
             <span className="text-primary font-semibold">Institutional Intelligence</span>
-            <span className="text-outline-variant">/</span>
-            <span className="text-primary-container font-semibold">Cohort Telemetry</span>
           </div>
-          <h1 className="font-headline-lg text-headline-lg text-primary tracking-tight">Placement Analytics & Institutional Trends</h1>
-          <p className="font-body-md text-body-md text-on-surface-variant mt-space-xs leading-relaxed">
-            Longitudinal placement statistics, departmental clearance velocity, package dispersal topology, and industry skill demand.
-          </p>
+          <h1 className="font-headline-lg text-headline-lg text-primary tracking-tight">Placement Analytics & Trends</h1>
+        </div>
+      </div>
+
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-lg mb-space-xl">
+        <div className="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm border border-surface-container-low flex flex-col justify-between">
+          <span className="font-label-uppercase text-label-uppercase text-on-surface-variant uppercase tracking-wider mb-space-md">Total Companies</span>
+          <div className="flex items-baseline gap-space-xs">
+            <span className="font-headline-lg text-headline-lg text-primary">{data.totalCompanies}</span>
+            <span className="material-symbols-outlined text-primary-container text-xl">domain</span>
+          </div>
         </div>
         
-        {/* Administrative Action Bar */}
-        <div className="flex flex-wrap items-center gap-space-sm shrink-0">
-          <div className="inline-flex items-center gap-space-xs px-space-sm py-2 rounded-lg bg-surface-container-low text-primary font-body-sm text-body-sm">
-            <span className="w-2 h-2 rounded-full bg-primary-container"></span>
-            <span className="font-medium">Live Server Sync</span>
+        <div className="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm border border-surface-container-low flex flex-col justify-between">
+          <span className="font-label-uppercase text-label-uppercase text-on-surface-variant uppercase tracking-wider mb-space-md">Total Placements</span>
+          <div className="flex items-baseline gap-space-xs">
+            <span className="font-headline-lg text-headline-lg text-primary">{data.totalPlacements}</span>
+            <span className="material-symbols-outlined text-primary-container text-xl">work</span>
+          </div>
+        </div>
+
+        <div className="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm border border-surface-container-low flex flex-col justify-between">
+          <span className="font-label-uppercase text-label-uppercase text-on-surface-variant uppercase tracking-wider mb-space-md">Upcoming Drives</span>
+          <div className="flex items-baseline gap-space-xs">
+            <span className="font-headline-lg text-headline-lg text-primary">{data.upcomingDrives?.length || 0}</span>
+            <span className="material-symbols-outlined text-primary-container text-xl">event_upcoming</span>
+          </div>
+        </div>
+
+        <div className="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm border border-surface-container-low flex flex-col justify-between">
+          <span className="font-label-uppercase text-label-uppercase text-on-surface-variant uppercase tracking-wider mb-space-md">Top Package Tier</span>
+          <div className="flex items-baseline gap-space-xs">
+            <span className="font-headline-lg text-headline-lg text-primary">{data.packageDistribution['20+ LPA'] || 0}</span>
+            <span className="font-title-sm text-on-surface-variant">20+ LPA Roles</span>
           </div>
         </div>
       </div>
 
-      {/* Row 1: High-Level Institutional KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-space-lg mb-space-2xl">
-        {/* KPI 1 */}
-        <div className="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm flex flex-col justify-between">
-          <div className="flex items-center justify-between">
-            <span className="font-label-uppercase text-label-uppercase text-on-surface-variant uppercase tracking-wider">Total Companies</span>
-            <span className="p-1.5 rounded-lg bg-surface-container-low text-primary-container">
-              <span className="material-symbols-outlined text-[20px]">domain</span>
-            </span>
-          </div>
-          <div className="my-space-md">
-            <div className="flex items-baseline gap-space-xs">
-              <span className="font-headline-lg text-headline-lg text-primary tracking-tight">{data.totalCompanies}</span>
-              <span className="font-body-sm text-body-sm text-on-surface-variant font-medium">Recruiting Partners</span>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-space-xl mb-space-xl">
+        {/* Placements By Year */}
+        <div className="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm border border-surface-container-low">
+          <h2 className="font-title-lg text-title-lg text-primary mb-space-lg">Placements By Year</h2>
+          {yearList.length === 0 ? (
+            <div className="text-secondary py-space-xl text-center">No placement data available.</div>
+          ) : (
+            <div className="flex items-end gap-space-md h-48 mt-space-lg border-b border-surface-container pb-2">
+              {yearList.map(([year, count], idx) => {
+                const height = Math.max(10, Math.round((count / maxYearValue) * 100));
+                return (
+                  <div key={idx} className="flex flex-col items-center flex-1 gap-2 group">
+                    <span className="font-label-sm text-label-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity">{count}</span>
+                    <div className="w-full bg-primary-container rounded-t-md transition-all group-hover:bg-primary" style={{ height: `${height}%` }}></div>
+                    <span className="font-body-sm text-body-sm text-on-surface-variant mt-1">{year}</span>
+                  </div>
+                );
+              })}
             </div>
-          </div>
+          )}
         </div>
-        
-        {/* KPI 2 */}
-        <div className="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm flex flex-col justify-between">
-          <div className="flex items-center justify-between">
-            <span className="font-label-uppercase text-label-uppercase text-on-surface-variant uppercase tracking-wider">Total Placements</span>
-            <span className="p-1.5 rounded-lg bg-secondary-fixed text-primary">
-              <span className="material-symbols-outlined text-[20px]">work</span>
-            </span>
-          </div>
-          <div className="my-space-md">
-            <div className="flex items-baseline gap-space-xs">
-              <span className="font-headline-lg text-headline-lg text-primary tracking-tight">{data.totalPlacements}</span>
-              <span className="font-title-sm text-title-sm text-on-surface-variant">Scheduled Drives</span>
-            </div>
+
+        {/* Package Range */}
+        <div className="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm border border-surface-container-low">
+          <h2 className="font-title-lg text-title-lg text-primary mb-space-lg">Package Range Distribution</h2>
+          <div className="flex flex-col gap-space-md">
+            {packageList.map(([range, count], idx) => {
+              const percentage = maxPackageValue > 0 ? Math.round((count / maxPackageValue) * 100) : 0;
+              return (
+                <div key={idx} className="flex flex-col">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="font-body-md text-body-md text-primary-container">{range}</span>
+                    <span className="font-body-sm text-body-sm text-on-surface-variant">{count}</span>
+                  </div>
+                  <div className="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden">
+                    <div className="bg-primary h-full rounded-full transition-all" style={{ width: `${percentage}%` }}></div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
 
-      {/* Row 2: Comprehensive 2-Column Analytical Topology */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-xl">
-        
-        {/* LEFT COLUMN (6 Cols) - Skill Demand */}
-        <div className="lg:col-span-6 flex flex-col gap-space-xl">
-          <div className="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm mb-space-lg">
-              <div>
-                <span className="font-label-uppercase text-label-uppercase text-on-surface-variant uppercase tracking-wider">Industry Alignment</span>
-                <h2 className="font-headline-sm text-headline-sm text-primary tracking-tight">Technical Competency Demand Mapping</h2>
-              </div>
-            </div>
-            
-            <div className="flex flex-col gap-space-md mt-space-md">
-              {skillsList.map(([skill, count], idx) => {
-                const percentage = Math.round((count / maxSkillValue) * 100);
-                return (
-                  <div key={idx} className="flex flex-col">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="font-title-sm text-title-sm text-primary-container">{skill}</span>
-                      <span className="font-title-sm text-title-sm text-primary">{count} Mentions</span>
-                    </div>
-                    <div className="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden flex">
-                      <div className="bg-primary h-full rounded-full transition-all" style={{ width: `${percentage}%` }}></div>
-                    </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-space-xl">
+        {/* Branch Distribution */}
+        <div className="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm border border-surface-container-low lg:col-span-1">
+          <h2 className="font-title-lg text-title-lg text-primary mb-space-lg">Branch Distribution</h2>
+          <div className="flex flex-col gap-space-md">
+            {branchesList.map(([branch, count], idx) => {
+              const percentage = Math.round((count / maxBranchValue) * 100);
+              return (
+                <div key={idx} className="flex flex-col">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="font-body-md text-body-md text-primary-container">{branch}</span>
+                    <span className="font-body-sm text-body-sm text-on-surface-variant">{count}</span>
                   </div>
-                );
-              })}
-              {skillsList.length === 0 && <div className="text-secondary p-space-lg">No skills data available.</div>}
-            </div>
+                  <div className="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden">
+                    <div className="bg-tertiary h-full rounded-full transition-all" style={{ width: `${percentage}%` }}></div>
+                  </div>
+                </div>
+              );
+            })}
+            {branchesList.length === 0 && <div className="text-secondary py-space-md text-center">No branch data available.</div>}
           </div>
         </div>
 
-        {/* RIGHT COLUMN (6 Cols) - Branch Distribution */}
-        <div className="lg:col-span-6 flex flex-col gap-space-xl">
-          <div className="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm h-full flex flex-col relative overflow-hidden">
-            <div className="flex items-center justify-between mb-space-md relative z-10">
-              <div className="flex flex-col">
-                <span className="font-label-uppercase text-label-uppercase text-on-surface-variant uppercase tracking-wider">Demographics</span>
-                <h2 className="font-headline-sm text-headline-sm text-primary tracking-tight">Branch Eligibility Distribution</h2>
-              </div>
-            </div>
-            
-            <div className="flex flex-col gap-space-md mt-space-md">
-              {branchesList.map(([branch, count], idx) => {
-                const percentage = Math.round((count / maxBranchValue) * 100);
-                return (
-                  <div key={idx} className="flex flex-col">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="font-title-sm text-title-sm text-primary-container">{branch}</span>
-                      <span className="font-title-sm text-title-sm text-primary">{count} Drives</span>
-                    </div>
-                    <div className="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden flex">
-                      <div className="bg-tertiary h-full rounded-full transition-all" style={{ width: `${percentage}%` }}></div>
-                    </div>
+        {/* Skill Demand */}
+        <div className="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm border border-surface-container-low lg:col-span-1">
+          <h2 className="font-title-lg text-title-lg text-primary mb-space-lg">Top Skill Demand</h2>
+          <div className="flex flex-col gap-space-md">
+            {skillsList.slice(0, 8).map(([skill, count], idx) => {
+              const percentage = Math.round((count / maxSkillValue) * 100);
+              return (
+                <div key={idx} className="flex flex-col">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="font-body-md text-body-md text-primary-container">{skill}</span>
+                    <span className="font-body-sm text-body-sm text-on-surface-variant">{count}</span>
                   </div>
-                );
-              })}
-              {branchesList.length === 0 && <div className="text-secondary p-space-lg">No branch data available.</div>}
-            </div>
+                  <div className="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden">
+                    <div className="bg-[#1B5E20] h-full rounded-full transition-all" style={{ width: `${percentage}%` }}></div>
+                  </div>
+                </div>
+              );
+            })}
+            {skillsList.length === 0 && <div className="text-secondary py-space-md text-center">No skills data available.</div>}
+          </div>
+        </div>
+
+        {/* Top Company Participation */}
+        <div className="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm border border-surface-container-low lg:col-span-1">
+          <h2 className="font-title-lg text-title-lg text-primary mb-space-lg">Company Participation</h2>
+          <div className="flex flex-col gap-space-md">
+            {companyPartList.map(([company, count], idx) => {
+              const percentage = Math.round((count / maxCompanyValue) * 100);
+              return (
+                <div key={idx} className="flex flex-col">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="font-body-md text-body-md text-primary-container">{company}</span>
+                    <span className="font-body-sm text-body-sm text-on-surface-variant">{count} drives</span>
+                  </div>
+                  <div className="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden">
+                    <div className="bg-primary-container h-full rounded-full transition-all" style={{ width: `${percentage}%` }}></div>
+                  </div>
+                </div>
+              );
+            })}
+            {companyPartList.length === 0 && <div className="text-secondary py-space-md text-center">No company data available.</div>}
           </div>
         </div>
       </div>

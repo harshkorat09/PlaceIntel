@@ -139,14 +139,11 @@ exports.Prisma.CompanyScalarFieldEnum = {
   id: 'id',
   name: 'name',
   sector: 'sector',
-  hiresDepstar: 'hiresDepstar',
-  hiresCspit: 'hiresCspit',
-  status: 'status',
-  avgPackage: 'avgPackage',
-  notes: 'notes',
   website: 'website',
-  hrContacts: 'hrContacts',
-  visits: 'visits',
+  description: 'description',
+  location: 'location',
+  size: 'size',
+  foundedYear: 'foundedYear',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -162,17 +159,15 @@ exports.Prisma.PlacementScalarFieldEnum = {
   cgpaCutoff: 'cgpaCutoff',
   description: 'description',
   status: 'status',
-  activeRound: 'activeRound',
-  appliedCount: 'appliedCount',
-  shortlistedCount: 'shortlistedCount',
-  offeredCount: 'offeredCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
 exports.Prisma.BranchScalarFieldEnum = {
   id: 'id',
-  name: 'name'
+  name: 'name',
+  code: 'code',
+  degree: 'degree'
 };
 
 exports.Prisma.SkillScalarFieldEnum = {
@@ -231,11 +226,6 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.NullableJsonNullValueInput = {
-  DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull
-};
-
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -244,12 +234,6 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
-};
-
-exports.Prisma.JsonNullValueFilter = {
-  DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull,
-  AnyNull: Prisma.AnyNull
 };
 exports.Role = exports.$Enums.Role = {
   STUDENT: 'STUDENT',

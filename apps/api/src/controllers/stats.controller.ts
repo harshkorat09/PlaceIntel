@@ -9,8 +9,16 @@ export const getStats = asyncHandler(async (_req: Request, res: Response) => {
   const allPlacements = await prisma.placement.findMany({
     include: {
       skills: { include: { skill: true } },
-      branches: { include: { branch: true } }
+      branches: { include: { branch: true } },
+      company: true
     }
+  });
+
+  const upcomingDrives = await prisma.placement.findMany({
+    where: { driveDate: { gte: new Date() } },
+    orderBy: { driveDate: 'asc' },
+    take: 5,
+    include: { company: true }
   });
 
   const packageDistribution: Record<'< 5 LPA' | '5 - 10 LPA' | '10 - 20 LPA' | '20+ LPA', number> = {
@@ -26,6 +34,7 @@ export const getStats = asyncHandler(async (_req: Request, res: Response) => {
 
   const yearWiseCtcSum: Record<string, number> = {};
   const yearWiseCount: Record<string, number> = {};
+  const companyParticipation: Record<string, number> = {};
 
   allPlacements.forEach(p => {
     // Package Distribution
@@ -51,6 +60,12 @@ export const getStats = asyncHandler(async (_req: Request, res: Response) => {
     const year = p.deadline.getFullYear().toString();
     yearWiseCtcSum[year] = (yearWiseCtcSum[year] || 0) + ctc;
     yearWiseCount[year] = (yearWiseCount[year] || 0) + 1;
+
+    // Company Participation
+    const companyName = p.company?.name;
+    if (companyName) {
+      companyParticipation[companyName] = (companyParticipation[companyName] || 0) + 1;
+    }
   });
 
   for (const year in yearWiseCtcSum) {
@@ -67,7 +82,10 @@ export const getStats = asyncHandler(async (_req: Request, res: Response) => {
       packageDistribution,
       skillDemand,
       branchDistribution,
-      yearWiseTrends
+      yearWiseTrends,
+      yearWisePlacementCounts: yearWiseCount,
+      companyParticipation,
+      upcomingDrives
     } 
   });
 });

@@ -48,13 +48,15 @@ function mapPlacement(p: ApiPlacement): Placement {
 }
 
 export const placementService = {
-  async getPlacements(filters?: { search?: string; branch?: string; skills?: string }): Promise<Placement[]> {
+  async getPlacements(filters?: { search?: string; branch?: string; skills?: string; packageRange?: string; year?: string }): Promise<Placement[]> {
     let url = '/placements';
     if (filters) {
       const params = new URLSearchParams();
       if (filters.branch) params.append('branch', filters.branch);
       if (filters.skills) params.append('skills', filters.skills);
       if (filters.search) params.append('search', filters.search);
+      if (filters.packageRange) params.append('packageRange', filters.packageRange);
+      if (filters.year) params.append('year', filters.year);
       const qs = params.toString();
       if (qs) url += `?${qs}`;
     }
